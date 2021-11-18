@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mycompany/theme/app_colors.dart';
+import 'package:mycompany/theme/app_theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -6,12 +9,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: AppColors.background,
+        statusBarBrightness: Brightness.dark
+    ));
+
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'myCompany',
+      theme: AppTheme.defaultTheme,
       home: const MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
