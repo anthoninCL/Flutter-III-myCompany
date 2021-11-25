@@ -1,38 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mycompany/src/pages/register.dart';
+import 'package:mycompany/src/pages/login.dart';
 import 'package:mycompany/src/shared/widgets/dismiss_keyboard.dart';
 import 'package:mycompany/src/widgets/auth_header.dart';
 import 'package:mycompany/src/widgets/auth_rich_text.dart';
+import 'package:mycompany/src/widgets/classic_text_input.dart';
 import 'package:mycompany/src/widgets/fingerprint_button.dart';
 import 'package:mycompany/src/widgets/main_button.dart';
-import 'package:mycompany/src/widgets/classic_text_input.dart';
 import 'package:mycompany/theme/app_colors.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _firstNameTextController = TextEditingController();
+  final TextEditingController _lastNameTextController = TextEditingController();
 
   bool _emailError = false;
   bool _passwordError = false;
+  bool _firstNameError = false;
+  bool _lastNameError = false;
 
   @override
   void initState() {
     super.initState();
     _emailError = false;
     _passwordError = false;
+    _firstNameError = false;
+    _lastNameError = false;
   }
 
   bool isEmailValid() {
     bool validation = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(_emailTextController.text);
 
     setState(() {
@@ -52,9 +58,29 @@ class _LoginScreenState extends State<LoginScreen> {
     return !validation;
   }
 
+  bool isFirstNameValid() {
+    bool validation = _firstNameTextController.text.trim().isNotEmpty;
+
+    setState(() {
+      _firstNameError = !validation;
+    });
+
+    return !validation;
+  }
+
+  bool isLastNameValid() {
+    bool validation = _lastNameTextController.text.trim().isNotEmpty;
+
+    setState(() {
+      _lastNameError = !validation;
+    });
+
+    return !validation;
+  }
+
   void onRichTextTap(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const RegisterScreen();
+      return const LoginScreen();
     }));
   }
 
@@ -72,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   return SingleChildScrollView(
                     child: ConstrainedBox(
                       constraints:
-                          BoxConstraints(minHeight: constraint.maxHeight),
+                      BoxConstraints(minHeight: constraint.maxHeight),
                       child: IntrinsicHeight(
                         child: Column(
                           children: <Widget>[
@@ -80,13 +106,37 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 75,
                             ),
                             const AuthHeader(
-                                title: "Welcome 👋",
+                                title: "Create a New Account",
                                 subtitle:
-                                    "We’re glad to see you here. You can continue to login and manage your company"),
+                                "Create an account in order to manage your personal company"),
                             Padding(
                               padding: const EdgeInsets.only(top: 30),
                               child: Column(
                                 children: [
+                                  ClassicTextInput(
+                                    hintText: "Firstname",
+                                    isSecured: false,
+                                    textController: _firstNameTextController,
+                                    height: 60,
+                                    borderRadius: 10,
+                                    hasBorder: false,
+                                    color: AppColors.whiteDark,
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  ClassicTextInput(
+                                    hintText: "Lastname",
+                                    isSecured: false,
+                                    textController: _lastNameTextController,
+                                    height: 60,
+                                    borderRadius: 10,
+                                    hasBorder: false,
+                                    color: AppColors.whiteDark,
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
                                   ClassicTextInput(
                                     hintText: "Email",
                                     isSecured: false,
@@ -106,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           hintText: "Password",
                                           isSecured: true,
                                           textController:
-                                              _passwordTextController,
+                                          _passwordTextController,
                                           height: 60,
                                           borderRadius: 10,
                                           hasBorder: false,
@@ -119,21 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       const FingerPrintButton(),
                                     ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 15),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: const [
-                                        Text(
-                                          "Forgot password?",
-                                          style: TextStyle(
-                                              color: AppColors.primary,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -144,13 +179,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               padding: const EdgeInsets.only(bottom: 30),
                               child: Column(
                                 children: [
-                                  const MainButton(title: "Login", onPressed: null),
+                                  const MainButton(title: "Create account", onPressed: null),
                                   const SizedBox(
                                     height: 20,
                                   ),
                                   AuthRichText(
-                                      content: "Don't have an account yet? ",
-                                      richContent: "Create one",
+                                      content: "Already have an account? ",
+                                      richContent: "Sign in",
                                       onTap: () => onRichTextTap(context)),
                                 ],
                               ),
