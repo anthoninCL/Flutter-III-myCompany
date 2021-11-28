@@ -176,7 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: Container(),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 30),
+                              padding: const EdgeInsets.only(bottom: 30, top: 10),
                               child: Column(
                                 children: [
                                   const MainButton(title: "Create account", onPressed: null),

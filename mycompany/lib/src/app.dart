@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mycompany/src/pages/login.dart';
+import 'package:mycompany/src/pages/welcome.dart';
 import 'package:mycompany/theme/app_colors.dart';
 import 'package:mycompany/theme/app_theme.dart';
 

@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Container(),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 30),
+                              padding: const EdgeInsets.only(bottom: 30, top: 10),
                               child: Column(
                                 children: [
                                   const MainButton(title: "Login", onPressed: null),

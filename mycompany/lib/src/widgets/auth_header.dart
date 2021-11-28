@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany/src/widgets/app_subtitle.dart';
+import 'package:mycompany/src/widgets/app_title.dart';
 import 'package:mycompany/theme/app_colors.dart';
 
 class AuthHeader extends StatelessWidget {
@@ -13,21 +15,11 @@ class AuthHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-              color: AppColors.primary,
-              fontSize: 30,
-              fontWeight: FontWeight.bold),
-        ),
+        AppTitle(title: title),
         const SizedBox(
           height: 10,
         ),
-        Text(
-          subtitle,
-          style: const TextStyle(
-              color: AppColors.grey, fontSize: 15, fontWeight: FontWeight.bold),
-        )
+        AppSubtitle(title: subtitle)
       ],
     );
   }
