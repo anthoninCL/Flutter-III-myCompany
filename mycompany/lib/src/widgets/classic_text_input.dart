@@ -16,7 +16,8 @@ class ClassicTextInput extends StatefulWidget {
       this.borderColor,
       required this.hasBorder,
       required this.color,
-      this.alignment = Alignment.center})
+      this.alignment = Alignment.center,
+      this.keyboardType = TextInputType.text})
       : super(key: key);
 
   final IconData? prefixIcon;
@@ -32,6 +33,7 @@ class ClassicTextInput extends StatefulWidget {
   final bool hasBorder;
   final Color color;
   final Alignment? alignment;
+  final TextInputType? keyboardType;
 
   @override
   _ClassicTextInputState createState() => _ClassicTextInputState();
@@ -63,6 +65,7 @@ class _ClassicTextInputState extends State<ClassicTextInput> {
       child: TextField(
         cursorColor: AppColors.black,
         controller: widget.textController,
+        keyboardType: widget.keyboardType,
         enableSuggestions: widget.isSecured ? false : true,
         autocorrect: false,
         obscureText: widget.isSecured ? !_passwordVisible : false,

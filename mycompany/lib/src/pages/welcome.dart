@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mycompany/src/pages/create_company.dart';
 import 'package:mycompany/src/widgets/app_subtitle.dart';
 import 'package:mycompany/src/widgets/main_button.dart';
 import 'package:mycompany/src/widgets/app_title.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
+
+  void onButtonPressed(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const CreateCompanyScreen();
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +62,11 @@ class WelcomeScreen extends StatelessWidget {
                             Expanded(
                               child: Container(),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 60, top: 10),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 60, top: 10),
                               child: MainButton(
                                 title: "Get started",
-                                onPressed: null,
+                                onPressed: () => onButtonPressed(context),
                                 centerIcon: Icons.arrow_forward,
                               ),
                             ),

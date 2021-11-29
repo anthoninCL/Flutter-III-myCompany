@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mycompany/src/pages/login.dart';
+import 'package:mycompany/src/pages/welcome.dart';
 import 'package:mycompany/src/shared/widgets/dismiss_keyboard.dart';
 import 'package:mycompany/src/widgets/auth_header.dart';
 import 'package:mycompany/src/widgets/auth_rich_text.dart';
@@ -78,6 +79,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return !validation;
   }
 
+  void onRegisterButtonPressed(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const WelcomeScreen();
+    }));
+  }
+
   void onRichTextTap(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return const LoginScreen();
@@ -121,6 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     borderRadius: 10,
                                     hasBorder: false,
                                     color: AppColors.whiteDark,
+                                    keyboardType: TextInputType.name,
                                   ),
                                   const SizedBox(
                                     height: 15,
@@ -133,6 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     borderRadius: 10,
                                     hasBorder: false,
                                     color: AppColors.whiteDark,
+                                    keyboardType: TextInputType.name,
                                   ),
                                   const SizedBox(
                                     height: 15,
@@ -145,6 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     borderRadius: 10,
                                     hasBorder: false,
                                     color: AppColors.whiteDark,
+                                    keyboardType: TextInputType.emailAddress,
                                   ),
                                   const SizedBox(
                                     height: 15,
@@ -179,7 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               padding: const EdgeInsets.only(bottom: 30, top: 10),
                               child: Column(
                                 children: [
-                                  const MainButton(title: "Create account", onPressed: null),
+                                  MainButton(title: "Create account", onPressed: () => onRegisterButtonPressed(context)),
                                   const SizedBox(
                                     height: 20,
                                   ),

@@ -95,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     borderRadius: 10,
                                     hasBorder: false,
                                     color: AppColors.whiteDark,
+                                    keyboardType: TextInputType.emailAddress,
                                   ),
                                   const SizedBox(
                                     height: 15,

@@ -33,8 +33,7 @@ class _MainButtonState extends State<MainButton> {
                 blurRadius: 10,
                 offset: const Offset(0, 15),
               )
-            ]
-        ),
+            ]),
         child: Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -49,10 +48,17 @@ class _MainButtonState extends State<MainButton> {
                 ),
               ),
               widget.centerIcon != null
-                  ? const SizedBox(width: 20,)
+                  ? const SizedBox(
+                      width: 20,
+                    )
                   : Container(),
-              widget.centerIcon != null ? Icon(
-                widget.centerIcon, color: AppColors.white, size: 26,) : Container(),
+              widget.centerIcon != null
+                  ? Icon(
+                      widget.centerIcon,
+                      color: AppColors.white,
+                      size: 26,
+                    )
+                  : Container(),
             ],
           ),
         ),
