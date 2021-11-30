@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mycompany/src/navigation_screen.dart';
 import 'package:mycompany/theme/app_colors.dart';
 import 'package:mycompany/theme/app_theme.dart';
 
@@ -34,10 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Hello"),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    return const NavigationScreen();// This trailing comma makes auto-formatting nicer for build methods.
   }
 }
