@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mycompany/src/navigation_screen.dart';
-import 'package:mycompany/theme/app_colors.dart';
-import 'package:mycompany/theme/app_theme.dart';
+import 'package:mycompany/src/config/routes/app_routes.dart';
+import 'package:mycompany/src/presentation/screens/navigation_screen.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
+import 'package:mycompany/src/config/themes/app_theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'myCompany',
       theme: AppTheme.defaultTheme,
-      home: const MyHomePage(),
+      onGenerateRoute: AppRoutes.onGenerateRoutes,
       debugShowCheckedModeBanner: false,
     );
   }

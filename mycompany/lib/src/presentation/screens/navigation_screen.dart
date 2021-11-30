@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mycompany/src/screens/home_screen.dart';
-import 'package:mycompany/src/screens/meetings_screen.dart';
-import 'package:mycompany/src/screens/profile_screen.dart';
-import 'package:mycompany/src/screens/tasks_screen.dart';
-import 'package:mycompany/theme/app_colors.dart';
+import 'package:mycompany/src/presentation/screens/home_screen.dart';
+import 'package:mycompany/src/presentation/screens/meetings_screen.dart';
+import 'package:mycompany/src/presentation/screens/profile_screen.dart';
+import 'package:mycompany/src/presentation/screens/tasks_screen.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
