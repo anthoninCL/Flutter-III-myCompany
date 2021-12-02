@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mycompany/src/presentation/screens/home_screen.dart';
 import 'package:mycompany/src/presentation/screens/meetings_screen.dart';
 import 'package:mycompany/src/presentation/screens/navigation_screen.dart';
+import 'package:mycompany/src/presentation/screens/new_task.dart';
 import 'package:mycompany/src/presentation/screens/profile_screen.dart';
 import 'package:mycompany/src/presentation/screens/tasks_screen.dart';
 
@@ -18,6 +19,8 @@ class AppRoutes {
         return _materialRoute(const MeetingsScreen());
       case '/profile':
         return _materialRoute(const ProfileScreen());
+      case '/newTask':
+        return _materialRoute(const NewTask());
       default:
         return _materialRoute(const NavigationScreen());
     }
