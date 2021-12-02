@@ -8,6 +8,7 @@ class TaskModel extends Task {
     required double estimatedTime,
     required int deadline,
     required String state,
+    required String priority,
   }) : super(
           id: id,
           name: name,
@@ -15,16 +16,17 @@ class TaskModel extends Task {
           estimatedTime: estimatedTime,
           deadline: deadline,
           state: state,
+          priority: priority,
         );
 
   factory TaskModel.fromJson(Map<String, dynamic> map) {
     return TaskModel(
-      id: map["id"],
-      name: map["name"],
-      description: map["description"],
-      estimatedTime: map["estimatedTime"],
-      deadline: map["deadline"],
-      state: map["state"],
-    );
+        id: map["id"],
+        name: map["name"],
+        description: map["description"],
+        estimatedTime: map["estimatedTime"],
+        deadline: map["deadline"],
+        state: map["state"],
+        priority: map["priority"]);
   }
 }

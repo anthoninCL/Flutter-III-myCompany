@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class Task extends Equatable {
-
   const Task({
     required this.id,
     required this.name,
@@ -9,6 +8,7 @@ class Task extends Equatable {
     required this.estimatedTime,
     required this.deadline,
     required this.state,
+    required this.priority,
   });
 
   final String id;
@@ -17,6 +17,7 @@ class Task extends Equatable {
   final double estimatedTime;
   final int deadline;
   final String state;
+  final String priority;
 
   @override
   List<Object?> get props {
@@ -26,7 +27,8 @@ class Task extends Equatable {
       description,
       estimatedTime,
       deadline,
-      state
+      state,
+      priority,
     ];
   }
 
