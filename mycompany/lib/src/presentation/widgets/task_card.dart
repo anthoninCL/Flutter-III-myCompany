@@ -86,7 +86,7 @@ class TaskCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("Deadline", style: TextStyle(color: AppColors.grey),),
+              Text("Deadline: ", style: TextStyle(color: AppColors.grey),),
               Text(DateFormat('EE dd MMM. yyyy').format(endDate), style: TextStyle(color: AppColors.primary),)
             ],
           )
