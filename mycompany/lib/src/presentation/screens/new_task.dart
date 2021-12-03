@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_picker/flutter_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/domain/entities/task.dart';
 import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
+import 'package:mycompany/src/presentation/widgets/custom_date_picker.dart';
+import 'package:mycompany/src/presentation/widgets/header_label.dart';
 import 'package:uuid/uuid.dart';
 
 class NewTask extends StatefulWidget {
@@ -117,14 +117,9 @@ class _NewTaskState extends State<NewTask> {
 
   showEstimatedTimePickerModal(BuildContext context) async {
     await Picker(
-        adapter: PickerDataAdapter(data: [
-          PickerItem(text: const Text("5 minutes"), value: "5"),
-          PickerItem(text: const Text("10 minutes"), value: "10"),
-          PickerItem(text: const Text("15 minutes"), value: "15"),
-          PickerItem(text: const Text("30 minutes"), value: "30"),
-          PickerItem(text: const Text("45 minutes"), value: "45"),
-          PickerItem(text: const Text("1 heure"), value: "60"),
-        ]),
+        adapter: PickerDataAdapter(data: List.generate(20, (index) {
+          return PickerItem(text: Text("${index + 1} days"), value: "${index + 1}");
+        })),
         changeToFirst: false,
         hideHeader: false,
         onConfirm: (picker, value) {
@@ -173,7 +168,7 @@ class _NewTaskState extends State<NewTask> {
             padding: EdgeInsets.only(right: 15),
             child: Center(
               child: Text(
-                "Done",
+                "Add",
                 style: TextStyle(fontSize: 16, color: AppColors.primary),
               ),
             ),
@@ -185,24 +180,24 @@ class _NewTaskState extends State<NewTask> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeaderText("Task Name"),
+            const HeaderLabel(label: "Task Name"),
             ClassicTextInput(
                 controller: _taskNameController,
                 placeholder: "Write your task here"),
             const SizedBox(
               height: 15,
             ),
-            _buildHeaderText("Description"),
+            const HeaderLabel(label: "Description"),
             _buildDescriptionInput(),
             const SizedBox(
               height: 15,
             ),
-            _buildHeaderText("Project"),
+            const HeaderLabel(label: "Project"),
             _buildProjectPicker(),
             const SizedBox(
               height: 15,
             ),
-            _buildHeaderText("Priority"),
+            const HeaderLabel(label: "Priority"),
             _buildPriorityPicker(),
             const SizedBox(
               height: 20,
@@ -211,25 +206,11 @@ class _NewTaskState extends State<NewTask> {
             const SizedBox(
               height: 15,
             ),
-            _buildHeaderText("Dead line"),
+            const HeaderLabel(label: "Dead line"),
             _buildDeadLine(),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildHeaderText(String label) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 18, color: AppColors.grey),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
     );
   }
 
@@ -417,43 +398,14 @@ class _NewTaskState extends State<NewTask> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 250),
             height: !isDeadLine ? 0 : 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    DatePicker.showDatePicker(context, showTitleActions: true,
-                        onConfirm: (date) {
-                      setState(() {
-                        deadline = date;
-                      });
-                    }, currentTime: deadline);
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
-                          blurRadius: 6,
-                          offset: const Offset(0, 0),
-                        ),
-                      ],
-                    ),
-                    child: const Text(
-                      "Select a deadline",
-                      style: TextStyle(fontSize: 14, color: Colors.white),
-                    ),
-                  ),
-                ),
-                Text(
-                  DateFormat('EE dd MMM. yyyy').format(deadline),
-                  style: TextStyle(fontSize: 14),
-                ),
-              ],
+            child: CustomDatePicker(
+              label: "Select a deadline",
+              date: deadline,
+              onPress: (date) {
+                setState(() {
+                  deadline = date;
+                });
+              },
             ),
           ),
         ],
