@@ -1,4 +1,4 @@
-import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Company {
   String id;
@@ -9,8 +9,8 @@ class Company {
   String country;
   String contact;
   String phoneNumber;
-  List<String> users;
-  List<String> poles;
+  List<dynamic> users;
+  List<dynamic> poles;
 
   Company(this.id, this.name, this.address, this.zipCode, this.city,
       this.country, this.contact, this.phoneNumber, this.users, this.poles);
