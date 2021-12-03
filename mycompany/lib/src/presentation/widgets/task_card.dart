@@ -11,7 +11,6 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var endDate = DateTime.fromMillisecondsSinceEpoch(task.deadline * 1000);
 
     Color _getStateColor(String state) {
@@ -21,7 +20,7 @@ class TaskCard extends StatelessWidget {
         return AppColors.yellow;
       }
     }
-    
+
     Color _getPriorityColor(String priority) {
       switch (priority) {
         case "Low":
@@ -36,8 +35,8 @@ class TaskCard extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.all(10.0),
-      margin: EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10.0),
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -45,7 +44,7 @@ class TaskCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.25),
             blurRadius: 6,
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
           ),
         ],
       ),
@@ -58,36 +57,50 @@ class TaskCard extends StatelessWidget {
               Flexible(
                 child: Text(
                   task.name,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.bold),
                 ),
               ),
-              Tile(color: _getPriorityColor(task.priority), label: task.priority)
+              Tile(
+                  color: _getPriorityColor(task.priority), label: task.priority)
             ],
           ),
-          SizedBox(height: 5,),
+          const SizedBox(
+            height: 5,
+          ),
           Text(
             task.description,
-            style: TextStyle(color: AppColors.grey),
+            style: const TextStyle(color: AppColors.grey),
           ),
-          SizedBox(height: 5,),
+          const SizedBox(
+            height: 5,
+          ),
           Wrap(
             spacing: 5,
             runSpacing: 5,
             children: [
-              Tile(color: Colors.red, label: "Development"),
+              const Tile(color: Colors.red, label: "Development"),
               Tile(color: _getStateColor(task.state), label: task.state),
               Tile(
                   color: Colors.black,
                   label: "${task.estimatedTime.toInt()} days"),
-              Tile(color: Colors.purple, label: "Communication"),
+              const Tile(color: Colors.purple, label: "Communication"),
             ],
           ),
-          SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("Deadline", style: TextStyle(color: AppColors.grey),),
-              Text(DateFormat('EE dd MMM. yyyy').format(endDate), style: TextStyle(color: AppColors.primary),)
+              const Text(
+                "Deadline",
+                style: TextStyle(color: AppColors.grey),
+              ),
+              Text(
+                DateFormat('EE dd MMM. yyyy').format(endDate),
+                style: const TextStyle(color: AppColors.primary),
+              )
             ],
           )
         ],

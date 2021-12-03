@@ -4,7 +4,9 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
+import 'package:mycompany/src/domain/entities/task.dart';
 import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
+import 'package:uuid/uuid.dart';
 
 class NewTask extends StatefulWidget {
   const NewTask({Key? key}) : super(key: key);
@@ -26,6 +28,7 @@ class _NewTaskState extends State<NewTask> {
   bool isLow = false;
   bool isMedium = false;
   bool isHigh = false;
+  String selectedPriority = "None";
 
   int estimatedTime = 0;
 
@@ -33,6 +36,9 @@ class _NewTaskState extends State<NewTask> {
   DateTime deadline = DateTime.now();
 
   void selectPriority(String label) {
+    setState(() {
+      selectedPriority = label;
+    });
     switch (label) {
       case "None":
         setState(() {
@@ -112,12 +118,12 @@ class _NewTaskState extends State<NewTask> {
   showEstimatedTimePickerModal(BuildContext context) async {
     await Picker(
         adapter: PickerDataAdapter(data: [
-          PickerItem(text: Text("5 minutes"), value: "5"),
-          PickerItem(text: Text("10 minutes"), value: "10"),
-          PickerItem(text: Text("15 minutes"), value: "15"),
-          PickerItem(text: Text("30 minutes"), value: "30"),
-          PickerItem(text: Text("45 minutes"), value: "45"),
-          PickerItem(text: Text("1 heure"), value: "60"),
+          PickerItem(text: const Text("5 minutes"), value: "5"),
+          PickerItem(text: const Text("10 minutes"), value: "10"),
+          PickerItem(text: const Text("15 minutes"), value: "15"),
+          PickerItem(text: const Text("30 minutes"), value: "30"),
+          PickerItem(text: const Text("45 minutes"), value: "45"),
+          PickerItem(text: const Text("1 heure"), value: "60"),
         ]),
         changeToFirst: false,
         hideHeader: false,
@@ -152,16 +158,16 @@ class _NewTaskState extends State<NewTask> {
       appBar: AppBar(title: const Text("New task"), actions: [
         GestureDetector(
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  // Retrieve the text the that user has entered by using the
-                  // TextEditingController.
-                  content: Text(_taskNameController.text),
-                );
-              },
-            );
+            var task = Task(
+                id: const Uuid().v4(),
+                name: _taskNameController.text,
+                description: _taskDescriptionController.text,
+                estimatedTime: estimatedTime.toDouble(),
+                deadline: deadline.millisecondsSinceEpoch,
+                state: "Todo",
+                priority: selectedPriority);
+            print(task);
+            Navigator.pop(context);
           },
           child: const Padding(
             padding: EdgeInsets.only(right: 15),
@@ -416,8 +422,8 @@ class _NewTaskState extends State<NewTask> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    DatePicker.showDatePicker(context,
-                        showTitleActions: true, onConfirm: (date) {
+                    DatePicker.showDatePicker(context, showTitleActions: true,
+                        onConfirm: (date) {
                       setState(() {
                         deadline = date;
                       });
@@ -443,7 +449,10 @@ class _NewTaskState extends State<NewTask> {
                     ),
                   ),
                 ),
-                Text(DateFormat('EE dd MMM. yyyy').format(deadline), style: TextStyle(fontSize: 14),),
+                Text(
+                  DateFormat('EE dd MMM. yyyy').format(deadline),
+                  style: TextStyle(fontSize: 14),
+                ),
               ],
             ),
           ),

@@ -24,7 +24,7 @@ class _ClassicTextInputState extends State<ClassicTextInput> {
           BoxShadow(
             color: Colors.black.withOpacity(0.25),
             blurRadius: 6,
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
           ),
         ],
       ),
@@ -33,8 +33,8 @@ class _ClassicTextInputState extends State<ClassicTextInput> {
         cursorColor: AppColors.grey,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: "Write your task here",
-          contentPadding: EdgeInsets.only(left: 20, bottom: 5),
+          hintText: widget.placeholder,
+          contentPadding: const EdgeInsets.only(left: 20, bottom: 5),
         ),
       ),
     );

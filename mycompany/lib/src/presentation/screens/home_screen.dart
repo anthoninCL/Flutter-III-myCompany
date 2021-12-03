@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Task> _tasksData = [
+  final List<Task> _tasksData = const [
     Task(
       id: "1",
       name: "Faire le design de la home page",
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.vertical,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Text(
           formattedDate,
-          style: TextStyle(fontSize: 14, color: AppColors.grey),
+          style: const TextStyle(fontSize: 14, color: AppColors.grey),
         ),
       ],
     );
@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Wrap(
       spacing: 5,
       runSpacing: 5,
-      children: [
+      children: const [
         Tile(color: Colors.red, label: "Development"),
         Tile(color: Colors.purple, label: "Communication"),
         Tile(color: AppColors.primaryLight, label: "Juloa"),
@@ -142,12 +142,12 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               "My tasts",
               style: TextStyle(fontSize: 18, color: AppColors.grey),
             ),
             GestureDetector(
-              child: Text(
+              child: const Text(
                 "New task",
                 style: TextStyle(fontSize: 18, color: AppColors.primaryLight),
               ),
@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
