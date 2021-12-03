@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
+import 'package:mycompany/src/config/themes/card_decoration.dart';
 import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
 import 'package:mycompany/src/presentation/widgets/custom_date_picker.dart';
 import 'package:mycompany/src/presentation/widgets/header_label.dart';
@@ -123,17 +124,7 @@ class _NewMeetingState extends State<NewMeeting> {
 
   Widget _buildAttendeesSelection() {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 6,
-            offset: const Offset(0, 0),
-          ),
-        ],
-      ),
+      decoration: CardDecoration(),
       child: Autocomplete(
         fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
           return TextField(
@@ -200,17 +191,7 @@ class _NewMeetingState extends State<NewMeeting> {
       runSpacing: 5,
       children: _attendees.map((attendee) {
         return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.25),
-                blurRadius: 6,
-                offset: const Offset(0, 0),
-              ),
-            ],
-          ),
+          decoration: CardDecoration(),
           child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
@@ -235,17 +216,7 @@ class _NewMeetingState extends State<NewMeeting> {
   Widget _buildScheduleSelection() {
     return Container(
       padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 6,
-            offset: const Offset(0, 0),
-          ),
-        ],
-      ),
+      decoration: CardDecoration(),
       child: Column(
         children: [
           CustomDatePicker(
@@ -283,17 +254,7 @@ class _NewMeetingState extends State<NewMeeting> {
           child: Container(
             width: MediaQuery.of(context).size.width / 5,
             height: 30,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.25),
-                  blurRadius: 6,
-                  offset: const Offset(0, 0),
-                ),
-              ],
-            ),
+            decoration: CardDecoration(),
             child: Center(
               child: Text(
                 duration.toString(),

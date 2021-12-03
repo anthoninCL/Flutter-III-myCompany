@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
+import 'package:mycompany/src/config/themes/card_decoration.dart';
 import 'package:mycompany/src/domain/entities/task.dart';
 import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
 import 'package:mycompany/src/presentation/widgets/custom_date_picker.dart';
@@ -34,6 +35,22 @@ class _NewTaskState extends State<NewTask> {
 
   bool isDeadLine = false;
   DateTime deadline = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    _taskNameController = TextEditingController();
+    _taskDescriptionController = TextEditingController();
+    _taskEstimatedTimeController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _taskNameController.dispose();
+    _taskDescriptionController.dispose();
+    _taskEstimatedTimeController.dispose();
+    super.dispose();
+  }
 
   void selectPriority(String label) {
     setState(() {
@@ -131,22 +148,6 @@ class _NewTaskState extends State<NewTask> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _taskNameController = TextEditingController();
-    _taskDescriptionController = TextEditingController();
-    _taskEstimatedTimeController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _taskNameController.dispose();
-    _taskDescriptionController.dispose();
-    _taskEstimatedTimeController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
@@ -217,17 +218,7 @@ class _NewTaskState extends State<NewTask> {
   Widget _buildDescriptionInput() {
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 6,
-            offset: const Offset(0, 0),
-          ),
-        ],
-      ),
+      decoration: CardDecoration(),
       child: TextField(
         controller: _taskDescriptionController,
         keyboardType: TextInputType.multiline,
@@ -249,17 +240,7 @@ class _NewTaskState extends State<NewTask> {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              blurRadius: 6,
-              offset: const Offset(0, 0),
-            ),
-          ],
-        ),
+        decoration: CardDecoration(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -364,17 +345,7 @@ class _NewTaskState extends State<NewTask> {
   Widget _buildDeadLine() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 6,
-            offset: const Offset(0, 0),
-          ),
-        ],
-      ),
+      decoration: CardDecoration(),
       child: Column(
         children: [
           Row(
