@@ -1,4 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mycompany/src/models/pole.dart';
+import 'package:mycompany/src/models/user.dart';
 
 class Company {
   String id;
@@ -9,8 +11,8 @@ class Company {
   String country;
   String contact;
   String phoneNumber;
-  List<dynamic> users;
-  List<dynamic> poles;
+  List<UserFront> users;
+  List<Pole> poles;
 
   Company(this.id, this.name, this.address, this.zipCode, this.city,
       this.country, this.contact, this.phoneNumber, this.users, this.poles);
@@ -41,4 +43,9 @@ class Company {
         phoneNumber = map["phoneNumber"],
         users = map["users"],
         poles = map["poles"];
+
+  @override
+  String toString() {
+    return 'Company: name: $name users: $users poles: $poles';
+  }
 }

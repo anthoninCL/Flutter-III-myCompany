@@ -1,3 +1,6 @@
+import 'package:mycompany/src/models/pole.dart';
+import 'package:mycompany/src/models/project.dart';
+
 class UserFront {
   String id;
   String firstName;
@@ -9,8 +12,8 @@ class UserFront {
   String country;
   String phoneNumber;
   String role;
-  List<dynamic> tasks;
-  List<dynamic> poles;
+  List<Project> projects;
+  List<Pole> poles;
 
   UserFront(
       this.firstName,
@@ -22,8 +25,8 @@ class UserFront {
       this.country,
       this.phoneNumber,
       this.role,
+      this.projects,
       this.poles,
-      this.tasks,
       [this.id = ""]);
 
   Map<String, dynamic> toMap() {
@@ -38,7 +41,7 @@ class UserFront {
       "country": country,
       "phoneNumber": phoneNumber,
       "role": role,
-      "tasks": tasks,
+      "projects": projects,
       "poles": poles
     };
   }
@@ -54,6 +57,12 @@ class UserFront {
         country = map["country"],
         phoneNumber = map["phoneNumber"],
         role = map["role"],
-        tasks = map["tasks"],
+        projects = map["projects"],
         poles = map["poles"];
+
+  @override
+  String toString() {
+    print(poles[0].toString());
+    return 'User: $firstName $lastName ${poles.toString()}';
+  }
 }
