@@ -1,5 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mycompany/src/exceptions/email_already_used_exception.dart';
+import 'package:mycompany/src/exceptions/invalid_email_exception.dart';
+import 'package:mycompany/src/exceptions/user_not_found_exception.dart';
+import 'package:mycompany/src/exceptions/weak_password_exception.dart';
+import 'package:mycompany/src/exceptions/wrong_password_exception.dart';
 import 'package:mycompany/src/models/company.dart';
 import 'package:mycompany/src/models/user.dart';
 import 'package:mycompany/src/services/company_service.dart';
@@ -13,22 +18,25 @@ class UserService {
   Future<String> registerUser(
       String email, String password, UserFront user, String companyId) async {
     try {
-      return FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) async {
-        if (value.user != null) {
-          user.id = value.user!.uid;
-          users.doc(value.user!.uid).set(user.toMap());
-          Company company = await CompanyService().readCompany(companyId);
-          company.users.add(user);
-          CompanyService().setCompany(company);
-          return (value.user!.uid);
-        } else {
-          throw Error();
-        }
-      });
-    } catch (err) {
-      print(err.toString());
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      if (userCredential.user != null) {
+        user.id = userCredential.user!.uid;
+        users.doc(userCredential.user!.uid).set(user.toMap());
+        Company company = await CompanyService().readCompany(companyId);
+        company.users.add(user);
+        CompanyService().setCompany(company);
+        return (userCredential.user!.uid);
+      } else {
+        throw Error();
+      }
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'weak-password') {
+        throw WeakPasswordException();
+      } else if (err.code == 'email-already-in-use') {
+        throw EmailAlreadyUsedException();
+      }
     }
     throw Error();
   }
@@ -41,7 +49,14 @@ class UserService {
       final User user = result.user!;
 
       return user.uid;
-    } catch (err) {
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'invalid-email') {
+        throw InvalidEmailException();
+      } else if (err.code == 'user-not-found') {
+        throw UserNotFoundException();
+      } else if (err.code == 'wrong-password') {
+        throw WrongPasswordException();
+      }
       throw Error();
     }
   }
