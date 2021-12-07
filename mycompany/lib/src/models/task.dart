@@ -1,5 +1,3 @@
-import 'package:mycompany/src/models/user.dart';
-
 class Task {
   String id;
   String name;

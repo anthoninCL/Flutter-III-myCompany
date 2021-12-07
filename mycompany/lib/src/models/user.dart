@@ -62,7 +62,6 @@ class UserFront {
 
   @override
   String toString() {
-    print(poles[0].toString());
     return 'User: $firstName $lastName ${poles.toString()}';
   }
 }

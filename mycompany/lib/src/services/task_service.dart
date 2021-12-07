@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mycompany/src/models/project.dart';
 import 'package:mycompany/src/models/task.dart';
-import 'package:mycompany/src/models/user.dart';
 import 'package:mycompany/src/services/project_service.dart';
-import 'package:mycompany/src/services/user_service.dart';
 
 class TaskService {
   CollectionReference tasks = FirebaseFirestore.instance.collection('tasks');
