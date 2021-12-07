@@ -6,7 +6,7 @@ class AppTitle extends StatelessWidget {
       {Key? key,
         required this.title,
         this.color = AppColors.primary,
-        this.fontSize = 50,
+        this.fontSize = 45,
         this.textAlign = TextAlign.start,
         this.fontWeight = FontWeight.bold})
       : super(key: key);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mycompany_admin/src/screens/login_screen.dart';
+import 'package:mycompany_admin/src/screens/main_screen.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
 import 'package:mycompany_admin/theme/app_theme.dart';
 
@@ -43,8 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return MaterialApp(
       title: 'myCompany',
       theme: AppTheme.defaultTheme,
+      initialRoute: '/',
       routes: {
-        '/': (context) => const LoginScreen(),
+        '/': (context) => const MainScreen(),
       },
       debugShowCheckedModeBanner: false,
     );
