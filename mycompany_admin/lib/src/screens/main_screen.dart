@@ -1,9 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:mycompany_admin/src/widgets/action_buttons_bar.dart';
 import 'package:mycompany_admin/src/widgets/app_title.dart';
 import 'package:mycompany_admin/src/widgets/collection_buttons_bar.dart';
+import 'package:mycompany_admin/src/widgets/document_list.dart';
+import 'package:mycompany_admin/src/widgets/list_item.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
+
+// CONSTANTS IMPORT TO REMOVE WHEN IMPLEMENT BLOCKS
+import 'package:mycompany_admin/src/constants/groups_datas.dart';
+import 'package:mycompany_admin/src/constants/projects_data.dart';
+import 'package:mycompany_admin/src/constants/rights_datas.dart';
+import 'package:mycompany_admin/src/constants/roles_datas.dart';
+import 'package:mycompany_admin/src/constants/tasks_datas.dart';
+import 'package:mycompany_admin/src/constants/users_dats.dart';
+import 'package:mycompany_admin/src/constants/meetings_datas.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -15,6 +27,32 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  late String _selectedScreen = 'Users';
+  late List<ListItem> _datas = listUser;
+
+  void onChangeScreen(String title) {
+    setState(() {
+      _selectedScreen = title;
+
+      // TODO : remove this when blocks implemented
+      if (title == 'Users') {
+        _datas = listUser;
+      } else if (title == 'Groups') {
+        _datas = listGroups;
+      } else if (title == 'Roles') {
+        _datas = listRoles;
+      } else if (title == 'Rights') {
+        _datas = listRights;
+      } else if (title == 'Projects') {
+        _datas = listProjects;
+      } else if (title == 'Tasks') {
+        _datas = listTasks;
+      } else if (title == 'Meetings') {
+        _datas = listMeetings;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,14 +79,18 @@ class _MainScreenState extends State<MainScreen> {
             ),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.08,
-            child: const CollectionButtonBar(),
+            child: CollectionButtonBar(
+              selected: _selectedScreen,
+              onChange: onChangeScreen,
+            ),
           ),
           Row(
             children: [
               Container( // DOCUMENT LIST
                 width: MediaQuery.of(context).size.width * 0.25,
                 height: MediaQuery.of(context).size.height * 0.85,
-                color: AppColors.greenShadow,
+                color: AppColors.background,
+                child: DocumentList(datas: _datas),
               ),
               Expanded(
                 child: Column(

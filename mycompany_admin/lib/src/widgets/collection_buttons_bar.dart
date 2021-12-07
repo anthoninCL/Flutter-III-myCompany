@@ -4,7 +4,12 @@ import 'package:mycompany_admin/src/widgets/generic_button.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
 
 class CollectionButtonBar extends StatefulWidget {
-  const CollectionButtonBar({Key? key}) : super(key: key);
+  const CollectionButtonBar(
+      {Key? key, required this.onChange, required this.selected})
+      : super(key: key);
+
+  final Function onChange;
+  final String selected;
 
   @override
   State<StatefulWidget> createState() => _CollectionButtonBarState();
@@ -14,14 +19,7 @@ class _CollectionButtonBarState extends State<CollectionButtonBar> {
   late String _selected = 'Users';
 
   bool isSelected(String title) {
-    return title == _selected;
-  }
-
-  void setSelected(String title) {
-    // TODO : FAIRE LA BONNE REQUETE POUR RECUP LES BONNES DONNEES
-    setState(() {
-      _selected = title;
-    });
+    return title == widget.selected;
   }
 
   @override
@@ -31,9 +29,7 @@ class _CollectionButtonBarState extends State<CollectionButtonBar> {
         padding: const EdgeInsets.all(10),
         child: GenericButton(
           title: 'Users',
-          onPressed: () => setState(() {
-            _selected = 'Users';
-          }),
+          onPressed: () => widget.onChange('Users'),
           backColor: isSelected('Users') ? AppColors.primary : AppColors.white,
           fontColor: isSelected('Users') ? AppColors.white : AppColors.primary,
           shadowColor:
@@ -46,9 +42,7 @@ class _CollectionButtonBarState extends State<CollectionButtonBar> {
         padding: const EdgeInsets.all(10),
         child: GenericButton(
           title: 'Groups',
-          onPressed: () => setState(() {
-            _selected = 'Groups';
-          }),
+          onPressed: () => widget.onChange('Groups'),
           backColor: isSelected('Groups') ? AppColors.primary : AppColors.white,
           fontColor: isSelected('Groups') ? AppColors.white : AppColors.primary,
           shadowColor:
@@ -61,9 +55,7 @@ class _CollectionButtonBarState extends State<CollectionButtonBar> {
         padding: const EdgeInsets.all(10),
         child: GenericButton(
           title: 'Roles',
-          onPressed: () => setState(() {
-            _selected = 'Roles';
-          }),
+          onPressed: () => widget.onChange('Roles'),
           backColor: isSelected('Roles') ? AppColors.primary : AppColors.white,
           fontColor: isSelected('Roles') ? AppColors.white : AppColors.primary,
           shadowColor:
@@ -76,9 +68,7 @@ class _CollectionButtonBarState extends State<CollectionButtonBar> {
         padding: const EdgeInsets.all(10),
         child: GenericButton(
           title: 'Rights',
-          onPressed: () => setState(() {
-            _selected = 'Rights';
-          }),
+          onPressed: () => widget.onChange('Rights'),
           backColor: isSelected('Rights') ? AppColors.primary : AppColors.white,
           fontColor: isSelected('Rights') ? AppColors.white : AppColors.primary,
           shadowColor:
@@ -91,9 +81,7 @@ class _CollectionButtonBarState extends State<CollectionButtonBar> {
         padding: const EdgeInsets.all(10),
         child: GenericButton(
           title: 'Projects',
-          onPressed: () => setState(() {
-            _selected = 'Projects';
-          }),
+          onPressed: () => widget.onChange('Projects'),
           backColor:
               isSelected('Projects') ? AppColors.primary : AppColors.white,
           fontColor:
@@ -108,9 +96,7 @@ class _CollectionButtonBarState extends State<CollectionButtonBar> {
         padding: const EdgeInsets.all(10),
         child: GenericButton(
           title: 'Tasks',
-          onPressed: () => setState(() {
-            _selected = 'Tasks';
-          }),
+          onPressed: () => widget.onChange('Tasks'),
           backColor: isSelected('Tasks') ? AppColors.primary : AppColors.white,
           fontColor: isSelected('Tasks') ? AppColors.white : AppColors.primary,
           shadowColor:
@@ -123,9 +109,7 @@ class _CollectionButtonBarState extends State<CollectionButtonBar> {
         padding: const EdgeInsets.all(10),
         child: GenericButton(
           title: 'Meetings',
-          onPressed: () => setState(() {
-            _selected = 'Meetings';
-          }),
+          onPressed: () => widget.onChange('Meetings'),
           backColor:
               isSelected('Meetings') ? AppColors.primary : AppColors.white,
           fontColor:
