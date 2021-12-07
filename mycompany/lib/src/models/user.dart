@@ -14,6 +14,7 @@ class UserFront {
   String role;
   List<Project> projects;
   List<Pole> poles;
+  String companyId;
 
   UserFront(
       this.firstName,
@@ -27,6 +28,7 @@ class UserFront {
       this.role,
       this.projects,
       this.poles,
+      this.companyId,
       [this.id = ""]);
 
   Map<String, dynamic> toMap() {
@@ -42,7 +44,8 @@ class UserFront {
       "phoneNumber": phoneNumber,
       "role": role,
       "projects": projects,
-      "poles": poles
+      "poles": poles,
+      "companyId": companyId
     };
   }
 
@@ -58,7 +61,8 @@ class UserFront {
         phoneNumber = map["phoneNumber"],
         role = map["role"],
         projects = map["projects"],
-        poles = map["poles"];
+        poles = map["poles"],
+        companyId = map["companyId"];
 
   @override
   String toString() {
