@@ -1,7 +1,96 @@
 # Flutter-III-myCompany
 
+## Data Models
 
-#### Firestore documentation: 
+- Company
+```
+company: {
+  id: string,
+  name: string,
+  address: string,
+  zipCode: string,
+  city: string,
+  country: string,
+  contact: string,
+  phoneNumber: string,
+  users: [
+    id: string // id of an item from the users collection
+  ],
+  poles: [
+    id: string // id of an item from the poles collection
+  ]
+}
+```
+- Meeting
+```
+meeting: {
+  id: string,
+  users: [
+    id: string // id of an item from the users collection
+  ],
+  name: string,
+  dateStart: number,
+  duration: number
+}
+```
+- Pole
+```
+pole: {
+  id: string,
+  name: string,
+  color: string,
+  companyId: string
+}
+```
+- Project
+```
+project: {
+  id: string,
+  name: string,
+  description: string,
+  color: string,
+  companyId: string // id of a company,
+  tasks: [
+    id: string // id of an item from the tasks collection
+  ]
+}
+```
+- Task
+```
+task: {
+  id: string,
+  name: string,
+  description: string,
+  estimatedTime: number,
+  state: string,
+  deadLine: number,
+  user: string // id of a user
+}
+```
+- User
+```
+userFront: {
+  id: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  address: string,
+  zipCode: string,
+  city: string,
+  country: string,
+  phoneNumber: string,
+  role: string,
+  projects: [
+    id: string // id of an item from the projects collection
+  ],
+  poles: [
+    id: string // id of an item from the poles collection
+  ],
+  companyId: string
+```
+
+## Firestore documentation
+
 - Company methods (inside CompanyService) : 
   - setCompany(Company object) -> Create / Update
   - deleteCompany(String companyId) -> Delete
