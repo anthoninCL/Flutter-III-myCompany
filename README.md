@@ -22,71 +22,71 @@
 }
 ```
 - Meeting
-```
-meeting: {
-  id: string,
-  users: [
-    id: string // id of an item from the users collection
+```json
+"meeting": {
+  "id": "string",
+  "users": [
+    "string"
   ],
-  name: string,
-  dateStart: number,
-  duration: number
+  "name": "string",
+  "dateStart": "number",
+  "duration": "number"
 }
 ```
 - Pole
-```
-pole: {
-  id: string,
-  name: string,
-  color: string,
-  companyId: string
+```json
+"pole": {
+  "id": "string",
+  "name": "string",
+  "color": "string",
+  "companyId": "string"
 }
 ```
 - Project
-```
-project: {
-  id: string,
-  name: string,
-  description: string,
-  color: string,
-  companyId: string // id of a company,
-  tasks: [
-    id: string // id of an item from the tasks collection
+```json
+"project": {
+  "id": "string",
+  "name": "string",
+  "description": "string",
+  "color": "string",
+  "companyId": "string",
+  "tasks": [
+    "string"
   ]
 }
 ```
 - Task
-```
-task: {
-  id: string,
-  name: string,
-  description: string,
-  estimatedTime: number,
-  state: string,
-  deadLine: number,
-  user: string // id of a user
+```json
+"task": {
+  "id": "string",
+  "name": "string",
+  "description": "string",
+  "estimatedTime": "number",
+  "state": "string",
+  "deadLine": "number",
+  "user": "string"
 }
 ```
 - User
-```
-userFront: {
-  id: string,
-  firstName: string,
-  lastName: string,
-  email: string,
-  address: string,
-  zipCode: string,
-  city: string,
-  country: string,
-  phoneNumber: string,
-  role: string,
-  projects: [
-    id: string // id of an item from the projects collection
+```json
+"user": {
+  "id": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "email": "string",
+  "address": "string",
+  "zipCode": "string",
+  "city": "string",
+  "country": "string",
+  "phoneNumber": "string",
+  "role": "string",
+  "projects": [
+    "string"
   ],
-  poles: [
-    id: string // id of an item from the poles collection
+  "poles": [
+    "string"
   ],
-  companyId: string
+  "companyId": "string"
 ```
 
 ## Firestore documentation
