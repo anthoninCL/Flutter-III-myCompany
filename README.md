@@ -5,7 +5,7 @@
 - Company
 ```
 company: {
-  id: string,
+  <span style="color:blue">id</span>: string,
   name: string,
   address: string,
   zipCode: string,
