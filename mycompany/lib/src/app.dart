@@ -6,6 +6,7 @@ import 'package:mycompany/src/pages/welcome.dart';
 import 'package:mycompany/src/navigation_screen.dart';
 import 'package:mycompany/theme/app_colors.dart';
 import 'package:mycompany/theme/app_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -14,8 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: AppColors.background,
-        statusBarBrightness: Brightness.dark
-    ));
+        statusBarBrightness: Brightness.dark));
 
     return MaterialApp(
       title: 'myCompany',
@@ -34,9 +34,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-    return const NavigationScreen();// This trailing comma makes auto-formatting nicer for build methods.
+    return FutureBuilder(
+        future: _initialization,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print(snapshot.error.toString());
+            return Text(snapshot.error.toString());
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return const NavigationScreen();
+          }
+          return const Text("Loading");
+        });
   }
 }

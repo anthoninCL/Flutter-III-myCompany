@@ -13,7 +13,6 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
-
   static const List<Widget> _screens = [
     HomeScreen(),
     TasksScreen(),
