@@ -5,19 +5,19 @@
 - Company
 ```json
 "company": {
-  "id": string,
-  "name": string,
-  "address": string,
-  "zipCode": string,
-  "city": string,
-  "country": string,
-  "contact": string,
-  "phoneNumber": string,
+  "id": "string",
+  "name": "string",
+  "address": "string",
+  "zipCode": "string",
+  "city": "string",
+  "country": "string",
+  "contact": "string",
+  "phoneNumber": "string",
   "users": [
-    "id": string // id of an item from the users collection
+    "id": "string" // id of an item from the users collection
   ],
   "poles": [
-    "id": string // id of an item from the poles collection
+    "id": "string" // id of an item from the poles collection
   ]
 }
 ```
