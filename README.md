@@ -3,21 +3,21 @@
 ## Data Models
 
 - Company
-```
-company: {
-  <span style="color:blue">id</span>: string,
-  name: string,
-  address: string,
-  zipCode: string,
-  city: string,
-  country: string,
-  contact: string,
-  phoneNumber: string,
-  users: [
-    id: string // id of an item from the users collection
+```json
+"company": {
+  "id": string,
+  "name": string,
+  "address": string,
+  "zipCode": string,
+  "city": string,
+  "country": string,
+  "contact": string,
+  "phoneNumber": string,
+  "users": [
+    "id": string // id of an item from the users collection
   ],
-  poles: [
-    id: string // id of an item from the poles collection
+  "poles": [
+    "id": string // id of an item from the poles collection
   ]
 }
 ```
