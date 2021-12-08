@@ -14,10 +14,10 @@
   "contact": "string",
   "phoneNumber": "string",
   "users": [
-    "id": "string" // id of an item from the users collection
+    "string"
   ],
   "poles": [
-    "id": "string" // id of an item from the poles collection
+    "string"
   ]
 }
 ```
