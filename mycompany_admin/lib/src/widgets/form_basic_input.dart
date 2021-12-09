@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class FormBasicInput extends StatefulWidget {
   const FormBasicInput(
       {Key? key,
-      required this.enable,
+      required this.readOnly,
       required this.fieldTitle,
       required this.textEditingController,
       this.defaultValue,
       this.hintText})
       : super(key: key);
 
-  final bool enable;
+  final bool readOnly;
   final String fieldTitle;
   final TextEditingController textEditingController;
   final String? defaultValue;
@@ -21,6 +21,16 @@ class FormBasicInput extends StatefulWidget {
 }
 
 class _FormBasicInputState extends State<FormBasicInput> {
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.defaultValue != null) {
+      widget.textEditingController.text = widget.defaultValue!;
+      // TODO if previous lane doesn't work, try widget.textEditingController.value = widget.defaultValue as TextEditingValue;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -45,6 +55,7 @@ class _FormBasicInputState extends State<FormBasicInput> {
             child: TextField(
               controller: widget.textEditingController,
               cursorColor: Colors.black,
+              readOnly: widget.readOnly,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: widget.hintText,
