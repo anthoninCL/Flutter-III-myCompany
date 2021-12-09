@@ -87,6 +87,7 @@
     "string"
   ],
   "companyId": "string"
+}
 ```
 
 ## Firestore documentation
