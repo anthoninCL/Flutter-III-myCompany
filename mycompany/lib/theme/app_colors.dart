@@ -13,11 +13,9 @@ class AppColors {
   static const greyLight = Color(0xFFE9E9E9);
   static const whiteDark = Color(0xFFF5F5F5);
   static const green = Color(0xFF2ECC71);
-  static const greenShadow = Color(0x4D2ECC71);
   static const orange = Color(0xFFF39C12);
-  static const orangeShadow = Color(0x4DF39C12);
   static const red = Color(0xFFEA2027);
-  static const redShadow = Color(0x4DEA2027);
+  static const transparent = Color(0x00000000);
 
   const AppColors._();
 }
