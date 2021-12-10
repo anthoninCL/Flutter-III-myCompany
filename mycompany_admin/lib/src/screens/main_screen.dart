@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/blocs/users/user_bloc.dart';
 
 import 'package:mycompany_admin/src/widgets/action_buttons_bar.dart';
 import 'package:mycompany_admin/src/widgets/app_title.dart';
@@ -18,7 +21,8 @@ import 'package:mycompany_admin/src/constants/users_dats.dart';
 import 'package:mycompany_admin/src/constants/meetings_datas.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({Key? key, required this.userId}) : super(key: key);
+  final String userId;
 
   static const id = "/admin-panel";
 
@@ -29,6 +33,22 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   late String _selectedScreen = 'Users';
   late List<ListItem> _datas = listUser;
+
+  final _firstNameController = TextEditingController();
+  late UserBloc _userBloc;
+  late StreamSubscription blocSubscription;
+
+  @override
+  void initState() {
+    _userBloc = UserBloc();
+
+    if (widget.userId != "") {
+      print("Main Screen getUser");
+      _userBloc.getUser(widget.userId);
+    }
+
+    super.initState();
+  }
 
   void onChangeScreen(String title) {
     setState(() {
@@ -55,6 +75,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(_firstNameController);
     return Scaffold(
       appBar: AppBar(
         title: const AppTitle(title: 'MyCompany'),
