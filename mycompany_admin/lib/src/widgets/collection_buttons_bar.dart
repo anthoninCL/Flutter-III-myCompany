@@ -41,40 +41,14 @@ class _CollectionButtonBarState extends State<CollectionButtonBar> {
       Padding(
         padding: const EdgeInsets.all(10),
         child: GenericButton(
-          title: 'Groups',
-          onPressed: () => widget.onChange('Groups'),
-          backColor: isSelected('Groups') ? AppColors.primary : AppColors.white,
-          fontColor: isSelected('Groups') ? AppColors.white : AppColors.primary,
+          title: 'Poles',
+          onPressed: () => widget.onChange('Poles'),
+          backColor: isSelected('Poles') ? AppColors.primary : AppColors.white,
+          fontColor: isSelected('Poles') ? AppColors.white : AppColors.primary,
           shadowColor:
-              isSelected('Groups') ? AppColors.primary : AppColors.white,
+              isSelected('Poles') ? AppColors.primary : AppColors.white,
           borderColor:
-              isSelected('Groups') ? AppColors.white : AppColors.primary,
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(10),
-        child: GenericButton(
-          title: 'Roles',
-          onPressed: () => widget.onChange('Roles'),
-          backColor: isSelected('Roles') ? AppColors.primary : AppColors.white,
-          fontColor: isSelected('Roles') ? AppColors.white : AppColors.primary,
-          shadowColor:
-              isSelected('Roles') ? AppColors.primary : AppColors.white,
-          borderColor:
-              isSelected('Roles') ? AppColors.white : AppColors.primary,
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(10),
-        child: GenericButton(
-          title: 'Rights',
-          onPressed: () => widget.onChange('Rights'),
-          backColor: isSelected('Rights') ? AppColors.primary : AppColors.white,
-          fontColor: isSelected('Rights') ? AppColors.white : AppColors.primary,
-          shadowColor:
-              isSelected('Rights') ? AppColors.primary : AppColors.white,
-          borderColor:
-              isSelected('Rights') ? AppColors.white : AppColors.primary,
+              isSelected('Poles') ? AppColors.white : AppColors.primary,
         ),
       ),
       Padding(

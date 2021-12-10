@@ -5,6 +5,10 @@ import 'package:mycompany_admin/src/widgets/action_buttons_bar.dart';
 import 'package:mycompany_admin/src/widgets/app_title.dart';
 import 'package:mycompany_admin/src/widgets/collection_buttons_bar.dart';
 import 'package:mycompany_admin/src/widgets/document_list.dart';
+import 'package:mycompany_admin/src/widgets/forms/meeting_form.dart';
+import 'package:mycompany_admin/src/widgets/forms/pole_form.dart';
+import 'package:mycompany_admin/src/widgets/forms/project_form.dart';
+import 'package:mycompany_admin/src/widgets/forms/task_form.dart';
 import 'package:mycompany_admin/src/widgets/forms/user_form.dart';
 import 'package:mycompany_admin/src/widgets/list_item.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
@@ -30,6 +34,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   late String _selectedScreen = 'Users';
   late List<ListItem> _datas = listUser;
+  late Widget form = const UserForm();
 
   void onChangeScreen(String title) {
     setState(() {
@@ -38,18 +43,19 @@ class _MainScreenState extends State<MainScreen> {
       // TODO : remove this when blocks implemented
       if (title == 'Users') {
         _datas = listUser;
-      } else if (title == 'Groups') {
+        form = const UserForm();
+      } else if (title == 'Poles') {
         _datas = listGroups;
-      } else if (title == 'Roles') {
-        _datas = listRoles;
-      } else if (title == 'Rights') {
-        _datas = listRights;
+        form = const PoleForm();
       } else if (title == 'Projects') {
         _datas = listProjects;
+        form = const ProjectForm();
       } else if (title == 'Tasks') {
         _datas = listTasks;
+        form = const TaskForm();
       } else if (title == 'Meetings') {
         _datas = listMeetings;
+        form = const MeetingForm();
       }
     });
   }
@@ -75,70 +81,20 @@ class _MainScreenState extends State<MainScreen> {
             Container(
               decoration: const BoxDecoration(
                   color: AppColors.background,
-                  border: Border(right: BorderSide(color: AppColors.greyLight))),
+                  border:
+                      Border(right: BorderSide(color: AppColors.greyLight))),
               width: MediaQuery.of(context).size.width * 0.25,
-              height: MediaQuery.of(context).size.height - AppBar().preferredSize.height,
+              height: MediaQuery.of(context).size.height -
+                  AppBar().preferredSize.height,
               child: DocumentList(datas: _datas),
             ),
             Container(
-              width: MediaQuery.of(context).size.width * 0.75,
-              height: MediaQuery.of(context).size.height - AppBar().preferredSize.height,
-              color: AppColors.background,
-              child: UserForm()
-            ),
-          ],
-        )
-        /*Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              border: const Border(
-                bottom: BorderSide(color: AppColors.greyLight),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.darkLight.withOpacity(0.25),
-                  spreadRadius: -5,
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                )
-              ],
-            ),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.08,
-            child: CollectionButtonBar(
-              selected: _selectedScreen,
-              onChange: onChangeScreen,
-            ),
-          ),
-          Row(
-            children: [
-              Container( // DOCUMENT LIST
-                width: MediaQuery.of(context).size.width * 0.25,
-                height: MediaQuery.of(context).size.height * 0.85,
+                width: MediaQuery.of(context).size.width * 0.75,
+                height: MediaQuery.of(context).size.height -
+                    AppBar().preferredSize.height,
                 color: AppColors.background,
-                child: DocumentList(datas: _datas),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      child: const ActionButtonBar(),
-                    ),
-                    Container( // DOCUMENT DETAIL
-                      color: AppColors.primaryLight,
-                      height: MediaQuery.of(context).size.height * 0.75,
-                      child: const UserForm(),
-                    ),
-                  ],
-                ),
-              ),
-            ]
-          )
-        ]
-      ),*/
-        );
+                child: form),
+          ],
+        ));
   }
 }
