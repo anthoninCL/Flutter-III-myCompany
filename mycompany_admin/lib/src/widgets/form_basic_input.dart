@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/theme/app_colors.dart';
 
 class FormBasicInput extends StatefulWidget {
   const FormBasicInput(
@@ -38,15 +39,19 @@ class _FormBasicInputState extends State<FormBasicInput> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            widget.fieldTitle,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+          Container(
+            width: 300,
+            child: Text(
+              widget.fieldTitle,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
           ),
           const SizedBox(
             width: 30,
           ),
           Container(
             height: 50,
+            width: MediaQuery.of(context).size.width * 0.3,
             alignment: Alignment.center,
             padding: const EdgeInsets.only(left: 20),
             decoration: BoxDecoration(
@@ -55,13 +60,14 @@ class _FormBasicInputState extends State<FormBasicInput> {
             child: TextField(
               controller: widget.textEditingController,
               cursorColor: Colors.black,
+              style: const TextStyle(color: AppColors.black, fontSize: 20),
               readOnly: widget.readOnly,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: widget.hintText,
                   hintStyle: const TextStyle(
                     color: Colors.grey,
-                    fontSize: 30,
+                    fontSize: 20,
                   )),
             ),
           )

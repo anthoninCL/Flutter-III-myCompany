@@ -5,6 +5,7 @@ import 'package:mycompany_admin/src/widgets/action_buttons_bar.dart';
 import 'package:mycompany_admin/src/widgets/app_title.dart';
 import 'package:mycompany_admin/src/widgets/collection_buttons_bar.dart';
 import 'package:mycompany_admin/src/widgets/document_list.dart';
+import 'package:mycompany_admin/src/widgets/forms/user_form.dart';
 import 'package:mycompany_admin/src/widgets/list_item.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
 
@@ -56,11 +57,38 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const AppTitle(title: 'MyCompany'),
-        backgroundColor: AppColors.background,
-      ),
-      body: Column(
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CollectionButtonBar(
+                selected: _selectedScreen,
+                onChange: onChangeScreen,
+              ),
+              const AppTitle(title: 'MyCompany'),
+            ],
+          ),
+          backgroundColor: AppColors.background,
+        ),
+        body: Row(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  border: Border(right: BorderSide(color: AppColors.greyLight))),
+              width: MediaQuery.of(context).size.width * 0.25,
+              height: MediaQuery.of(context).size.height - AppBar().preferredSize.height,
+              child: DocumentList(datas: _datas),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.75,
+              height: MediaQuery.of(context).size.height - AppBar().preferredSize.height,
+              color: AppColors.background,
+              child: UserForm()
+            ),
+          ],
+        )
+        /*Column(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -102,19 +130,15 @@ class _MainScreenState extends State<MainScreen> {
                     Container( // DOCUMENT DETAIL
                       color: AppColors.primaryLight,
                       height: MediaQuery.of(context).size.height * 0.75,
+                      child: const UserForm(),
                     ),
                   ],
                 ),
               ),
-              Container( // GROUP/ROLE ???
-                width: MediaQuery.of(context).size.width * 0.25,
-                color: AppColors.redShadow,
-                height: MediaQuery.of(context).size.height * 0.85,
-              ),
             ]
           )
         ]
-      ),
-    );
+      ),*/
+        );
   }
 }

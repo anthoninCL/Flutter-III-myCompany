@@ -37,7 +37,7 @@ class _UserFormState extends State<UserForm> {
         hintText: "LastName",
       ),
       FormBasicInput(
-        readOnly: false,
+        readOnly: true,
         fieldTitle: "Email",
         textEditingController: _emailTextController,
         hintText: "Email",

@@ -25,19 +25,18 @@ class _DocumentListState extends State<DocumentList> {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Row(
             children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.15,
-                height: 40,
+              Expanded(
                 child: ClassicTextInput(
                   hintText: "Search",
                   isSecured: false,
                   textController:
                   _searchTextController,
-                  height: 60,
+                  height: 40,
                   borderRadius: 10,
                   hasBorder: true,
                   color: AppColors.whiteDark,
                   borderColor: AppColors.greyLight,
+                  alignment: Alignment.center,
                 ),
               ),
               const SizedBox(
@@ -50,29 +49,25 @@ class _DocumentListState extends State<DocumentList> {
                   fontColor: AppColors.white,
                   shadowColor: AppColors.primary
               ),
+              const SizedBox(
+                width: 20,
+              ),
+              const GenericButton(
+                  title: 'New',
+                  onPressed: null,
+                  backColor: AppColors.primary,
+                  fontColor: AppColors.white,
+                  shadowColor: AppColors.primary
+              ),
+
             ]
           ),
         ),
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.22,
-          height: MediaQuery.of(context).size.width * 0.35,
+          height: MediaQuery.of(context).size.height * 0.85,
           child: ListView(
             children: widget.datas,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.22,
-            height: 40,
-            child: const GenericButton(
-                title: 'Add new document',
-                onPressed: null, // TODO: OUVRIR LA MODALE POUR CREER UN NOUVEAU DOC
-                backColor: AppColors.green,
-                fontColor: AppColors.white,
-                shadowColor: AppColors.greenShadow,
-              radius: 50,
-            ),
           ),
         ),
       ]
