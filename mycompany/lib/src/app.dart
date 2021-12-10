@@ -1,12 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mycompany/src/pages/create_company.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycompany/src/pages/login.dart';
-import 'package:mycompany/src/pages/welcome.dart';
-import 'package:mycompany/src/navigation_screen.dart';
 import 'package:mycompany/theme/app_colors.dart';
 import 'package:mycompany/theme/app_theme.dart';
-import 'package:firebase_core/firebase_core.dart';
+
+import 'blocs/login/login_bloc.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'myCompany',
       theme: AppTheme.defaultTheme,
-      home: const MyHomePage(),
+      home:  const MyHomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -35,19 +35,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            print(snapshot.error.toString());
-            return Text(snapshot.error.toString());
+            return Scaffold(body: Center(child: Text(snapshot.error.toString())));
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            return const NavigationScreen();
+            return BlocProvider(create: (context) => LoginBloc(), child: const LoginScreen());
           }
-          return const Text("Loading");
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
         });
   }
 }
