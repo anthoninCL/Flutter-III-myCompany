@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mycompany/src/blocs/login/login_bloc.dart';
 import 'package:mycompany/src/blocs/register/register_bloc.dart';
 import 'package:mycompany/src/pages/login.dart';
 import 'package:mycompany/src/pages/welcome.dart';
@@ -58,6 +59,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void onRegisterButtonPressed(BuildContext context) {
+    if (isFirstNameValid() || isLastNameValid()) {
+      BlocProvider.of<RegisterBloc>(context)
+          .emit(const RegisterError("One or more fields are empty"));
+    }
     BlocProvider.of<RegisterBloc>(context).add(RegisterSubmitEvent(
         _firstNameTextController.text,
         _lastNameTextController.text,
@@ -66,8 +71,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void onRichTextTap(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const LoginScreen();
+    Navigator.pop(context, MaterialPageRoute(builder: (context) {
+      return BlocProvider(
+          create: (context) => LoginBloc(), child: const LoginScreen());
     }));
   }
 
@@ -79,7 +85,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Scaffold(
           body: BlocConsumer<RegisterBloc, RegisterState>(
             listener: (context, state) {
-              if (state is RegisterError) {
+              if (state is RegisterError ||
+                  isLastNameValid() ||
+                  isFirstNameValid()) {
                 scaffoldSnackBar(context, state);
               }
             },
@@ -182,7 +190,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       Expanded(
-                        child: Container(),
+                        child: state is RegisterLoading
+                            ? _buildLoading()
+                            : Container(),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 30, top: 10),
@@ -211,5 +221,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildLoading() {
+    return const Center(child: CircularProgressIndicator());
   }
 }
