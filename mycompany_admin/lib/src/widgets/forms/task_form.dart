@@ -17,8 +17,6 @@ class _TaskFormState extends State<TaskForm> {
       TextEditingController();
   final TextEditingController _estimatedTimeTextController =
       TextEditingController();
-  final TextEditingController _stateTextController = TextEditingController();
-  final TextEditingController _deadlineTextController = TextEditingController();
   final TextEditingController _userTextController = TextEditingController();
   String taskPriority = "None";
   DateTime deadline = DateTime.now().add(const Duration(days: 1));
@@ -67,8 +65,8 @@ class _TaskFormState extends State<TaskForm> {
       CalendarInput(
         initialValue: deadline,
         onDeadlineChanged: changeDeadline,
+        fieldTitle: "Deadline",
       ),
-      // TODO CalendarInput
       FormBasicInput(
         readOnly: false,
         fieldTitle: "Assignee",

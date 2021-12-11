@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
 
 class CalendarInput extends StatefulWidget {
-  const CalendarInput({Key? key, required this.onDeadlineChanged, required this.initialValue}) : super(key: key);
+  const CalendarInput({Key? key, required this.onDeadlineChanged, required this.initialValue, required this.fieldTitle}) : super(key: key);
 
   final Function(DateTime?) onDeadlineChanged;
   final DateTime initialValue;
+  final String fieldTitle;
 
   @override
   _CalendarInputState createState() => _CalendarInputState();
@@ -41,11 +42,11 @@ class _CalendarInputState extends State<CalendarInput> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(
+          SizedBox(
             width: 300,
             child: Text(
-              "Deadline",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              widget.fieldTitle,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
           ),
           const SizedBox(
