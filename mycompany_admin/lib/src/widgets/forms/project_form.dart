@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
+import 'package:mycompany_admin/src/widgets/inputs/color_input.dart';
 
 class ProjectForm extends StatefulWidget {
   const ProjectForm({Key? key}) : super(key: key);
@@ -12,7 +13,11 @@ class ProjectForm extends StatefulWidget {
 class _ProjectFormState extends State<ProjectForm> {
   final TextEditingController _nameTextController = TextEditingController();
   final TextEditingController _descriptionTextController = TextEditingController();
-  final String color = "";
+  Color pickerColor = const Color(0xFF0652DD);
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +34,7 @@ class _ProjectFormState extends State<ProjectForm> {
         textEditingController: _descriptionTextController,
         hintText: "Project description",
       ),
-      // TODO ColorInput
+      ColorInput(pickerColor: pickerColor, onColorChange: changeColor)
       // TODO TaskSelectInput
     ]);
   }
