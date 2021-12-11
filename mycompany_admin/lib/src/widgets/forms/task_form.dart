@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
+import 'package:mycompany_admin/src/widgets/inputs/task_state_input.dart';
 
 class TaskForm extends StatefulWidget {
   const TaskForm({Key? key}) : super(key: key);
@@ -16,6 +17,19 @@ class _TaskFormState extends State<TaskForm> {
   final TextEditingController _stateTextController = TextEditingController();
   final TextEditingController _deadlineTextController = TextEditingController();
   final TextEditingController _userTextController = TextEditingController();
+  String taskPriority = "None";
+
+  @override
+  void initState() {
+    super.initState();
+    taskPriority = "None";
+  }
+
+  void changePriority(String value) {
+    setState(() {
+      taskPriority = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +52,7 @@ class _TaskFormState extends State<TaskForm> {
         textEditingController: _estimatedTimeTextController,
         hintText: "Estimated time",
       ),
-      FormBasicInput(
-        readOnly: false,
-        fieldTitle: "Task state",
-        textEditingController: _stateTextController,
-        hintText: "Task state",
-      ),
-      // TODO TaskStateSelectInput
+      TaskStateInput(changeItem: changePriority),
       FormBasicInput(
         readOnly: false,
         fieldTitle: "Deadline",

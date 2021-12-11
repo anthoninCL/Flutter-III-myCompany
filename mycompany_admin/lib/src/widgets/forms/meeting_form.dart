@@ -38,7 +38,6 @@ class _MeetingFormState extends State<MeetingForm> {
       MeetingDurationInput(changeItem: changeDuration),
       // TODO UserSelectInput
       // TODO DateTimeInput
-      // TODO MeetingDurationInput
     ]);
   }
 }
