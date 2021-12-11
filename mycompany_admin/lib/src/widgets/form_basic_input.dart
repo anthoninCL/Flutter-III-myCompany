@@ -22,7 +22,6 @@ class FormBasicInput extends StatefulWidget {
 }
 
 class _FormBasicInputState extends State<FormBasicInput> {
-
   @override
   void initState() {
     super.initState();
@@ -39,11 +38,14 @@ class _FormBasicInputState extends State<FormBasicInput> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
+          SizedBox(
             width: 300,
             child: Text(
               widget.fieldTitle,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: widget.readOnly ? AppColors.grey : AppColors.black),
             ),
           ),
           const SizedBox(
@@ -56,7 +58,8 @@ class _FormBasicInputState extends State<FormBasicInput> {
             padding: const EdgeInsets.only(left: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black)),
+                border: Border.all(
+                    color: widget.readOnly ? AppColors.grey : AppColors.black)),
             child: TextField(
               controller: widget.textEditingController,
               cursorColor: Colors.black,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
+import 'package:mycompany_admin/src/widgets/inputs/role_input.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({Key? key}) : super(key: key);
@@ -20,6 +21,19 @@ class _UserFormState extends State<UserForm> {
   final TextEditingController _cityTextController = TextEditingController();
   final TextEditingController _countryTextController = TextEditingController();
   final TextEditingController _phoneNumberTextController = TextEditingController();
+  String role = "User";
+
+  @override
+  void initState() {
+    super.initState();
+    role = "User";
+  }
+
+  void changeRole(String value) {
+    setState(() {
+      role = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +86,7 @@ class _UserFormState extends State<UserForm> {
         textEditingController: _phoneNumberTextController,
         hintText: "Phone number",
       ),
-      // TODO RoleSelectInput
+      RoleInput(changeItem: changeRole),
       // TODO ProjectSelectInput
       // TODO PoleSelectInput
     ]);
