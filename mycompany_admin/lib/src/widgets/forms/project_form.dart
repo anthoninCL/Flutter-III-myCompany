@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/shared/utils/color_convertion.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
 import 'package:mycompany_admin/src/widgets/inputs/color_input.dart';
@@ -17,6 +18,7 @@ class _ProjectFormState extends State<ProjectForm> {
 
   void changeColor(Color color) {
     setState(() => pickerColor = color);
+    print(getStringFromColor(pickerColor));
   }
 
   @override
