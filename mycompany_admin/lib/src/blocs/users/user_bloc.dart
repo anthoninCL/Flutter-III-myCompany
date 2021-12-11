@@ -1,35 +1,10 @@
-import 'dart:async';
+/*import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycompany_admin/src/models/user.dart';
 import 'package:mycompany_admin/src/services/user_service.dart';
 
 enum UserEvents { getUser, createUser, updateUser, deleteUser }
-
-final UserFront defaultUser =
-    UserFront("", "", "", "", "", "", "", "", "", [], [], "");
-
-class UserState {
-  UserFront user;
-  bool isLoading;
-  bool isLoaded;
-  bool isDeleting;
-  bool isDeleted;
-  bool isSaved;
-  bool hasFailure;
-  bool isSaving;
-
-  UserState({
-    required this.user,
-    this.isLoading = false,
-    this.isSaved = false,
-    this.isDeleting = false,
-    this.isDeleted = false,
-    this.isSaving = false,
-    this.hasFailure = false,
-    this.isLoaded = false,
-  });
-}
 
 class UserBloc extends Bloc<UserEvents, UserState> {
   final UserService _userService = UserService();
@@ -127,5 +102,31 @@ class UserBloc extends Bloc<UserEvents, UserState> {
 
          */
     }
+  }
+}
+
+
+ */
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mycompany_admin/src/models/user.dart';
+import 'package:mycompany_admin/src/services/user_service.dart';
+
+part "user_state.dart";
+
+part "user_events.dart";
+
+class UserBloc extends Bloc<UserEvent, UserState> {
+  UserBloc() : super(const UserInitial()) {
+    on<GetUser>((event, emit) async {
+      try {
+        emit(const UserLoading());
+        var user = await UserService().readUser(event.userId);
+        emit(UserLoaded(user));
+      } on Exception catch (error) {
+        emit(UserError(error.toString()));
+      }
+    });
   }
 }

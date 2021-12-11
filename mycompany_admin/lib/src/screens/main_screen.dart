@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
 
     if (widget.userId != "") {
       print("Main Screen getUser");
-      _userBloc.getUser(widget.userId);
+      _userBloc.(widget.userId);
     }
 
     super.initState();
