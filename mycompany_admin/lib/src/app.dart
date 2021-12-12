@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycompany_admin/src/screens/login_screen.dart';
 import 'package:mycompany_admin/src/screens/main_screen.dart';
+import 'package:mycompany_admin/src/screens/register_screen.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
 import 'package:mycompany_admin/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,18 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: AppColors.background,
-        statusBarBrightness: Brightness.dark));
-
-    return MaterialApp(
-      title: 'myCompany',
-      theme: AppTheme.defaultTheme,
-      home: MultiBlocProvider(providers: [
-        BlocProvider<UserBloc>(create: (BuildContext context) => UserBloc()),
-      ], child: const MyHomePage()),
-      debugShowCheckedModeBanner: false,
-    );
+    return const MyHomePage();
   }
 }
 
@@ -52,19 +42,25 @@ class _MyHomePageState extends State<MyHomePage> {
             print(snapshot.error.toString());
             return Text(snapshot.error.toString());
           }
-          if (snapshot.connectionState == ConnectionState.done) {
+          // if (snapshot.connectionState == ConnectionState.done) {
             return MaterialApp(
               title: 'myCompany',
               theme: AppTheme.defaultTheme,
-              initialRoute: '/login',
+              initialRoute: LoginScreen.id,
               routes: {
-                '/': (context) => const MainScreen(userId: 'TMAuv8NRMhcL3mdZOppWbFun6N02',),
-                '/login' : (context) => const LoginScreen(),
+                LoginScreen.id: (context) => const LoginScreen(),
+                RegisterScreen.id: (context) => const RegisterScreen(),
+                MainScreen.id: (context) => const MainScreen(),
               },
               debugShowCheckedModeBanner: false,
             );
-          }
-          return const Text("Loading");
+          /* }
+          return MaterialApp(
+              title: 'myCompany',
+              theme: AppTheme.defaultTheme,
+              home: const Text("Loading"));
+
+           */
         });
   }
 }

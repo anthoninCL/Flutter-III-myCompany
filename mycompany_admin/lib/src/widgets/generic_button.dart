@@ -4,15 +4,14 @@ import 'package:mycompany_admin/theme/app_colors.dart';
 class GenericButton extends StatefulWidget {
   const GenericButton(
       {Key? key,
-        required this.title,
-        required this.onPressed,
-        this.centerIcon,
-        required this.backColor,
-        required this.fontColor,
-        required this.shadowColor,
-        this.borderColor,
-        this.radius
-      })
+      required this.title,
+      required this.onPressed,
+      this.centerIcon,
+      required this.backColor,
+      required this.fontColor,
+      required this.shadowColor,
+      this.borderColor,
+      this.radius})
       : super(key: key);
 
   final String title;
@@ -71,10 +70,10 @@ class _GenericButtonState extends State<GenericButton> {
               ),
               widget.centerIcon != null
                   ? Icon(
-                widget.centerIcon,
-                color: widget.fontColor,
-                size: 26,
-              )
+                      widget.centerIcon,
+                      color: widget.fontColor,
+                      size: 26,
+                    )
                   : Container(),
             ],
           ),

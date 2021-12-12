@@ -26,10 +26,9 @@ import 'package:mycompany_admin/src/constants/users_dats.dart';
 import 'package:mycompany_admin/src/constants/meetings_datas.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key, required this.userId}) : super(key: key);
-  final String userId;
+  const MainScreen({Key? key}) : super(key: key);
 
-  static const id = "/admin-panel";
+  static const id = "/admin_panel";
 
   @override
   State<StatefulWidget> createState() => _MainScreenState();
