@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:mycompany/src/blocs/meeting/meeting_bloc.dart';
+import 'package:mycompany/src/blocs/task/task_bloc.dart';
+import 'package:mycompany/src/blocs/user/user_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
-import 'package:mycompany/src/domain/entities/meeting.dart';
-import 'package:mycompany/src/domain/entities/task.dart';
+import 'package:mycompany/src/presentation/shared/utils/color_extension.dart';
 import 'package:mycompany/src/presentation/widgets/meeting_card.dart';
 import 'package:mycompany/src/presentation/widgets/task_card.dart';
 import 'package:mycompany/src/presentation/widgets/tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,41 +19,48 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Task> _tasksData = const [
-    Task(
-      id: "1",
-      name: "Faire le design de la home page",
-      description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sit non est tristique gravida vitae morbi. Urna lacus at sit diam fames nec amet, in turpis. Mus eu diam velit amet ",
-      deadline: 1638442800,
-      state: "Todo",
-      priority: "Low",
-      estimatedTime: 3,
-    ),
-    Task(
-      id: "1",
-      name: "Integrer la vraie data",
-      description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sit non est tristique gravida vitae morbi. Urna lacus at sit diam fames nec amet, in turpis. Mus eu diam velit amet ",
-      deadline: 1638442800,
-      state: "In Progress",
-      priority: "Medium",
-      estimatedTime: 7,
-    ),
-    Task(
-      id: "1",
-      name: "Faire le design de la home page",
-      description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sit non est tristique gravida vitae morbi. Urna lacus at sit diam fames nec amet, in turpis. Mus eu diam velit amet ",
-      deadline: 1638442800,
-      state: "Todo",
-      priority: "High",
-      estimatedTime: 5,
-    ),
-  ];
+  final UserBloc _userBloc = UserBloc();
+  final TaskBloc _taskBloc = TaskBloc();
+  final MeetingBloc _meetingBloc = MeetingBloc();
+
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  Future<bool> init() async {
+    print("Init...");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString("userToken");
+    _userBloc.add(GetUser("TMAuv8NRMhcL3mdZOppWbFun6N02"));
+
+    _taskBloc.add(GetTasks("TMAuv8NRMhcL3mdZOppWbFun6N02"));
+
+    _meetingBloc.add(GetMeetingsFromUser("TMAuv8NRMhcL3mdZOppWbFun6N02"));
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder(
+      bloc: _userBloc,
+      builder: (context, state) {
+        if (state is UserLoaded) {
+          return _buildPage(state);
+        } else if (state is UserError) {
+          return Center(
+            child: Text(state.error),
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+
+  Widget _buildPage(state) {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -58,13 +69,28 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildDate(),
-            _buildTitle(),
-            SizedBox(height: 10),
-            _buildTiles(),
-            SizedBox(height: 10),
-            _buildMeeting(),
-            SizedBox(height: 20),
-            _buildTasksList(),
+            _buildTitle(state),
+            const SizedBox(height: 10),
+            _buildTiles(state),
+            const SizedBox(height: 10),
+            BlocBuilder<MeetingBloc, MeetingState>(
+              bloc: _meetingBloc,
+              builder: (context, state) {
+                print(state);
+                if (state is MeetingsLoaded && state.meetings.isNotEmpty) {
+                  return _buildMeeting(state);
+                }
+                return Container();
+              },
+            ),
+            const SizedBox(height: 20),
+            BlocBuilder<TaskBloc, TaskState>(
+              bloc: _taskBloc,
+              builder: (context, state) {
+                print(state);
+                return _buildTasksList(state);
+              },
+            ),
           ],
         ),
       ),
@@ -85,57 +111,51 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(state) {
     return RichText(
-      text: const TextSpan(
+      text: TextSpan(
           text: "Hello\n",
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 36,
               color: AppColors.primary,
               fontWeight: FontWeight.bold),
           children: [
             TextSpan(
-                text: "Thomas Hidalgo",
-                style: TextStyle(
+                text: "${state.user.firstName} ${state.user.lastName}",
+                style: const TextStyle(
                     fontWeight: FontWeight.normal, color: Colors.black))
           ]),
     );
   }
 
-  Widget _buildTiles() {
+  Widget _buildTiles(state) {
     return Wrap(
       spacing: 5,
       runSpacing: 5,
-      children: const [
-        Tile(color: Colors.red, label: "Development"),
-        Tile(color: Colors.purple, label: "Communication"),
-        Tile(color: AppColors.primaryLight, label: "Juloa"),
-      ],
+      children: state.user.poles.map<Widget>((pole) {
+        return Tile(color: getColor(pole.color), label: pole.name);
+      }).toList(),
     );
   }
 
-  Widget _buildMeeting() {
+  Widget _buildMeeting(state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text(
+      children: [
+        const Text(
           "Next meeting",
           style: TextStyle(fontSize: 18, color: AppColors.grey),
         ),
-        SizedBox(height: 10),
-        MeetingCard(
-          meeting: Meeting(
-              id: "1",
-              name: "Réunion Shoku",
-              users: ["ajdnzakdj, azodjazn"],
-              start: 1638442800,
-              duration: 30),
-        )
+        const SizedBox(height: 10),
+        state is MeetingsLoaded ? MeetingCard(
+          meeting: state.meetings[0],
+        ) : state is MeetingError ? Center(child: Text(state.error))
+            : const Center(child: CircularProgressIndicator()),
       ],
     );
   }
 
-  Widget _buildTasksList() {
+  Widget _buildTasksList(state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -156,15 +176,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         const SizedBox(height: 10),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: _tasksData.length,
-          itemBuilder: (context, index) {
-            return TaskCard(task: _tasksData[index],);
-          },
-        ),
+        state is TasksLoaded
+            ? ListView.builder(
+                shrinkWrap: true,
 
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: state.tasks.length,
+                itemBuilder: (context, index) {
+                  return TaskCard(
+                    task: state.tasks[index],
+                  );
+                },
+              )
+            : state is TaskError
+                ? Center(child: Text(state.error))
+                : const Center(child: CircularProgressIndicator()),
+        if (state is TasksLoaded && state.tasks.isEmpty)
+          const Center(child: Text("No attributed task", style: TextStyle(fontSize: 16, color: AppColors.grey),))
       ],
     );
   }

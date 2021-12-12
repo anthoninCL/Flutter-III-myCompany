@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
-import 'package:mycompany/src/domain/entities/task.dart';
+import 'package:mycompany/src/models/task.dart';
 import 'package:mycompany/src/presentation/widgets/tile.dart';
 
 class TaskCard extends StatelessWidget {
@@ -11,7 +11,8 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var endDate = DateTime.fromMillisecondsSinceEpoch(task.deadline * 1000);
+
+    var endDate = task.deadLine != null ? DateTime.fromMillisecondsSinceEpoch(task.deadLine! * 1000) : null;
 
     Color _getStateColor(String state) {
       if (state == "Todo") {
@@ -87,22 +88,15 @@ class TaskCard extends StatelessWidget {
               const Tile(color: Colors.purple, label: "Communication"),
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Text(
-                "Deadline",
-                style: TextStyle(color: AppColors.grey),
-              ),
-              Text(
-                DateFormat('EE dd MMM. yyyy').format(endDate),
-                style: const TextStyle(color: AppColors.primary),
-              )
-            ],
-          )
+          SizedBox(height: 10,),
+          if (endDate != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Deadline: ", style: TextStyle(color: AppColors.grey),),
+                Text(DateFormat('EE dd MMM. yyyy').format(endDate), style: TextStyle(color: AppColors.primary),)
+              ],
+            )
         ],
       ),
     );
