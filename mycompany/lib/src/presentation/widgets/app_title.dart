@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mycompany/theme/app_colors.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
 
-class AppSubtitle extends StatelessWidget {
-  const AppSubtitle(
+class AppTitle extends StatelessWidget {
+  const AppTitle(
       {Key? key,
       required this.title,
-      this.color = AppColors.grey,
-      this.fontSize = 15,
+      this.color = AppColors.primary,
+      this.fontSize = 30,
       this.textAlign = TextAlign.start,
       this.fontWeight = FontWeight.bold})
       : super(key: key);

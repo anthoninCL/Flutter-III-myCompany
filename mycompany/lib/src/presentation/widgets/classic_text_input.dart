@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mycompany/theme/app_colors.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
 
 class ClassicTextInput extends StatefulWidget {
   const ClassicTextInput(
@@ -85,7 +85,7 @@ class _ClassicTextInputState extends State<ClassicTextInput> {
                         _passwordVisible = !_passwordVisible;
                       });
                     },
-                    splashColor: AppColors.transparent,
+                    splashColor: Colors.transparent,
                     icon: Icon(
                       _passwordVisible
                           ? Icons.visibility

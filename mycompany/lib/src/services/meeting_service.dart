@@ -68,7 +68,7 @@ class MeetingService {
     return meetings;
   }
 
-  Future<List<Meeting>> readMeetingsFromuser(String userId) async {
+  Future<List<Meeting>> readMeetingsFromUser(String userId) async {
     List<Meeting> meetings = [];
     var collection = FirebaseFirestore.instance.collection('meetings');
     var docSnapshot =

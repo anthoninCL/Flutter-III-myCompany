@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mycompany/src/pages/create_company.dart';
-import 'package:mycompany/src/widgets/app_subtitle.dart';
-import 'package:mycompany/src/widgets/main_button.dart';
-import 'package:mycompany/src/widgets/app_title.dart';
+import 'package:mycompany/src/presentation/screens/create_company.dart';
+import 'package:mycompany/src/presentation/widgets/app_subtitle.dart';
+import 'package:mycompany/src/presentation/widgets/main_button.dart';
+import 'package:mycompany/src/presentation/widgets/app_title.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);

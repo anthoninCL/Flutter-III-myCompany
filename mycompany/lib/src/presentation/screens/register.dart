@@ -3,16 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycompany/src/blocs/login/login_bloc.dart';
 import 'package:mycompany/src/blocs/register/register_bloc.dart';
-import 'package:mycompany/src/pages/login.dart';
-import 'package:mycompany/src/pages/welcome.dart';
-import 'package:mycompany/src/shared/widgets/dismiss_keyboard.dart';
-import 'package:mycompany/src/widgets/auth_header.dart';
-import 'package:mycompany/src/widgets/auth_rich_text.dart';
-import 'package:mycompany/src/widgets/classic_text_input.dart';
-import 'package:mycompany/src/widgets/fingerprint_button.dart';
-import 'package:mycompany/src/widgets/main_button.dart';
-import 'package:mycompany/src/widgets/scaffold_snack_bar.dart';
-import 'package:mycompany/theme/app_colors.dart';
+import 'package:mycompany/src/presentation/screens/login.dart';
+import 'package:mycompany/src/presentation/shared/widgets/dismiss_keyboard.dart';
+import 'package:mycompany/src/presentation/widgets/auth_header.dart';
+import 'package:mycompany/src/presentation/widgets/auth_rich_text.dart';
+import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
+import 'package:mycompany/src/presentation/widgets/fingerprint_button.dart';
+import 'package:mycompany/src/presentation/widgets/main_button.dart';
+import 'package:mycompany/src/presentation/widgets/scaffold_snack_bar.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -30,13 +29,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _firstNameError = false;
   bool _lastNameError = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _firstNameError = false;
-    _lastNameError = false;
-  }
 
   bool isFirstNameValid() {
     bool validation = _firstNameTextController.text.trim().isNotEmpty;
@@ -62,12 +54,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (isFirstNameValid() || isLastNameValid()) {
       BlocProvider.of<RegisterBloc>(context)
           .emit(const RegisterError("One or more fields are empty"));
+    } else {
+      BlocProvider.of<RegisterBloc>(context).add(RegisterSubmitEvent(
+          _firstNameTextController.text,
+          _lastNameTextController.text,
+          _emailTextController.text,
+          _passwordTextController.text));
     }
-    BlocProvider.of<RegisterBloc>(context).add(RegisterSubmitEvent(
-        _firstNameTextController.text,
-        _lastNameTextController.text,
-        _emailTextController.text,
-        _passwordTextController.text));
   }
 
   void onRichTextTap(BuildContext context) {
@@ -93,9 +86,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             },
             builder: (context, state) {
               if (state is RegisterLoaded) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const WelcomeScreen();
-                }));
+                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                  Navigator.pushNamed(context, '/welcome');
+                });
               }
               return _buildInitialPage(state);
             },

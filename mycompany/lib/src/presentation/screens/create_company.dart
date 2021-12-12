@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mycompany/src/shared/utils/create_material_color.dart';
-import 'package:mycompany/src/shared/widgets/dismiss_keyboard.dart';
-import 'package:mycompany/src/widgets/app_subtitle.dart';
-import 'package:mycompany/src/widgets/classic_text_input.dart';
-import 'package:mycompany/src/widgets/main_button.dart';
-import 'package:mycompany/theme/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mycompany/src/blocs/create_company/create_company_bloc.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
+import 'package:mycompany/src/models/company.dart';
+import 'package:mycompany/src/presentation/shared/utils/create_material_color.dart';
+import 'package:mycompany/src/presentation/shared/widgets/dismiss_keyboard.dart';
+import 'package:mycompany/src/presentation/widgets/app_subtitle.dart';
+import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
+import 'package:mycompany/src/presentation/widgets/main_button.dart';
+import 'package:mycompany/src/presentation/widgets/scaffold_snack_bar.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateCompanyScreen extends StatefulWidget {
   const CreateCompanyScreen({Key? key}) : super(key: key);
@@ -52,11 +57,52 @@ class _CreateCompanyScreenState extends State<CreateCompanyScreen> {
     _companyPhoneNumberError = false;
   }
 
+  bool isInputValid(controller, state) {
+    bool validation = controller.text.trim().isNotEmpty;
+
+    setState(() {
+      state = !validation;
+    });
+
+    return !validation;
+  }
+
+  bool get areInputsValid =>
+      isInputValid(_companyNameTextController, _companyNameError) ||
+      isInputValid(_companyAddressTextController, _companyAddressError) ||
+      isInputValid(_companyZipCodeTextController, _companyZipCodeError) ||
+      isInputValid(_companyCityTextController, _companyCityError) ||
+      isInputValid(_companyCountryTextController, _companyCountryError) ||
+      isInputValid(_companyEmailTextController, _companyEmailError) ||
+      isInputValid(_companyPhoneNumberTextController, _companyPhoneNumberError);
+
   void onStepContinue() {
     if (currentStep < 2) {
       setState(() {
         currentStep += 1;
       });
+    } else {
+      if (areInputsValid) {
+        BlocProvider.of<CreateCompanyBloc>(context)
+            .emit(const CreateCompanyError("One or more fields are empty"));
+      } else {
+        BlocProvider.of<CreateCompanyBloc>(context).add(
+          CreateCompanySubmitEvent(
+            Company(
+              const Uuid().v4().toString(),
+              _companyNameTextController.text,
+              _companyAddressTextController.text,
+              _companyZipCodeTextController.text,
+              _companyCityTextController.text,
+              _companyCountryTextController.text,
+              _companyEmailTextController.text,
+              _companyPhoneNumberTextController.text,
+              [],
+              [],
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -74,60 +120,80 @@ class _CreateCompanyScreenState extends State<CreateCompanyScreen> {
         value: SystemUiOverlayStyle.dark,
         child: DismissKeyboard(
           child: Scaffold(
-            body: SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                      child: Theme(
-                    data: ThemeData(
-                      primarySwatch: createMaterialColor(AppColors.primary),
-                    ),
-                    child: Stepper(
-                      controlsBuilder: (BuildContext context,
-                          {VoidCallback? onStepContinue,
-                          VoidCallback? onStepCancel}) {
-                        return Container();
-                      },
-                      elevation: 0,
-                      physics: const ScrollPhysics(),
-                      type: StepperType.horizontal,
-                      steps: getSteps(),
-                      currentStep: currentStep,
-                      onStepContinue: onStepContinue,
-                      onStepCancel: onStepCancel,
-                    ),
-                  )),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 60, top: 10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        TextButton(
-                          onPressed: onStepCancel,
-                          child: const Text(
-                            'Cancel',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 150,
-                          child: MainButton(
-                            onPressed: onStepContinue,
-                            title: "Continue",
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            body: BlocConsumer<CreateCompanyBloc, CreateCompanyState>(
+                listener: (context, state) {
+                  if (state is CreateCompanyError || areInputsValid) {
+                    scaffoldSnackBar(context, state);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is CreateCompanyLoaded) {
+                    WidgetsBinding.instance!.addPostFrameCallback((_) {
+                      Navigator.pushNamed(context, '/');
+                    });
+                  }
+                  return _buildInitialPage(state);
+                }),
           ),
         ));
+  }
+
+  Widget _buildInitialPage(state) {
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+              child: Theme(
+            data: ThemeData(
+              primarySwatch: createMaterialColor(AppColors.primary),
+            ),
+            child: Stepper(
+              controlsBuilder: (BuildContext context,
+                  {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) {
+                return Container();
+              },
+              elevation: 0,
+              physics: const ScrollPhysics(),
+              type: StepperType.horizontal,
+              steps: getSteps(),
+              currentStep: currentStep,
+              onStepContinue: onStepContinue,
+              onStepCancel: onStepCancel,
+            ),
+          )),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 60, top: 10),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                currentStep > 0
+                    ? TextButton(
+                        onPressed: onStepCancel,
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary),
+                        ),
+                      )
+                    : Container(
+                        width: 90,
+                      ),
+                SizedBox(
+                  width: 150,
+                  child: MainButton(
+                    onPressed: onStepContinue,
+                    title: "Continue",
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   List<Step> getSteps() => [

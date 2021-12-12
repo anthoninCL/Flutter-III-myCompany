@@ -4,10 +4,11 @@ class Task {
   String description;
   double estimatedTime;
   String state;
+  String priority;
   int? deadLine;
   String? user;
 
-  Task(this.id, this.name, this.description, this.estimatedTime, this.state,
+  Task(this.id, this.name, this.description, this.estimatedTime, this.state, this.priority,
       {this.deadLine, this.user});
 
   Map<String, dynamic> toMap() {
@@ -19,6 +20,7 @@ class Task {
       "state": state,
       "deadLine": deadLine,
       "user": user,
+      "priority": priority,
     };
   }
 
@@ -29,7 +31,8 @@ class Task {
         estimatedTime = map["estimatedTime"],
         state = map["state"],
         deadLine = map["deadLine"],
-        user = map["user"];
+        user = map["user"],
+        priority = map["priority"];
 
   @override
   String toString() {

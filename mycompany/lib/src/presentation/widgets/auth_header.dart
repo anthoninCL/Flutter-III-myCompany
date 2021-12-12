@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mycompany/src/widgets/app_subtitle.dart';
-import 'package:mycompany/src/widgets/app_title.dart';
-import 'package:mycompany/theme/app_colors.dart';
+import 'package:mycompany/src/presentation/widgets/app_subtitle.dart';
+import 'package:mycompany/src/presentation/widgets/app_title.dart';
 
 class AuthHeader extends StatelessWidget {
   const AuthHeader({Key? key, required this.title, required this.subtitle})

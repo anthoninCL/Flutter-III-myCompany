@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:mycompany/theme/app_colors.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
 
 class AuthRichText extends StatelessWidget {
   const AuthRichText(

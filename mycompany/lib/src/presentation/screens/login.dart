@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycompany/src/blocs/login/login_bloc.dart';
-import 'package:mycompany/src/blocs/register/register_bloc.dart';
-import 'package:mycompany/src/pages/register.dart';
-import 'package:mycompany/src/shared/widgets/dismiss_keyboard.dart';
-import 'package:mycompany/src/widgets/auth_header.dart';
-import 'package:mycompany/src/widgets/auth_rich_text.dart';
-import 'package:mycompany/src/widgets/classic_text_input.dart';
-import 'package:mycompany/src/widgets/fingerprint_button.dart';
-import 'package:mycompany/src/widgets/main_button.dart';
-import 'package:mycompany/src/widgets/scaffold_snack_bar.dart';
-import 'package:mycompany/theme/app_colors.dart';
+import 'package:mycompany/src/presentation/shared/widgets/dismiss_keyboard.dart';
+import 'package:mycompany/src/presentation/widgets/auth_header.dart';
+import 'package:mycompany/src/presentation/widgets/auth_rich_text.dart';
+import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
+import 'package:mycompany/src/presentation/widgets/fingerprint_button.dart';
+import 'package:mycompany/src/presentation/widgets/main_button.dart';
+import 'package:mycompany/src/presentation/widgets/scaffold_snack_bar.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -25,9 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordTextController = TextEditingController();
 
   void onRichTextTap(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return BlocProvider(create: (context) => RegisterBloc(), child: const RegisterScreen());
-    }));
+    Navigator.pushNamed(context, "/register");
   }
 
   @override
@@ -44,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             builder: (context, state) {
               if (state is LoginLoaded) {
-                Navigator.pushNamed(context, "/navigation");
+                Navigator.pushNamed(context, "/");
               }
               return _buildInitialPage(state);
             },
