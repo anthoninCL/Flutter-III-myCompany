@@ -9,7 +9,8 @@ class MultiSelectInput extends StatefulWidget {
       required this.selectedItems,
       required this.onChange,
       required this.fieldTitle,
-      required this.onEmpty})
+      required this.onEmpty,
+      this.childBuilder})
       : super(key: key);
 
   final List<String> items;
@@ -17,6 +18,7 @@ class MultiSelectInput extends StatefulWidget {
   final Function(List<String>) onChange;
   final String fieldTitle;
   final String onEmpty;
+  final Widget Function(List<String>)? childBuilder;
 
   @override
   _MultiSelectInputState createState() => _MultiSelectInputState();
@@ -55,7 +57,7 @@ class _MultiSelectInputState extends State<MultiSelectInput> {
               onChanged: widget.onChange,
               options: widget.items,
               selectedValues: widget.selectedItems,
-              childBuilder: buildChildItem,
+              childBuilder: widget.childBuilder ?? buildChildItem,
               whenEmpty: widget.onEmpty,
               decoration: const InputDecoration(
                   border: InputBorder.none,

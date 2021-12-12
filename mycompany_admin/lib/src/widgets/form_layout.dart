@@ -13,15 +13,15 @@ class FormLayout extends StatefulWidget {
 class _FormLayoutState extends State<FormLayout> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.1,
-          child: const ActionButtonBar(creation: false,),
-        ),
-        SingleChildScrollView(
-          child: Padding(
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: const ActionButtonBar(creation: false,),
+          ),
+          Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -29,8 +29,8 @@ class _FormLayoutState extends State<FormLayout> {
               children: widget.children,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

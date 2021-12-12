@@ -54,8 +54,16 @@ class _MeetingFormState extends State<MeetingForm> {
         hintText: "Project name",
       ),
       MeetingDurationInput(changeItem: changeDuration),
-      DateTimeInput(onValueChanged: changeStart, initialValue: start, fieldTitle: "Schedule"),
-      MultiSelectInput(items: const ['John', 'Bob', 'James', 'Mandy'], selectedItems: users, onChange: changeUsers, fieldTitle: "Users", onEmpty: "Select users")
+      DateTimeInput(
+          onValueChanged: changeStart,
+          initialValue: start,
+          fieldTitle: "Schedule"),
+      MultiSelectInput(
+          items: const ['John', 'Bob', 'James', 'Mandy'],
+          selectedItems: users,
+          onChange: changeUsers,
+          fieldTitle: "Users",
+          onEmpty: "Select users")
     ]);
   }
 }
