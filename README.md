@@ -1,7 +1,12 @@
 # Flutter-III-myCompany
 
-## User Stories
+## Mock up
 
+To design our application, we decided to go with Figma into a full mock up of our mobile application and our admin console. We didn't take the time to prototype it because of the lack of time and the lack of use in our project.
+
+[Link to our mock up](https://www.figma.com/file/f1hUvDjGJOyvWnQnPnrROc/myCompany?node-id=0%3A1)
+
+## User Stories
 
 ### Mobile App:
 
@@ -204,12 +209,3 @@ As an admin I want to see all the information linked to a pole. <br />
   - readMeeting(String meetingId) -> Read
   - readMeetings(List<String> meetingsId) -> Read several meetings
   - readMeetingsFromUser(String userId) -> Read all tasks linked to one user
-  
-  
-  
-  
-  
-  
-  
-  
-  
