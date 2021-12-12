@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mycompany_admin/src/widgets/dropdown_menu_widget.dart';
 
 class MeetingDurationInput extends StatefulWidget {
-  const MeetingDurationInput({Key? key, required this.changeItem})
+  const MeetingDurationInput(
+      {Key? key, required this.changeItem, this.initialItem})
       : super(key: key);
 
   final Function(String) changeItem;
+  final String? initialItem;
 
   @override
   _MeetingDurationInputState createState() => _MeetingDurationInputState();
@@ -42,7 +44,7 @@ class _MeetingDurationInputState extends State<MeetingDurationInput> {
               child: DropDownMenuWidget(
                   items: items,
                   changeItem: widget.changeItem,
-                  initialItem: items[0]))
+                  initialItem: widget.initialItem ?? items[0]))
         ],
       ),
     );

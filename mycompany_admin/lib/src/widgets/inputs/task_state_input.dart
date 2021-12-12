@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mycompany_admin/src/widgets/dropdown_menu_widget.dart';
 
 class TaskStateInput extends StatefulWidget {
-  const TaskStateInput({Key? key, required this.changeItem}) : super(key: key);
+  const TaskStateInput({Key? key, required this.changeItem, this.initialItem}) : super(key: key);
 
   final Function(String) changeItem;
+  final String? initialItem;
 
   @override
   _TaskStateInputState createState() => _TaskStateInputState();
@@ -41,7 +42,7 @@ class _TaskStateInputState extends State<TaskStateInput> {
               child: DropDownMenuWidget(
                   items: items,
                   changeItem: widget.changeItem,
-                  initialItem: items[0]))
+                  initialItem: widget.initialItem ?? items[0]))
         ],
       ),
     );
