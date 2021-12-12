@@ -1,5 +1,77 @@
 # Flutter-III-myCompany
 
+## User Stories
+
+
+### Mobile App:
+
+#### Account:
+
+As a user I want to login to the mobile app. <br />
+As a user I want to register on the mobile app. <br />
+
+#### Company:
+
+As a user I want to create a company. <br />
+
+#### Task:
+As a user I want to see all the tasks assigned to me. <br />
+As a user I want to see all the tasks linked to my company. <br />
+As a user I want to create a task. <br />
+
+
+#### Meeting:
+As a user I want to see all of my next meetings.  <br />
+As a user I want to create a meeting.  <br />
+
+#### User:
+As a user I want to be able to edit my profile information.
+
+
+### Web App:
+
+#### Account:
+As an admin I want to login to the web app. <br />
+As an admin I want to register on the web app. <br />
+
+#### User: 
+As an admin I want to create an account for a user. <br />
+As an admin I want to modify the information for a user. <br />
+As an admin I want to delete a user. <br />
+As an admin I want to see all the information linked to a user. <br />
+
+#### Company:
+As an admin I want to create a company. <br />
+As an admin I want to modify the information concerning my company. <br />
+As an admin I want to delete a company. <br />
+As an admin I want to see all the information linked to a company. <br />
+
+#### Meetings:
+As an admin I want to create a meeting. <br />
+As an admin I want to modify the information concerning a meeting. <br />
+As an admin I want to delete a meeting. <br />
+As an admin I want to see all the information linked to a meeting. <br />
+
+#### Tasks:
+As an admin I want to create a task. <br />
+As an admin I want to modify the information concerning a task. <br />
+As an admin I want to delete a task. <br />
+As an admin I want to see all the information linked to a task. <br />
+
+#### Projects:
+As an admin I want to create a project. <br />
+As an admin I want to modify the information concerning a project. <br />
+As an admin I want to delete a project. <br />
+As an admin I want to see all the information linked to a project. <br />
+
+#### Pole:
+
+As an admin I want to create a pole. <br />
+As an admin I want to modify the information concerning a pole. <br />
+As an admin I want to delete a pole. <br />
+As an admin I want to see all the information linked to a pole. <br />
+
+
 ## Data Models
 
 - Company
