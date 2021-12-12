@@ -8,6 +8,17 @@ To design our application, we decided to go with Figma into a full mock up of ou
 
 [Link to our admin console mock up](https://www.figma.com/file/f1hUvDjGJOyvWnQnPnrROc/myCompany?node-id=184%3A9)
 
+## Route Map Navigation
+
+### Mobile App:
+
+<img width="524" alt="Capture d’écran 2021-12-12 à 22 49 27" src="https://user-images.githubusercontent.com/37048180/145731117-ce469ad3-fe52-4fe8-b3e8-ba4a6f89bc7b.png">
+
+
+### Web App:
+
+<img width="672" alt="Capture d’écran 2021-12-12 à 22 55 01" src="https://user-images.githubusercontent.com/37048180/145731120-9fda7240-47b4-472e-a8c7-673f5022636d.png">
+
 ## User Stories
 
 ### Mobile App:
