@@ -139,6 +139,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.0.0"
+  flutter_colorpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_colorpicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
+  flutter_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_datetime_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.5.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -198,6 +212,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  multiselect:
+    dependency: "direct main"
+    description:
+      name: multiselect
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   nested:
     dependency: transitive
     description:
@@ -245,6 +266,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  states_rebuilder:
+    dependency: transitive
+    description:
+      name: states_rebuilder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.4.0"
   stream_channel:
     dependency: transitive
     description:
@@ -289,4 +317,4 @@ packages:
     version: "2.1.0"
 sdks:
   dart: ">=2.12.0 <3.0.0"
-  flutter: ">=1.16.0"
+  flutter: ">=1.17.0"

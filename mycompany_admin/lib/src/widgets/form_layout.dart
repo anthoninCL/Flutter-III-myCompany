@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/widgets/action_buttons_bar.dart';
 
 class FormLayout extends StatefulWidget {
   const FormLayout({Key? key, required this.children}) : super(key: key);
@@ -14,7 +15,21 @@ class _FormLayoutState extends State<FormLayout> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: widget.children,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: const ActionButtonBar(creation: false,),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: widget.children,
+            ),
+          ),
+        ],
       ),
     );
   }

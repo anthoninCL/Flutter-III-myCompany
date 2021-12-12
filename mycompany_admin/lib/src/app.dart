@@ -56,9 +56,10 @@ class _MyHomePageState extends State<MyHomePage> {
             return MaterialApp(
               title: 'myCompany',
               theme: AppTheme.defaultTheme,
-              initialRoute: '/',
+              initialRoute: '/login',
               routes: {
                 '/': (context) => const MainScreen(userId: 'TMAuv8NRMhcL3mdZOppWbFun6N02',),
+                '/login' : (context) => const LoginScreen(),
               },
               debugShowCheckedModeBanner: false,
             );

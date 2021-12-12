@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
+import 'package:mycompany_admin/src/widgets/inputs/multiselect_input.dart';
+import 'package:mycompany_admin/src/widgets/inputs/role_input.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({Key? key}) : super(key: key);
@@ -20,6 +22,35 @@ class _UserFormState extends State<UserForm> {
   final TextEditingController _cityTextController = TextEditingController();
   final TextEditingController _countryTextController = TextEditingController();
   final TextEditingController _phoneNumberTextController = TextEditingController();
+  String role = "User";
+  List<String> projects = [];
+  List<String> poles = [];
+
+  @override
+  void initState() {
+    super.initState();
+    role = "User";
+    projects = [];
+    poles = [];
+  }
+
+  void changeRole(String value) {
+    setState(() {
+      role = value;
+    });
+  }
+
+  void changeProjects(List<String> newProjects) {
+    setState(() {
+      projects = newProjects;
+    });
+  }
+
+  void changePoles(List<String> newPoles) {
+    setState(() {
+      poles = newPoles;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +68,7 @@ class _UserFormState extends State<UserForm> {
         hintText: "LastName",
       ),
       FormBasicInput(
-        readOnly: false,
+        readOnly: true,
         fieldTitle: "Email",
         textEditingController: _emailTextController,
         hintText: "Email",
@@ -72,9 +103,19 @@ class _UserFormState extends State<UserForm> {
         textEditingController: _phoneNumberTextController,
         hintText: "Phone number",
       ),
-      // TODO RoleSelectInput
-      // TODO ProjectSelectInput
-      // TODO PoleSelectInput
+      RoleInput(changeItem: changeRole),
+      MultiSelectInput(
+          items: const ['Project 1', 'Project 2', 'Project 3', 'Project 4'],
+          selectedItems: projects,
+          onChange: changeProjects,
+          fieldTitle: "Projects",
+          onEmpty: "Select projects"),
+      MultiSelectInput(
+          items: const ['Dev', 'Design', 'Comm', 'Test'],
+          selectedItems: poles,
+          onChange: changePoles,
+          fieldTitle: "Poles",
+          onEmpty: "Select poles")
     ]);
   }
 }

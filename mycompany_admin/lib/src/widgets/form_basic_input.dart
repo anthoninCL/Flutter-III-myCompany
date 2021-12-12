@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/theme/app_colors.dart';
 
 class FormBasicInput extends StatefulWidget {
   const FormBasicInput(
@@ -21,7 +22,6 @@ class FormBasicInput extends StatefulWidget {
 }
 
 class _FormBasicInputState extends State<FormBasicInput> {
-
   @override
   void initState() {
     super.initState();
@@ -38,30 +38,39 @@ class _FormBasicInputState extends State<FormBasicInput> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            widget.fieldTitle,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+          SizedBox(
+            width: 300,
+            child: Text(
+              widget.fieldTitle,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: widget.readOnly ? AppColors.grey : AppColors.black),
+            ),
           ),
           const SizedBox(
             width: 30,
           ),
           Container(
             height: 50,
+            width: MediaQuery.of(context).size.width * 0.3,
             alignment: Alignment.center,
             padding: const EdgeInsets.only(left: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black)),
+                border: Border.all(
+                    color: widget.readOnly ? AppColors.grey : AppColors.black)),
             child: TextField(
               controller: widget.textEditingController,
               cursorColor: Colors.black,
+              style: const TextStyle(color: AppColors.black, fontSize: 20),
               readOnly: widget.readOnly,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: widget.hintText,
                   hintStyle: const TextStyle(
                     color: Colors.grey,
-                    fontSize: 30,
+                    fontSize: 20,
                   )),
             ),
           )
