@@ -49,7 +49,7 @@ class _MultiSelectInputState extends State<MultiSelectInput> {
             height: 50,
             width: MediaQuery.of(context).size.width * 0.3,
             alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.only(left: 20, right: 10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: AppColors.black)),
@@ -74,11 +74,17 @@ class _MultiSelectInputState extends State<MultiSelectInput> {
 
   Widget buildChildItem(List<String> selectedItems) {
     return Align(
-        child: Text(
-          selectedItems.isNotEmpty
-              ? selectedItems.reduce((a, b) => a + ' , ' + b)
-              : widget.onEmpty,
-          style: const TextStyle(color: AppColors.black, fontSize: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              selectedItems.isNotEmpty
+                  ? selectedItems.reduce((a, b) => a + ' , ' + b)
+                  : widget.onEmpty,
+              style: TextStyle(color: selectedItems.isNotEmpty ? AppColors.black : AppColors.grey, fontSize: 20),
+            ),
+            const Icon(Icons.arrow_drop_down, color: AppColors.black, size: 32)
+          ],
         ),
         alignment: Alignment.centerLeft);
   }
