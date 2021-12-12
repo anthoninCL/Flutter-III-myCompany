@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<bool> init() async {
-    print("Init...");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId = prefs.getString("userToken");
     _userBloc.add(GetUser("TMAuv8NRMhcL3mdZOppWbFun6N02"));

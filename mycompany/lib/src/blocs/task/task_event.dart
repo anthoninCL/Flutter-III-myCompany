@@ -15,3 +15,10 @@ class GetTasks extends TaskEvent {
 }
 
 class EditTask extends TaskEvent {}
+
+class AddTask extends TaskEvent {
+  final Task task;
+  final String projectId;
+
+  AddTask(this.task, this.projectId);
+}

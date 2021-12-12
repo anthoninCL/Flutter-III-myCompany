@@ -26,5 +26,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         emit(TaskError(error.toString()));
       }
     });
+    on<AddTask>((event, emit) async {
+      try {
+        print("Adding task...");
+        await TaskService().setTask(event.task, event.projectId);
+      } on Exception catch (error) {
+        emit(TaskError(error.toString()));
+      }
+    });
   }
 }

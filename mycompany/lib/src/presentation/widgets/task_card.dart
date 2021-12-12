@@ -12,7 +12,7 @@ class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var endDate = task.deadLine != null ? DateTime.fromMillisecondsSinceEpoch(task.deadLine! * 1000) : null;
+    var endDate = task.deadLine != null ? DateTime.fromMillisecondsSinceEpoch(task.deadLine!) : null;
 
     Color _getStateColor(String state) {
       if (state == "Todo") {
@@ -82,13 +82,14 @@ class TaskCard extends StatelessWidget {
             children: [
               const Tile(color: Colors.red, label: "Development"),
               Tile(color: _getStateColor(task.state), label: task.state),
-              Tile(
+              if (task.estimatedTime > 0)
+                Tile(
                   color: Colors.black,
                   label: "${task.estimatedTime.toInt()} days"),
               const Tile(color: Colors.purple, label: "Communication"),
             ],
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           if (endDate != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.start,

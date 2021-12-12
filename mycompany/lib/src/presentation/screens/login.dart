@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycompany/src/blocs/login/login_bloc.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/presentation/shared/widgets/dismiss_keyboard.dart';
 import 'package:mycompany/src/presentation/widgets/auth_header.dart';
 import 'package:mycompany/src/presentation/widgets/auth_rich_text.dart';
@@ -9,7 +10,6 @@ import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
 import 'package:mycompany/src/presentation/widgets/fingerprint_button.dart';
 import 'package:mycompany/src/presentation/widgets/main_button.dart';
 import 'package:mycompany/src/presentation/widgets/scaffold_snack_bar.dart';
-import 'package:mycompany/src/config/themes/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -78,15 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           children: [
                             ClassicTextInput(
-                              hintText: "Email",
-                              isSecured: false,
-                              textController: _emailTextController,
-                              height: 60,
-                              borderRadius: 10,
-                              hasBorder: false,
-                              color: AppColors.whiteDark,
-                              keyboardType: TextInputType.emailAddress,
-                            ),
+                                controller: _emailTextController,
+                                placeholder: "Email"),
                             const SizedBox(
                               height: 15,
                             ),
@@ -94,13 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Expanded(
                                   child: ClassicTextInput(
-                                    hintText: "Password",
-                                    isSecured: true,
-                                    textController: _passwordTextController,
-                                    height: 60,
-                                    borderRadius: 10,
-                                    hasBorder: false,
-                                    color: AppColors.whiteDark,
+                                    controller: _emailTextController,
+                                    placeholder: "Password",
+                                    secure: true,
                                   ),
                                 ),
                                 const SizedBox(

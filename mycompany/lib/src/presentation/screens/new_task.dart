@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:mycompany/src/blocs/project/project_bloc.dart';
+import 'package:mycompany/src/blocs/task/task_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
-import 'package:mycompany/src/domain/entities/task.dart';
+import 'package:mycompany/src/models/project.dart';
+import 'package:mycompany/src/models/task.dart';
 import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class NewTask extends StatefulWidget {
@@ -22,7 +27,7 @@ class _NewTaskState extends State<NewTask> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String projectSelected = "";
+  Project? projectSelected;
 
   bool isNone = true;
   bool isLow = false;
@@ -34,6 +39,9 @@ class _NewTaskState extends State<NewTask> {
 
   bool isDeadLine = false;
   DateTime deadline = DateTime.now();
+
+  final TaskBloc _taskBloc = TaskBloc();
+  final ProjectBloc _projectBloc = ProjectBloc();
 
   void selectPriority(String label) {
     setState(() {
@@ -83,6 +91,31 @@ class _NewTaskState extends State<NewTask> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    init();
+    _taskNameController = TextEditingController();
+    _taskDescriptionController = TextEditingController();
+    _taskEstimatedTimeController = TextEditingController();
+  }
+
+  void init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var companyId = prefs.getString("companyId");
+    if (companyId != null) {
+    }
+    _projectBloc.add(GetProjectsFromCompany("8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
+  }
+
+  @override
+  void dispose() {
+    _taskNameController.dispose();
+    _taskDescriptionController.dispose();
+    _taskEstimatedTimeController.dispose();
+    super.dispose();
+  }
+
   bool getPriority(String label) {
     switch (label) {
       case "None":
@@ -98,33 +131,38 @@ class _NewTaskState extends State<NewTask> {
     }
   }
 
-  showProjectPickerModal(BuildContext context) async {
+  showProjectPickerModal(BuildContext context, ProjectState state) async {
     await Picker(
-        adapter: PickerDataAdapter(data: [
-          PickerItem(text: Text("Project 1"), value: "Project 1"),
-          PickerItem(text: Text("Project 2"), value: "Project 2"),
-          PickerItem(text: Text("Project 3"), value: "Project 3"),
-        ]),
+        adapter: PickerDataAdapter(
+          data: state is ProjectsLoaded && state.projects.isNotEmpty
+              ? state.projects.map(
+                  (project) {
+                    return PickerItem(text: Text(project.name), value: project.name);
+                  },
+                ).toList()
+              : [PickerItem(text: const Text("No project found"))],
+        ),
         changeToFirst: false,
         hideHeader: false,
         onConfirm: (picker, value) {
-          setState(() {
-            projectSelected =
+          if (state is ProjectsLoaded) {
+            var itemSelected =
                 picker.adapter.text.replaceAll(RegExp(r'[^\w\s]+'), '');
-          });
+            print("item selected: $itemSelected");
+            var project =
+                state.projects.firstWhere((elem) => elem.name == itemSelected);
+            setState(() {
+              projectSelected = project;
+            });
+          }
         }).showModal(this.context);
   }
 
   showEstimatedTimePickerModal(BuildContext context) async {
     await Picker(
-        adapter: PickerDataAdapter(data: [
-          PickerItem(text: const Text("5 minutes"), value: "5"),
-          PickerItem(text: const Text("10 minutes"), value: "10"),
-          PickerItem(text: const Text("15 minutes"), value: "15"),
-          PickerItem(text: const Text("30 minutes"), value: "30"),
-          PickerItem(text: const Text("45 minutes"), value: "45"),
-          PickerItem(text: const Text("1 heure"), value: "60"),
-        ]),
+        adapter: PickerDataAdapter(data:
+          List.generate(20, (index) => PickerItem(text: Text("${index + 1} days"), value: "${index + 1}")),
+        ),
         changeToFirst: false,
         hideHeader: false,
         onConfirm: (picker, value) {
@@ -135,20 +173,18 @@ class _NewTaskState extends State<NewTask> {
         }).showModal(this.context);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _taskNameController = TextEditingController();
-    _taskDescriptionController = TextEditingController();
-    _taskEstimatedTimeController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _taskNameController.dispose();
-    _taskDescriptionController.dispose();
-    _taskEstimatedTimeController.dispose();
-    super.dispose();
+  void onTapDone(context) {
+    var task = Task(
+      const Uuid().v4(),
+      _taskNameController.text,
+      _taskDescriptionController.text,
+      estimatedTime.toDouble(),
+      "Todo",
+      selectedPriority,
+      deadLine: isDeadLine ? deadline.millisecondsSinceEpoch : null,
+    );
+    _taskBloc.add(AddTask(task, projectSelected!.id));
+    Navigator.pop(context);
   }
 
   @override
@@ -157,18 +193,7 @@ class _NewTaskState extends State<NewTask> {
       key: _scaffoldKey,
       appBar: AppBar(title: const Text("New task"), actions: [
         GestureDetector(
-          onTap: () {
-            var task = Task(
-                id: const Uuid().v4(),
-                name: _taskNameController.text,
-                description: _taskDescriptionController.text,
-                estimatedTime: estimatedTime.toDouble(),
-                deadline: deadline.millisecondsSinceEpoch,
-                state: "Todo",
-                priority: selectedPriority);
-            print(task);
-            Navigator.pop(context);
-          },
+          onTap: () => onTapDone(context),
           child: const Padding(
             padding: EdgeInsets.only(right: 15),
             child: Center(
@@ -198,7 +223,11 @@ class _NewTaskState extends State<NewTask> {
               height: 15,
             ),
             _buildHeaderText("Project"),
-            _buildProjectPicker(),
+            BlocBuilder<ProjectBloc, ProjectState>(
+                bloc: _projectBloc,
+                builder: (context, state) {
+                  return _buildProjectPicker(state);
+                }),
             const SizedBox(
               height: 15,
             ),
@@ -261,10 +290,10 @@ class _NewTaskState extends State<NewTask> {
     );
   }
 
-  Widget _buildProjectPicker() {
+  Widget _buildProjectPicker(state) {
     return GestureDetector(
       onTap: () {
-        showProjectPickerModal(context);
+        showProjectPickerModal(context, state);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -283,10 +312,10 @@ class _NewTaskState extends State<NewTask> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              projectSelected.isNotEmpty ? projectSelected : "Select a project",
+              projectSelected != null ? projectSelected!.name : "Select a project",
               style: TextStyle(
                   fontSize: 14,
-                  color: projectSelected.isNotEmpty
+                  color: projectSelected != null
                       ? Colors.black
                       : AppColors.grey),
             ),

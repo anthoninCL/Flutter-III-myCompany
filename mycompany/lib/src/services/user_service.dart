@@ -32,6 +32,7 @@ class UserService {
           CompanyService().setCompany(company);
         }
         await prefs.setString("userToken", user.id);
+        await prefs.setString("companyId", user.companyId);
         print(user.id);
         return user.id;
       } else {
