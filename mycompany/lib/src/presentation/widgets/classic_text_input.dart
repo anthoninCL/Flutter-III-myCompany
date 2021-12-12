@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 
 class ClassicTextInput extends StatefulWidget {
-  const ClassicTextInput({Key? key, required this.controller, this.value, required this.placeholder}) : super(key: key);
+  const ClassicTextInput({Key? key, required this.controller, required this.placeholder, this.secure = false}) : super(key: key);
 
   final TextEditingController controller;
-  final String? value;
   final String placeholder;
+  final bool secure;
 
   @override
   _ClassicTextInputState createState() => _ClassicTextInputState();
@@ -29,6 +29,9 @@ class _ClassicTextInputState extends State<ClassicTextInput> {
         ],
       ),
       child: TextField(
+        obscureText: widget.secure,
+        enableSuggestions: !widget.secure,
+        autocorrect: !widget.secure,
         controller: widget.controller,
         cursorColor: AppColors.grey,
         decoration: InputDecoration(

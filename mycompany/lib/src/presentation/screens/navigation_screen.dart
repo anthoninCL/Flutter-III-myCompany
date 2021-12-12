@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/presentation/screens/home_screen.dart';
 import 'package:mycompany/src/presentation/screens/meetings_screen.dart';
 import 'package:mycompany/src/presentation/screens/profile_screen.dart';
 import 'package:mycompany/src/presentation/screens/tasks_screen.dart';
-import 'package:mycompany/src/config/themes/app_colors.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
@@ -13,12 +13,11 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
-
-  static const List<Widget> _screens = [
+  static final List<Widget> _screens = [
     HomeScreen(),
     TasksScreen(),
     MeetingsScreen(),
-    ProfileScreen()
+    ProfileScreen(),
   ];
 
   int _selectedIndex = 0;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mycompany/src/domain/entities/meeting.dart';
+import 'package:mycompany/src/models/meeting.dart';
 
 class MeetingCard extends StatelessWidget {
   const MeetingCard({Key? key, required this.meeting}) : super(key: key);
@@ -10,7 +10,7 @@ class MeetingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var date = DateTime.fromMillisecondsSinceEpoch(meeting.start * 1000);
+    var date = DateTime.fromMillisecondsSinceEpoch(meeting.dateStart * 1000);
     var endDate = date.add(Duration(minutes: meeting.duration.toInt()));
 
     return Container(
