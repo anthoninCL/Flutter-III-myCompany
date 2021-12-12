@@ -155,7 +155,6 @@ class _NewTaskState extends State<NewTask> {
           if (state is ProjectsLoaded) {
             var itemSelected =
                 picker.adapter.text.replaceAll(RegExp(r'[^\w\s]+'), '');
-            print("item selected: $itemSelected");
             var project =
                 state.projects.firstWhere((elem) => elem.name == itemSelected);
             setState(() {

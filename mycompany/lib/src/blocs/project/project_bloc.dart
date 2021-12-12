@@ -12,7 +12,6 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       try {
         emit(const ProjectLoading());
         var projects = await ProjectService().readProjectsFromCompany(event.companyId);
-        print(projects);
         emit(ProjectsLoaded(projects));
       } on Exception catch (error) {
         emit(ProjectError(error.toString()));

@@ -33,7 +33,6 @@ class UserService {
         }
         await prefs.setString("userToken", user.id);
         await prefs.setString("companyId", user.companyId);
-        print(user.id);
         return user.id;
       } else {
         throw Error();
@@ -73,11 +72,9 @@ class UserService {
 
   //Read
   Future<UserFront> readUser(String userId) async {
-    print("uuid: $userId");
     var collection = FirebaseFirestore.instance.collection('users');
     var docSnapshot = await collection.doc(userId).get();
     if (docSnapshot.exists) {
-      print("Exist");
       Map<String, dynamic>? data = docSnapshot.data();
       if (data != null) {
         List<dynamic> polesIds = data["poles"];

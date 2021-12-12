@@ -75,7 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
             BlocBuilder<MeetingBloc, MeetingState>(
               bloc: _meetingBloc,
               builder: (context, state) {
-                print(state);
                 if (state is MeetingsLoaded && state.meetings.isNotEmpty) {
                   return _buildMeeting(state);
                 }
@@ -86,7 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
             BlocBuilder<TaskBloc, TaskState>(
               bloc: _taskBloc,
               builder: (context, state) {
-                print(state);
                 return _buildTasksList(state);
               },
             ),
