@@ -5,6 +5,7 @@
 To design our application, we decided to go with Figma into a full mock up of our mobile application and our admin console. We didn't take the time to prototype it because of the lack of time and the lack of use in our project.
 
 [Link to our mobile mock up](https://www.figma.com/file/f1hUvDjGJOyvWnQnPnrROc/myCompany?node-id=0%3A1)
+
 [Link to our admin console mock up](https://www.figma.com/file/f1hUvDjGJOyvWnQnPnrROc/myCompany?node-id=184%3A9)
 
 ## User Stories
