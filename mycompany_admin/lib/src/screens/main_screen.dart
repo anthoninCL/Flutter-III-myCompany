@@ -34,7 +34,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   String _selectedScreen = 'Users';
   List<ListItem> _data = listUser;
-  Widget form = const UserForm();
+  Widget form = Container();
 
   void onChangeScreen(String title) {
     setState(() {
@@ -43,10 +43,10 @@ class _MainScreenState extends State<MainScreen> {
       // TODO : remove this when blocks implemented
       if (title == 'Users') {
         _data = listUser;
-        form = const UserForm();
+        form = Container();
       } else if (title == 'Poles') {
         _data = listGroups;
-        form = const PoleForm();
+        form = const PoleForm(); // this will need to be Container() and the followings too
       } else if (title == 'Projects') {
         _data = listProjects;
         form = const ProjectForm();
