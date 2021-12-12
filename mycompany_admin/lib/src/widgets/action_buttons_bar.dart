@@ -4,16 +4,24 @@ import 'package:mycompany_admin/src/widgets/generic_button.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
 
 class ActionButtonBar extends StatefulWidget {
-  const ActionButtonBar({Key? key, required this.creation}) : super(key: key);
+  const ActionButtonBar(
+      {Key? key,
+      required this.creation,
+      this.onCreate,
+      this.onEdit,
+      this.onDelete})
+      : super(key: key);
 
   final bool creation;
+  final VoidCallback? onCreate;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   @override
   State<ActionButtonBar> createState() => _ActionButtonBarState();
 }
 
 class _ActionButtonBarState extends State<ActionButtonBar> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,11 +43,11 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
   }
 
   Widget buildCreateButton(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: GenericButton(
         title: 'Create',
-        onPressed: null,
+        onPressed: widget.onCreate,
         backColor: AppColors.white,
         fontColor: AppColors.green,
         shadowColor: AppColors.greenShadow,
@@ -50,11 +58,11 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
   }
 
   Widget buildDeleteButton(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: GenericButton(
         title: 'Delete',
-        onPressed: null,
+        onPressed: widget.onDelete,
         backColor: AppColors.white,
         fontColor: AppColors.red,
         shadowColor: AppColors.redShadow,
@@ -63,12 +71,13 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
       ),
     );
   }
+
   Widget buildEditButton(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: GenericButton(
         title: 'Edit',
-        onPressed: null,
+        onPressed: widget.onEdit,
         backColor: AppColors.white,
         fontColor: AppColors.orange,
         shadowColor: AppColors.orangeShadow,
@@ -77,5 +86,4 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
       ),
     );
   }
-
 }
