@@ -37,6 +37,14 @@ class MeetingBloc extends Bloc<MeetingEvent, MeetingState> {
         emit(MeetingError(error.toString()));
       }
     });
+
+    on<AddMeeting>((event, emit) async {
+      try {
+        await MeetingService().setMeeting(event.meeting);
+      } on Exception catch (error) {
+        emit(MeetingError(error.toString()));
+      }
+    });
   }
 
 }

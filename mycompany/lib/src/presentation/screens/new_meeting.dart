@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_picker/Picker.dart';
+import 'package:mycompany/src/blocs/meeting/meeting_bloc.dart';
+import 'package:mycompany/src/blocs/user/user_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
+import 'package:mycompany/src/models/meeting.dart';
+import 'package:mycompany/src/models/user.dart';
 import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
 import 'package:mycompany/src/presentation/widgets/custom_date_picker.dart';
 import 'package:mycompany/src/presentation/widgets/header_label.dart';
+import 'package:uuid/uuid.dart';
 
 class NewMeeting extends StatefulWidget {
   const NewMeeting({Key? key}) : super(key: key);
@@ -16,11 +22,8 @@ class _NewMeetingState extends State<NewMeeting> {
   late TextEditingController _meetingNameController;
   late TextEditingController _meetingLocationController;
 
-  static const List<String> _kOptions = <String>[
-    'aardvark',
-    'bobcat',
-    'chameleon',
-  ];
+  final UserBloc _userBloc = UserBloc();
+  final MeetingBloc _meetingBloc = MeetingBloc();
 
   List<String> _attendees = [];
 
@@ -33,6 +36,7 @@ class _NewMeetingState extends State<NewMeeting> {
     super.initState();
     _meetingNameController = TextEditingController();
     _meetingLocationController = TextEditingController();
+    _userBloc.add(GetUsersFromCompany("8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
   }
 
   @override
@@ -62,66 +66,95 @@ class _NewMeetingState extends State<NewMeeting> {
         }).showModal(this.context);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("New Meeting"),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 15),
-              child: Center(
-                child: Text(
-                  "Add",
-                  style: TextStyle(fontSize: 16, color: AppColors.primary),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const HeaderLabel(label: "Meeting name"),
-            ClassicTextInput(
-              controller: _meetingNameController,
-              placeholder: "Write your meeting name",
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            const HeaderLabel(label: "Attendees"),
-            _buildAttendeesSelection(),
-            const SizedBox(
-              height: 15,
-            ),
-            _buildAttendeesList(),
-            const SizedBox(
-              height: 15,
-            ),
-            const HeaderLabel(label: "Location"),
-            ClassicTextInput(
-              controller: _meetingLocationController,
-              placeholder: "Write the application for the meeting",
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            _buildScheduleSelection(),
-          ],
-        ),
-      ),
-    );
+  void _onTapDone(state) {
+    List<UserFront> users = [];
+    for (var attendee in _attendees) {
+      var user = state.users.firstWhere((user) {
+        var name = attendee.split(" ");
+        return user.firstName == name[0] && user.lastName == name[1];
+      });
+      users.add(user);
+    }
+    var meeting = Meeting(
+        Uuid().v4().toString(),
+        users,
+        _meetingNameController.text,
+        start.millisecondsSinceEpoch,
+        duration.toDouble());
+    _meetingBloc.add(AddMeeting(meeting));
   }
 
-  Widget _buildAttendeesSelection() {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UserBloc, UserState>(
+        bloc: _userBloc,
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("New Meeting"),
+              actions: [
+                GestureDetector(
+                  onTap: () {
+                    _onTapDone(state);
+                    Navigator.pop(context);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 15),
+                    child: Center(
+                      child: Text(
+                        "Add",
+                        style:
+                            TextStyle(fontSize: 16, color: AppColors.primary),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const HeaderLabel(label: "Meeting name"),
+                  ClassicTextInput(
+                    controller: _meetingNameController,
+                    placeholder: "Write your meeting name",
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const HeaderLabel(label: "Attendees"),
+                  _buildAttendeesSelection(state),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  _buildAttendeesList(),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const HeaderLabel(label: "Location"),
+                  ClassicTextInput(
+                    controller: _meetingLocationController,
+                    placeholder: "Write the application for the meeting",
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  _buildScheduleSelection(),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget _buildAttendeesSelection(UserState state) {
+    List<String> users = state is UsersLoaded
+        ? state.users
+            .map((user) => "${user.firstName} ${user.lastName}")
+            .toList()
+        : [];
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -180,8 +213,10 @@ class _NewMeetingState extends State<NewMeeting> {
           if (textEditingValue.text == '') {
             return const Iterable<String>.empty();
           }
-          return _kOptions.where((String option) {
-            return option.contains(textEditingValue.text.toLowerCase());
+          return users.where((String option) {
+            return option
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
           });
         },
         onSelected: (String selection) {

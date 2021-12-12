@@ -138,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMeeting(state) {
+    state is MeetingsLoaded ? state.meetings.sort((a, b) => b.dateStart.compareTo(a.dateStart)) : null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -162,23 +163,15 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              "My tasts",
+              "My tasks",
               style: TextStyle(fontSize: 18, color: AppColors.grey),
             ),
-            GestureDetector(
-              child: const Text(
-                "New task",
-                style: TextStyle(fontSize: 18, color: AppColors.primaryLight),
-              ),
-              onTap: () => print("Todo !!"),
-            )
           ],
         ),
         const SizedBox(height: 10),
         state is TasksLoaded
             ? ListView.builder(
                 shrinkWrap: true,
-
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: state.tasks.length,
                 itemBuilder: (context, index) {

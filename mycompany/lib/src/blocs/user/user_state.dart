@@ -19,6 +19,12 @@ class UserLoaded extends UserState {
   const UserLoaded(this.user);
 }
 
+class UsersLoaded extends UserState {
+  final List<UserFront> users;
+
+  const UsersLoaded(this.users);
+}
+
 class UserError extends UserState {
   final String error;
 

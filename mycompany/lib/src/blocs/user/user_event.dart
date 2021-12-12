@@ -7,3 +7,9 @@ class GetUser extends UserEvent {
 
   GetUser(this.userId);
 }
+
+class GetUsersFromCompany extends UserEvent {
+  final String companyId;
+
+  GetUsersFromCompany(this.companyId);
+}

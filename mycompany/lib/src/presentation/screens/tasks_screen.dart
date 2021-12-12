@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycompany/src/blocs/project/project_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/models/project.dart';
+import 'package:mycompany/src/presentation/widgets/custom_title.dart';
 import 'package:mycompany/src/presentation/widgets/task_card.dart';
 
 class TasksScreen extends StatefulWidget {
@@ -37,9 +38,10 @@ class _TasksScreenState extends State<TasksScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              _buildTextField(),
+              const CustomTitle(label: "Tasks"),
               const SizedBox(height: 10),
               BlocBuilder<ProjectBloc, ProjectState>(
                 bloc: _projectBloc,
@@ -61,38 +63,17 @@ class _TasksScreenState extends State<TasksScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/newTask').then((value) {
-            Future.delayed(const Duration(milliseconds: 200), () {
-              _projectBloc.add(GetProjectsFromCompany(
-                  "8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
-            });
-          }
-              );
+          Navigator.pushNamed(context, '/newTask').then(
+            (value) {
+              Future.delayed(const Duration(milliseconds: 200), () {
+                _projectBloc.add(GetProjectsFromCompany(
+                    "8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
+              });
+            },
+          );
         },
         child: const Icon(Icons.add, size: 30),
         backgroundColor: AppColors.primary,
-      ),
-    );
-  }
-
-  Widget _buildTextField() {
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        color: AppColors.greyLight,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: TextField(
-        cursorColor: AppColors.grey,
-        controller: _controller,
-        decoration: const InputDecoration(
-          prefixIcon: Icon(
-            Icons.search,
-            color: AppColors.grey,
-          ),
-          border: InputBorder.none,
-          hintText: "Find a task",
-        ),
       ),
     );
   }

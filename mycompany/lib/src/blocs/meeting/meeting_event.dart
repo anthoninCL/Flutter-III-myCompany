@@ -19,3 +19,9 @@ class GetMeeting extends MeetingEvent {
 
   GetMeeting(this.meetingId);
 }
+
+class AddMeeting extends MeetingEvent {
+  final Meeting meeting;
+
+  AddMeeting(this.meeting);
+}
