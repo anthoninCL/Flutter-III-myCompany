@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mycompany/src/blocs/project/project_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
+import 'package:mycompany/src/models/project.dart';
+import 'package:mycompany/src/presentation/widgets/custom_title.dart';
+import 'package:mycompany/src/presentation/widgets/task_card.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({Key? key}) : super(key: key);
@@ -10,11 +15,14 @@ class TasksScreen extends StatefulWidget {
 
 class _TasksScreenState extends State<TasksScreen> {
   late TextEditingController _controller;
+  final ProjectBloc _projectBloc = ProjectBloc();
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _projectBloc
+        .add(GetProjectsFromCompany("8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
   }
 
   @override
@@ -30,16 +38,39 @@ class _TasksScreenState extends State<TasksScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              _buildTextField(),
+              const CustomTitle(label: "Tasks"),
+              const SizedBox(height: 10),
+              BlocBuilder<ProjectBloc, ProjectState>(
+                bloc: _projectBloc,
+                builder: (context, state) {
+                  if (state is ProjectsLoaded) {
+                    return _buildTasksList(state);
+                  } else if (state is ProjectError) {
+                    return Center(child: Text(state.error));
+                  }
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                },
+              ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/newTask');
+          Navigator.pushNamed(context, '/newTask').then(
+            (value) {
+              Future.delayed(const Duration(milliseconds: 200), () {
+                _projectBloc.add(GetProjectsFromCompany(
+                    "8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
+              });
+            },
+          );
         },
         child: const Icon(Icons.add, size: 30),
         backgroundColor: AppColors.primary,
@@ -47,25 +78,37 @@ class _TasksScreenState extends State<TasksScreen> {
     );
   }
 
-  Widget _buildTextField() {
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        color: AppColors.greyLight,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: TextField(
-        cursorColor: AppColors.grey,
-        controller: _controller,
-        decoration: const InputDecoration(
-          prefixIcon: Icon(
-            Icons.search,
-            color: AppColors.grey,
-          ),
-          border: InputBorder.none,
-          hintText: "Find a task",
-        ),
-      ),
+  Widget _buildTasksList(ProjectsLoaded state) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: state.projects.length,
+      itemBuilder: (context, index) {
+        return _buildProjectItem(state.projects[index]);
+      },
     );
+  }
+
+  Widget _buildProjectItem(Project project) {
+    return project.tasks.isNotEmpty
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                project.name,
+                style: const TextStyle(fontSize: 18, color: AppColors.grey),
+              ),
+              const SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: project.tasks.length,
+                itemBuilder: (context, index) {
+                  return TaskCard(task: project.tasks[index]);
+                },
+              ),
+            ],
+          )
+        : Container();
   }
 }

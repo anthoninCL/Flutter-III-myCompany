@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mycompany/src/domain/entities/meeting.dart';
+import 'package:mycompany/src/models/meeting.dart';
 
 class MeetingCard extends StatelessWidget {
-  const MeetingCard({Key? key, required this.meeting}) : super(key: key);
+  const MeetingCard({Key? key, required this.meeting, this.showDate = true}) : super(key: key);
 
   final Meeting meeting;
+  final bool showDate;
 
   @override
   Widget build(BuildContext context) {
 
-    var date = DateTime.fromMillisecondsSinceEpoch(meeting.start * 1000);
+    var date = DateTime.fromMillisecondsSinceEpoch(meeting.dateStart * 1000);
     var endDate = date.add(Duration(minutes: meeting.duration.toInt()));
 
     return Container(
@@ -38,9 +39,10 @@ class MeetingCard extends StatelessWidget {
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
               ),
-              Text(
-                DateFormat('EE dd MMM. yyyy').format(date),
-              ),
+              if (showDate)
+                Text(
+                  DateFormat('EE dd MMM. yyyy').format(date),
+                ),
             ],
           ),
           SizedBox(height: 5),
