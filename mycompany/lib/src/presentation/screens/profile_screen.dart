@@ -22,7 +22,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _userBloc.add(GetUser("TMAuv8NRMhcL3mdZOppWbFun6N02"));
+    init();
+  }
+
+  void init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString("userToken");
+    if (userId != null) {
+      _userBloc.add(GetUser(userId));
+    }
   }
 
   @override
@@ -133,8 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (_) => EditProfile(user: state.user))).then(
-                (value) =>
-                    _userBloc.add(GetUser("TMAuv8NRMhcL3mdZOppWbFun6N02")),
+                (value) => init(),
               );
             },
           )

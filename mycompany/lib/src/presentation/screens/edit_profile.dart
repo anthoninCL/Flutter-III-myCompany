@@ -3,7 +3,6 @@ import 'package:mycompany/src/blocs/user/user_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/config/themes/card_decoration.dart';
 import 'package:mycompany/src/models/user.dart';
-import 'package:mycompany/src/presentation/screens/change_password.dart';
 import 'package:mycompany/src/presentation/widgets/header_label.dart';
 
 class EditProfile extends StatefulWidget {
@@ -22,7 +21,6 @@ class _EditProfileState extends State<EditProfile> {
   late TextEditingController _zipCodeController;
   late TextEditingController _cityController;
   late TextEditingController _countryController;
-  late TextEditingController _passwordController;
 
   final UserBloc _userBloc = UserBloc();
 
@@ -41,7 +39,6 @@ class _EditProfileState extends State<EditProfile> {
     _cityController.text = widget.user.city;
     _countryController = TextEditingController();
     _countryController.text = widget.user.country;
-    _passwordController = TextEditingController();
   }
 
   @override
@@ -52,7 +49,6 @@ class _EditProfileState extends State<EditProfile> {
     _zipCodeController.dispose();
     _cityController.dispose();
     _countryController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
@@ -120,7 +116,6 @@ class _EditProfileState extends State<EditProfile> {
             const SizedBox(
               height: 15,
             ),
-            //_buildChangePasswordButton(),
           ],
         ),
       ),
@@ -240,30 +235,6 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildChangePasswordButton() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ChangePassword(controller: _passwordController),
-          ),
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        height: 40,
-        decoration: CardDecoration(),
-        child: const Center(
-          child: Text(
-            "Change password",
-            style: TextStyle(fontSize: 14, color: AppColors.primary),
-          ),
-        ),
-      ),
     );
   }
 }

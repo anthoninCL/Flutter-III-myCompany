@@ -5,6 +5,7 @@ import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/models/project.dart';
 import 'package:mycompany/src/presentation/widgets/custom_title.dart';
 import 'package:mycompany/src/presentation/widgets/task_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({Key? key}) : super(key: key);
@@ -19,10 +20,18 @@ class _TasksScreenState extends State<TasksScreen> {
 
   @override
   void initState() {
+    init();
     super.initState();
     _controller = TextEditingController();
-    _projectBloc
-        .add(GetProjectsFromCompany("8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
+  }
+
+  void init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var companyId = prefs.getString("companyId");
+    if (companyId != null) {
+      _projectBloc
+          .add(GetProjectsFromCompany(companyId));
+    }
   }
 
   @override
@@ -66,8 +75,7 @@ class _TasksScreenState extends State<TasksScreen> {
           Navigator.pushNamed(context, '/newTask').then(
             (value) {
               Future.delayed(const Duration(milliseconds: 200), () {
-                _projectBloc.add(GetProjectsFromCompany(
-                    "8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
+                init();
               });
             },
           );
@@ -107,8 +115,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   return TaskCard(
                     task: project.tasks[index],
                     callback: () {
-                      _projectBloc.add(GetProjectsFromCompany(
-                          "8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
+                      init();
                     },
                     projectId: project.id,
                   );

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycompany/src/blocs/login/login_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
+import 'package:mycompany/src/presentation/screens/navigation_screen.dart';
 import 'package:mycompany/src/presentation/shared/widgets/dismiss_keyboard.dart';
 import 'package:mycompany/src/presentation/widgets/auth_header.dart';
 import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
@@ -21,10 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
 
-  void onRichTextTap(BuildContext context) {
-    Navigator.pushNamed(context, "/register");
-  }
-
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -39,7 +37,12 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             builder: (context, state) {
               if (state is LoginLoaded) {
-                Navigator.pushNamed(context, "/");
+                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const NavigationScreen()));
+                });
               }
               return _buildInitialPage(state);
             },
@@ -86,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Expanded(
                                   child: ClassicTextInput(
-                                    controller: _emailTextController,
+                                    controller: _passwordTextController,
                                     placeholder: "Password",
                                     secure: true,
                                   ),

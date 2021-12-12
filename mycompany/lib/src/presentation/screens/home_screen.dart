@@ -29,15 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  Future<bool> init() async {
+  void init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId = prefs.getString("userToken");
-    _userBloc.add(GetUser("TMAuv8NRMhcL3mdZOppWbFun6N02"));
-
-    _taskBloc.add(GetTasks("TMAuv8NRMhcL3mdZOppWbFun6N02"));
-
-    _meetingBloc.add(GetMeetingsFromUser("TMAuv8NRMhcL3mdZOppWbFun6N02"));
-    return true;
+    if (userId != null) {
+      _userBloc.add(GetUser(userId));
+      _taskBloc.add(GetTasks(userId));
+      _meetingBloc.add(GetMeetingsFromUser(userId));
+    }
   }
 
   @override

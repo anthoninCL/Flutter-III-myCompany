@@ -2,14 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mycompany/src/blocs/create_company/create_company_bloc.dart';
+import 'package:mycompany/src/blocs/meeting/meeting_bloc.dart';
 import 'package:mycompany/src/config/routes/app_routes.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/config/themes/app_theme.dart';
-import 'package:mycompany/src/presentation/screens/navigation_screen.dart';
+import 'package:mycompany/src/presentation/screens/login.dart';
 
 import 'blocs/login/login_bloc.dart';
-import 'blocs/register/register_bloc.dart';
+import 'blocs/project/project_bloc.dart';
 import 'blocs/task/task_bloc.dart';
 import 'blocs/user/user_bloc.dart';
 
@@ -27,17 +27,17 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginBloc>(
           create: (BuildContext context) => LoginBloc(),
         ),
-        BlocProvider<RegisterBloc>(
-          create: (BuildContext context) => RegisterBloc(),
-        ),
-        BlocProvider<CreateCompanyBloc>(
-          create: (BuildContext context) => CreateCompanyBloc(),
-        ),
         BlocProvider<UserBloc>(
           create: (BuildContext context) => UserBloc(),
         ),
         BlocProvider<TaskBloc>(
           create: (BuildContext context) => TaskBloc(),
+        ),
+        BlocProvider<MeetingBloc>(
+          create: (BuildContext context) => MeetingBloc(),
+        ),
+        BlocProvider<ProjectBloc>(
+          create: (BuildContext context) => ProjectBloc(),
         ),
       ],
       child: MaterialApp(
@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 body: Center(child: Text(snapshot.error.toString())));
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            return const NavigationScreen();
+            return const LoginScreen();
           }
           return const Scaffold(
               body: Center(child: CircularProgressIndicator()));

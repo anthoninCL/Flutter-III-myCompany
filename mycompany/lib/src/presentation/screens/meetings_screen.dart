@@ -5,6 +5,7 @@ import 'package:mycompany/src/blocs/meeting/meeting_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/presentation/widgets/custom_title.dart';
 import 'package:mycompany/src/presentation/widgets/meeting_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MeetingsScreen extends StatefulWidget {
   const MeetingsScreen({Key? key}) : super(key: key);
@@ -19,7 +20,15 @@ class _MeetingsScreenState extends State<MeetingsScreen> {
   @override
   void initState() {
     super.initState();
-    _meetingBloc.add(GetMeetingsFromUser("TMAuv8NRMhcL3mdZOppWbFun6N02"));
+    init();
+  }
+
+  void init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString("userToken");
+    if (userId != null) {
+      _meetingBloc.add(GetMeetingsFromUser(userId));
+    }
   }
 
   @override
@@ -55,8 +64,7 @@ class _MeetingsScreenState extends State<MeetingsScreen> {
           Navigator.pushNamed(context, '/newMeeting').then(
                 (value) {
               Future.delayed(const Duration(milliseconds: 200), () {
-                _meetingBloc.add(GetMeetingsFromUser(
-                    "TMAuv8NRMhcL3mdZOppWbFun6N02"));
+                init();
               });
             },
           );

@@ -57,6 +57,8 @@ class UserService {
       final User user = result.user!;
 
       await prefs.setString("userToken", user.uid);
+      UserFront userFront = await UserService().readUser(user.uid);
+      await prefs.setString("companyId", userFront.companyId);
       return user.uid;
     } on FirebaseAuthException catch (err) {
       if (err.code == 'invalid-email') {

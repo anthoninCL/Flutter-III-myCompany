@@ -126,10 +126,11 @@ class _NewTaskState extends State<NewTask> {
   void init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var companyId = prefs.getString("companyId");
-    if (companyId != null) {}
-    _userBloc.add(GetUsersFromCompany("8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
-    _projectBloc
-        .add(GetProjectsFromCompany("8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
+    if (companyId != null) {
+      _userBloc.add(GetUsersFromCompany(companyId));
+      _projectBloc
+          .add(GetProjectsFromCompany(companyId));
+    }
   }
 
   @override
