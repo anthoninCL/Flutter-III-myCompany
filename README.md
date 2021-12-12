@@ -126,6 +126,13 @@
    - readUsers(List<String> usersId) -> Read several users
    - updateUser(UserFront user) -> Update
   
+- Meeting methods (inside MeetingService) :
+  - setMeeting(Meeting meeting) -> Create / Update
+  - deleteMeeting(String meetingId) -> Delete
+  - readMeeting(String meetingId) -> Read
+  - readMeetings(List<String> meetingsId) -> Read several meetings
+  - readMeetingsFromUser(String userId) -> Read all tasks linked to one user
+  
   
   
   
