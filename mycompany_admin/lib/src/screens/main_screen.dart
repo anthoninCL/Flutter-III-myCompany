@@ -35,18 +35,10 @@ class _MainScreenState extends State<MainScreen> {
   late List<ListItem> _datas = listUser;
 
   final _firstNameController = TextEditingController();
-  late UserBloc _userBloc;
   late StreamSubscription blocSubscription;
 
   @override
   void initState() {
-    _userBloc = UserBloc();
-
-    if (widget.userId != "") {
-      print("Main Screen getUser");
-      _userBloc.(widget.userId);
-    }
-
     super.initState();
   }
 

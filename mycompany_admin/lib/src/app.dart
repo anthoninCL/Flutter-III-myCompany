@@ -8,7 +8,6 @@ import 'package:mycompany_admin/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'blocs/users/user_bloc.dart';
-import 'blocs/users/user_list_bloc.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
