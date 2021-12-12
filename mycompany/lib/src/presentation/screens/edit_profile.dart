@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany/src/blocs/user/user_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/config/themes/card_decoration.dart';
-import 'package:mycompany/src/domain/entities/user.dart';
+import 'package:mycompany/src/models/user.dart';
 import 'package:mycompany/src/presentation/screens/change_password.dart';
 import 'package:mycompany/src/presentation/widgets/header_label.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key, required this.user}) : super(key: key);
 
-  final User user;
+  final UserFront user;
 
   @override
   _EditProfileState createState() => _EditProfileState();
@@ -22,6 +23,8 @@ class _EditProfileState extends State<EditProfile> {
   late TextEditingController _cityController;
   late TextEditingController _countryController;
   late TextEditingController _passwordController;
+
+  final UserBloc _userBloc = UserBloc();
 
   @override
   void initState() {
@@ -53,6 +56,23 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
+  void _onTapDone() {
+    var user = UserFront(
+        widget.user.firstName,
+        widget.user.lastName,
+        _emailController.text,
+        _addressController.text,
+        _zipCodeController.text,
+        _cityController.text,
+        _countryController.text,
+        _phoneNumberController.text,
+        widget.user.role,
+        widget.user.projects,
+        widget.user.poles,
+        widget.user.companyId);
+    _userBloc.add(UpdateUser(user));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +81,7 @@ class _EditProfileState extends State<EditProfile> {
         actions: [
           GestureDetector(
             onTap: () {
+              _onTapDone();
               Navigator.pop(context);
             },
             child: const Padding(
@@ -97,7 +118,7 @@ class _EditProfileState extends State<EditProfile> {
             const SizedBox(
               height: 15,
             ),
-            _buildChangePasswordButton(),
+            //_buildChangePasswordButton(),
           ],
         ),
       ),

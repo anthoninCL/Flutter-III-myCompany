@@ -5,7 +5,6 @@ import 'package:mycompany/src/blocs/login/login_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/presentation/shared/widgets/dismiss_keyboard.dart';
 import 'package:mycompany/src/presentation/widgets/auth_header.dart';
-import 'package:mycompany/src/presentation/widgets/auth_rich_text.dart';
 import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
 import 'package:mycompany/src/presentation/widgets/fingerprint_button.dart';
 import 'package:mycompany/src/presentation/widgets/main_button.dart';
@@ -128,13 +127,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             MainButton(
                                 title: "Login",
                                 onPressed: () => login(context)),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            AuthRichText(
-                                content: "Don't have an account yet? ",
-                                richContent: "Create one",
-                                onTap: () => onRichTextTap(context)),
                           ],
                         ),
                       ),

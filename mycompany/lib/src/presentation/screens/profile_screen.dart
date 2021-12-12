@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mycompany/src/blocs/user/user_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/config/themes/card_decoration.dart';
-import 'package:mycompany/src/domain/entities/user.dart';
 import 'package:mycompany/src/presentation/screens/edit_profile.dart';
 import 'package:mycompany/src/presentation/widgets/custom_title.dart';
 import 'package:mycompany/src/presentation/widgets/header_label.dart';
 import 'package:mycompany/src/presentation/widgets/tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -15,23 +17,30 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final User user = const User(
-      id: "a",
-      firstName: "Thomas",
-      lastName: "Hidalgo",
-      email: "thomas.hidalgo@epitech.eu",
-      password: "password",
-      phoneNumber: "01 23 45 67 89",
-      address: "3 rue Cecile Dubrovnik",
-      zipCode: "31200",
-      city: "Toulouse",
-      country: "France",
-      role: "User",
-      tasks: ["tasks"],
-      poles: ["poles"]);
+  final UserBloc _userBloc = UserBloc();
+
+  @override
+  void initState() {
+    super.initState();
+    _userBloc.add(GetUser("TMAuv8NRMhcL3mdZOppWbFun6N02"));
+  }
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<UserBloc, UserState>(
+      bloc: _userBloc,
+      builder: (context, state) {
+        if (state is UserLoaded) {
+          return _buildPage(state);
+        } else if (state is UserError) {
+          return Center(child: Text(state.error));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget _buildPage(state) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -43,21 +52,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 15,
             ),
             const HeaderLabel(label: "Information"),
-            _buildInformation(),
+            _buildInformation(state),
             const SizedBox(
               height: 20,
             ),
-            _buildPersonalInfomartionHeader(),
-            _buildPersonalInformation(),
+            _buildPersonalInfomartionHeader(state),
+            _buildPersonalInformation(state),
             const Spacer(),
-            _buildLogOutButton(),
+            _buildLogOutButton(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInformation() {
+  Widget _buildInformation(UserLoaded state) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(10),
@@ -75,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Wrap(
             spacing: 5,
             runSpacing: 5,
-            children: user.poles.map((pole) {
+            children: state.user.poles.map((pole) {
               return const Tile(
                 color: Colors.white,
                 label: "Development",
@@ -104,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildPersonalInfomartionHeader() {
+  Widget _buildPersonalInfomartionHeader(UserLoaded state) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Row(
@@ -120,7 +129,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(fontSize: 18, color: AppColors.primaryLight),
             ),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => EditProfile(user: user)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => EditProfile(user: state.user))).then(
+                (value) =>
+                    _userBloc.add(GetUser("TMAuv8NRMhcL3mdZOppWbFun6N02")),
+              );
             },
           )
         ],
@@ -128,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildPersonalInformation() {
+  Widget _buildPersonalInformation(UserLoaded state) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: CardDecoration(),
@@ -142,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(fontSize: 14),
               ),
               Text(
-                user.email,
+                state.user.email,
                 style: const TextStyle(fontSize: 14),
               )
             ],
@@ -158,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(fontSize: 14),
               ),
               Text(
-                user.phoneNumber,
+                state.user.phoneNumber,
                 style: const TextStyle(
                     fontSize: 14, color: AppColors.primaryLight),
               )
@@ -179,23 +194,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    user.address,
+                    state.user.address,
                     style: const TextStyle(fontSize: 14),
                   ),
                   Row(
                     children: [
                       Text(
-                        user.zipCode,
+                        state.user.zipCode,
                         style: const TextStyle(fontSize: 14),
                       ),
                       Text(
-                        user.city,
+                        state.user.city,
                         style: const TextStyle(fontSize: 14),
                       ),
                     ],
                   ),
                   Text(
-                    user.country,
+                    state.user.country,
                     style: const TextStyle(fontSize: 14),
                   ),
                 ],
@@ -207,10 +222,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildLogOutButton() {
+  void _onTapLogOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.clear();
+  }
+
+  Widget _buildLogOutButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("Log out user");
+        _onTapLogOut();
+        Navigator.pushNamed(context, "/login");
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

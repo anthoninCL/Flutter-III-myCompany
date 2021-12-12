@@ -27,5 +27,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         emit(UserError(error.toString()));
       }
     });
+    on<UpdateUser>((event, emit) async {
+      try {
+        await UserService().updateUser(event.user);
+      } on Exception catch (error) {
+        emit(UserError(error.toString()));
+      }
+    });
   }
 }

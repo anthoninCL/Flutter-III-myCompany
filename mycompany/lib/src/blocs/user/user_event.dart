@@ -13,3 +13,9 @@ class GetUsersFromCompany extends UserEvent {
 
   GetUsersFromCompany(this.companyId);
 }
+
+class UpdateUser extends UserEvent {
+  final UserFront user;
+
+  UpdateUser(this.user);
+}
