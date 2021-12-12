@@ -96,21 +96,29 @@ class UserService {
     if (usersId.isEmpty) {
       return users;
     }
-    var docSnapshot =
-        await collection.where(FieldPath.documentId, whereIn: usersId).get();
-    List<QueryDocumentSnapshot> docs = docSnapshot.docs;
-    for (var doc in docs) {
-      if (doc.data() != null) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    List<List<String>> subList = [];
+    for (var i = 0; i < usersId.length; i += 10) {
+      subList.add(usersId.sublist(
+          i, i + 10 > usersId.length ? usersId.length : i + 10));
+    }
+    for (var element in subList) {
+      var docSnapshot =
+      await collection.where(FieldPath.documentId, whereIn: element).get();
+      List<QueryDocumentSnapshot> docs = docSnapshot.docs;
+      for (var doc in docs) {
+        if (doc.data() != null) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        List<dynamic> polesIds = data["poles"];
-        List<dynamic> projectsIds = data["projects"];
+          List<dynamic> polesIds = data["poles"];
+          List<dynamic> projectsIds = data["projects"];
 
-        data["poles"] = await PoleService().readPoles(polesIds.cast<String>());
-        data["projects"] =
-            await ProjectService().readProjects(projectsIds.cast<String>());
+          data["poles"] =
+          await PoleService().readPoles(polesIds.cast<String>());
+          data["projects"] =
+          await ProjectService().readProjects(projectsIds.cast<String>());
 
-        users.add(UserFront.fromMap(data));
+          users.add(UserFront.fromMap(data));
+        }
       }
     }
     return users;

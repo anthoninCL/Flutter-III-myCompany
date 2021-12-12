@@ -15,7 +15,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class NewTask extends StatefulWidget {
-  const NewTask({Key? key}) : super(key: key);
+  const NewTask({Key? key, this.edit = false, this.task, this.projectId}) : super(key: key);
+
+  final bool edit;
+  final Task? task;
+  final String? projectId;
 
   @override
   _NewTaskState createState() => _NewTaskState();
@@ -102,7 +106,21 @@ class _NewTaskState extends State<NewTask> {
     _taskNameController = TextEditingController();
     _taskDescriptionController = TextEditingController();
     _taskEstimatedTimeController = TextEditingController();
-    _taskEstimatedTimeController.text = "0.0";
+    _taskEstimatedTimeController.text = "0";
+    if (widget.edit) {
+      _taskNameController.text = widget.task!.name;
+      _taskDescriptionController.text = widget.task!.description;
+      _taskEstimatedTimeController.text = widget.task!.estimatedTime.toString();
+      selectedPriority = widget.task!.priority;
+      selectPriority(widget.task!.priority);
+      if (widget.task!.deadLine != null) {
+        setState(() {
+          isDeadLine = true;
+          deadline =
+              DateTime.fromMillisecondsSinceEpoch(widget.task!.deadLine!);
+        });
+      }
+    }
   }
 
   void init() async {
@@ -175,16 +193,18 @@ class _NewTaskState extends State<NewTask> {
       }
     }
     var task = Task(
-      const Uuid().v4(),
+      widget.edit ? widget.task!.id : const Uuid().v4(),
       _taskNameController.text,
       _taskDescriptionController.text,
-      _taskEstimatedTimeController.text.isNotEmpty ? int.parse(_taskEstimatedTimeController.text).toDouble() : 0.0,
+      _taskEstimatedTimeController.text.isNotEmpty
+          ? double.parse(_taskEstimatedTimeController.text)
+          : 0.0,
       "Todo",
       selectedPriority,
       deadLine: isDeadLine ? deadline.millisecondsSinceEpoch : null,
       user: userId,
     );
-    _taskBloc.add(AddTask(task, projectSelected!.id));
+    _taskBloc.add(AddTask(task, widget.edit ? widget.projectId! :projectSelected!.id));
     Navigator.pop(context);
   }
 
@@ -225,25 +245,33 @@ class _NewTaskState extends State<NewTask> {
                     ),
                     _buildHeaderText("Description"),
                     _buildDescriptionInput(),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    _buildHeaderText("Project"),
-                    BlocBuilder<ProjectBloc, ProjectState>(
-                        bloc: _projectBloc,
-                        builder: (context, state) {
-                          return _buildProjectPicker(state);
-                        }),
+                    !widget.edit
+                        ? const SizedBox(
+                            height: 15,
+                          )
+                        : Container(),
+                    !widget.edit ? _buildHeaderText("Project") : Container(),
+                    !widget.edit
+                        ? BlocBuilder<ProjectBloc, ProjectState>(
+                            bloc: _projectBloc,
+                            builder: (context, state) {
+                              return _buildProjectPicker(state);
+                            })
+                        : Container(),
                     const SizedBox(
                       height: 15,
                     ),
                     _buildHeaderText("Priority"),
                     _buildPriorityPicker(),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    _buildHeaderText("Assignee"),
-                    _buildAttendeesSelection(state),
+                    !widget.edit
+                        ? const SizedBox(
+                            height: 15,
+                          )
+                        : Container(),
+                    !widget.edit ? _buildHeaderText("Assignee") : Container(),
+                    !widget.edit
+                        ? _buildAttendeesSelection(state)
+                        : Container(),
                     const SizedBox(
                       height: 20,
                     ),
@@ -385,12 +413,21 @@ class _NewTaskState extends State<NewTask> {
     );
   }
 
+  TextEditingValue? getInitialAssignee(UserState state) {
+    if (state is UsersLoaded && widget.edit && widget.task!.user != null) {
+      var user =
+          state.users.firstWhere((element) => element.id == widget.task!.user!);
+      return TextEditingValue(text: "${user.firstName} ${user.lastName}");
+    }
+  }
+
   Widget _buildAttendeesSelection(UserState state) {
     List<String> users = state is UsersLoaded
         ? state.users
             .map((user) => "${user.firstName} ${user.lastName}")
             .toList()
         : [];
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -404,6 +441,7 @@ class _NewTaskState extends State<NewTask> {
         ],
       ),
       child: Autocomplete(
+        initialValue: getInitialAssignee(state),
         fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
           return TextField(
             controller: controller,

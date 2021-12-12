@@ -104,7 +104,14 @@ class _TasksScreenState extends State<TasksScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: project.tasks.length,
                 itemBuilder: (context, index) {
-                  return TaskCard(task: project.tasks[index]);
+                  return TaskCard(
+                    task: project.tasks[index],
+                    callback: () {
+                      _projectBloc.add(GetProjectsFromCompany(
+                          "8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
+                    },
+                    projectId: project.id,
+                  );
                 },
               ),
             ],

@@ -159,8 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
+          children: const [
+            Text(
               "My tasks",
               style: TextStyle(fontSize: 18, color: AppColors.grey),
             ),
@@ -175,6 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   return TaskCard(
                     task: state.tasks[index],
+                    callback: () {
+                      _taskBloc.add(GetTasks("TMAuv8NRMhcL3mdZOppWbFun6N02"));
+                    },
                   );
                 },
               )
