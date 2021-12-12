@@ -32,9 +32,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  late String _selectedScreen = 'Users';
-  late List<ListItem> _datas = listUser;
-  late Widget form = const UserForm();
+  String _selectedScreen = 'Users';
+  List<ListItem> _data = listUser;
+  Widget form = const UserForm();
 
   void onChangeScreen(String title) {
     setState(() {
@@ -42,21 +42,27 @@ class _MainScreenState extends State<MainScreen> {
 
       // TODO : remove this when blocks implemented
       if (title == 'Users') {
-        _datas = listUser;
+        _data = listUser;
         form = const UserForm();
       } else if (title == 'Poles') {
-        _datas = listGroups;
+        _data = listGroups;
         form = const PoleForm();
       } else if (title == 'Projects') {
-        _datas = listProjects;
+        _data = listProjects;
         form = const ProjectForm();
       } else if (title == 'Tasks') {
-        _datas = listTasks;
+        _data = listTasks;
         form = const TaskForm();
       } else if (title == 'Meetings') {
-        _datas = listMeetings;
+        _data = listMeetings;
         form = const MeetingForm();
       }
+    });
+  }
+
+  void changeForm(Widget newForm) {
+    setState(() {
+      form = newForm;
     });
   }
 
@@ -86,7 +92,10 @@ class _MainScreenState extends State<MainScreen> {
               width: MediaQuery.of(context).size.width * 0.25,
               height: MediaQuery.of(context).size.height -
                   AppBar().preferredSize.height,
-              child: DocumentList(datas: _datas),
+              child: DocumentList(
+                data: _data,
+                onChangeForm: changeForm,
+              ),
             ),
             Container(
                 width: MediaQuery.of(context).size.width * 0.75,
