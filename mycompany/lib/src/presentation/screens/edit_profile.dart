@@ -58,18 +58,20 @@ class _EditProfileState extends State<EditProfile> {
 
   void _onTapDone() {
     var user = UserFront(
-        widget.user.firstName,
-        widget.user.lastName,
-        _emailController.text,
-        _addressController.text,
-        _zipCodeController.text,
-        _cityController.text,
-        _countryController.text,
-        _phoneNumberController.text,
-        widget.user.role,
-        widget.user.projects,
-        widget.user.poles,
-        widget.user.companyId);
+      widget.user.firstName,
+      widget.user.lastName,
+      _emailController.text,
+      _addressController.text,
+      _zipCodeController.text,
+      _cityController.text,
+      _countryController.text,
+      _phoneNumberController.text,
+      widget.user.role,
+      widget.user.projects,
+      widget.user.poles,
+      widget.user.companyId,
+      widget.user.id,
+    );
     _userBloc.add(UpdateUser(user));
   }
 
