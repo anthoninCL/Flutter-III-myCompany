@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mycompany_admin/src/exceptions/email_already_used_exception.dart';
 import 'package:mycompany_admin/src/exceptions/invalid_email_exception.dart';
+import 'package:mycompany_admin/src/exceptions/not_admin_exception.dart';
 import 'package:mycompany_admin/src/exceptions/user_not_found_exception.dart';
 import 'package:mycompany_admin/src/exceptions/weak_password_exception.dart';
 import 'package:mycompany_admin/src/exceptions/wrong_password_exception.dart';
@@ -15,7 +16,6 @@ import 'package:mycompany_admin/src/services/pole_service.dart';
 import 'package:mycompany_admin/src/services/project_service.dart';
 import 'package:mycompany_admin/src/services/task_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'company_service.dart';
 
 class UserService {
