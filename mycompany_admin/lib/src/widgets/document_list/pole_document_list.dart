@@ -67,7 +67,7 @@ class _PoleDocumentListState extends State<PoleDocumentList> {
                   GenericButton(
                       title: 'New',
                       onPressed: () {
-                        widget.onChangeForm(const PoleForm());
+                        widget.onChangeForm(PoleForm(key: UniqueKey(),));
                       },
                       backColor: AppColors.primary,
                       fontColor: AppColors.white,
@@ -80,9 +80,14 @@ class _PoleDocumentListState extends State<PoleDocumentList> {
                 child: ListView.builder(
                     itemCount: state.company.poles.length,
                     itemBuilder: (context, index) {
-                      return ListItem(
-                          name: state.company.poles[index].name,
-                          id: state.company.users[index].id);
+                      return GestureDetector(
+                        onTap: () {
+                          widget.onChangeForm(PoleForm(pole: state.company.poles[index], key: UniqueKey(),));
+                        },
+                        child: ListItem(
+                            name: state.company.poles[index].name,
+                            id: state.company.poles[index].id),
+                      );
                     }),
               ),
             ]);
