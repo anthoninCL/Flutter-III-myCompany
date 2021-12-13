@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mycompany_admin/src/models/company.dart';
+import 'package:mycompany_admin/src/models/meeting.dart';
 import 'package:mycompany_admin/src/models/pole.dart';
+import 'package:mycompany_admin/src/models/project.dart';
 import 'package:mycompany_admin/src/models/user.dart';
+import 'package:mycompany_admin/src/services/meeting_service.dart';
 import 'package:mycompany_admin/src/services/pole_service.dart';
+import 'package:mycompany_admin/src/services/project_service.dart';
 import 'package:mycompany_admin/src/services/user_service.dart';
 
 class CompanyService {
@@ -36,7 +40,29 @@ class CompanyService {
   }
 
   //Delete
-  Future<void> deleteCompany(String companyId) {
+  Future<void> deleteCompany(String companyId) async {
+    Company company = await readCompany(companyId);
+    List<Meeting> meetings =
+        await MeetingService().readMeetingsFromCompany(companyId);
+
+    for (var meeting in meetings) {
+      MeetingService().deleteMeeting(meeting.id);
+    }
+
+    for (var pole in company.poles) {
+      PoleService().deletePole(pole.id);
+    }
+
+    List<Project> projects =
+        await ProjectService().readProjectsFromCompany(companyId);
+    for (var project in projects) {
+      ProjectService().deleteProject(project.id);
+    }
+
+    for (var user in company.users) {
+      await UserService().deleteUser(user.id);
+    }
+
     return (companies
         .doc(companyId)
         .delete()

@@ -19,7 +19,18 @@ class TaskService {
   }
 
   //Delete
-  Future<void> deleteTask(String taskId) {
+  Future<void> deleteTask(String taskId, String companyId) async {
+    List<Project> projects =
+        await ProjectService().readProjectsFromCompany(companyId);
+    Task task = await readTask(taskId);
+
+    for (var project in projects) {
+      final taskIdx = project.tasks.indexWhere((element) => element == task);
+      if (taskIdx != -1) {
+        project.tasks.removeAt(taskIdx);
+        ProjectService().setProject(project);
+      }
+    }
     return (tasks.doc(taskId).delete().catchError((error) => print(error)));
   }
 
@@ -51,7 +62,7 @@ class TaskService {
 
     for (var element in subList) {
       var docSnapshot =
-      await collection.where(FieldPath.documentId, whereIn: element).get();
+          await collection.where(FieldPath.documentId, whereIn: element).get();
       List<QueryDocumentSnapshot> docs = docSnapshot.docs;
       for (var doc in docs) {
         if (doc.data() != null) {

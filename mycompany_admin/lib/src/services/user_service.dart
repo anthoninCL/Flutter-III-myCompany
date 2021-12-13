@@ -6,9 +6,14 @@ import 'package:mycompany_admin/src/exceptions/user_not_found_exception.dart';
 import 'package:mycompany_admin/src/exceptions/weak_password_exception.dart';
 import 'package:mycompany_admin/src/exceptions/wrong_password_exception.dart';
 import 'package:mycompany_admin/src/models/company.dart';
+import 'package:mycompany_admin/src/models/meeting.dart';
+import 'package:mycompany_admin/src/models/project.dart';
+import 'package:mycompany_admin/src/models/task.dart';
 import 'package:mycompany_admin/src/models/user.dart';
+import 'package:mycompany_admin/src/services/meeting_service.dart';
 import 'package:mycompany_admin/src/services/pole_service.dart';
 import 'package:mycompany_admin/src/services/project_service.dart';
+import 'package:mycompany_admin/src/services/task_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'company_service.dart';
@@ -106,7 +111,7 @@ class UserService {
     }
     for (var element in subList) {
       var docSnapshot =
-      await collection.where(FieldPath.documentId, whereIn: element).get();
+          await collection.where(FieldPath.documentId, whereIn: element).get();
       List<QueryDocumentSnapshot> docs = docSnapshot.docs;
       for (var doc in docs) {
         if (doc.data() != null) {
@@ -116,9 +121,9 @@ class UserService {
           List<dynamic> projectsIds = data["projects"];
 
           data["poles"] =
-          await PoleService().readPoles(polesIds.cast<String>());
+              await PoleService().readPoles(polesIds.cast<String>());
           data["projects"] =
-          await ProjectService().readProjects(projectsIds.cast<String>());
+              await ProjectService().readProjects(projectsIds.cast<String>());
 
           users.add(UserFront.fromMap(data));
         }
@@ -139,5 +144,40 @@ class UserService {
     map["projects"] = projectsId;
 
     return (users.doc(user.id).set(map).catchError((error) => print(error)));
+  }
+
+  //Delete
+  Future<void> deleteUser(String userId) async {
+    UserFront user = await readUser(userId);
+
+    Company company = await CompanyService().readCompany(user.companyId);
+    final userIndex = company.users.indexWhere((usr) => usr.id == userId);
+    if (userIndex != -1) {
+      company.users.removeAt(userIndex);
+      CompanyService().setCompany(company);
+    }
+
+    List<Meeting> meetings =
+        await MeetingService().readMeetingsFromUser(userId);
+    for (var meeting in meetings) {
+      final idx = meeting.users.indexWhere((usr) => usr.id == userId);
+      if (idx != -1) {
+        meeting.users.removeAt(idx);
+        MeetingService().setMeeting(meeting);
+      }
+    }
+
+    List<Project> projects =
+        await ProjectService().readProjectsFromCompany(user.companyId);
+
+    List<Task> tasks = await TaskService().readTasksFromUser(userId);
+    for (var task in tasks) {
+      task.user = "";
+      final projectIdx = projects.indexWhere((prj) => prj.tasks.contains(task));
+      if (projectIdx != -1) {
+        TaskService().setTask(task, projects[projectIdx].id);
+      }
+    }
+    return (users.doc(userId).delete().catchError((error) => print(error)));
   }
 }

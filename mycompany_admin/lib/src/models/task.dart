@@ -10,6 +10,8 @@ class Task {
   Task(this.id, this.name, this.description, this.estimatedTime, this.state,
       {this.deadLine, this.user});
 
+  bool operator ==(Object o) => o is Task && o.id == id;
+
   Map<String, dynamic> toMap() {
     return {
       "id": id,

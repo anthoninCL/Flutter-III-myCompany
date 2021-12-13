@@ -29,7 +29,7 @@ class ProjectService {
   Future<void> deleteProject(String projectId) async {
     Project project = await ProjectService().readProject(projectId);
     for (Task task in project.tasks) {
-      TaskService().deleteTask(task.id);
+      TaskService().deleteTask(task.id, projectId);
     }
 
     return (projects
@@ -65,9 +65,8 @@ class ProjectService {
     }
     for (var element in subList) {
       var collection = FirebaseFirestore.instance.collection('projects');
-      var docSnapshot = await collection
-          .where(FieldPath.documentId, whereIn: element)
-          .get();
+      var docSnapshot =
+          await collection.where(FieldPath.documentId, whereIn: element).get();
       List<QueryDocumentSnapshot> docs = docSnapshot.docs;
       for (var doc in docs) {
         if (doc.data() != null) {
@@ -78,7 +77,7 @@ class ProjectService {
             data["tasks"] = emptyTasks;
           } else {
             data["tasks"] =
-            await TaskService().readTasks(tasksId.cast<String>());
+                await TaskService().readTasks(tasksId.cast<String>());
           }
           projects.add(Project.fromMap(data));
         }
