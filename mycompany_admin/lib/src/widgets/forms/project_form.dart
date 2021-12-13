@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/models/task.dart';
 import 'package:mycompany_admin/src/shared/utils/color_convertion.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
 import 'package:mycompany_admin/src/widgets/inputs/color_input.dart';
-import 'package:mycompany_admin/src/widgets/inputs/multiselect_input.dart';
+import 'package:mycompany_admin/src/widgets/inputs/tasks_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
 
 class ProjectForm extends StatefulWidget {
@@ -18,7 +19,7 @@ class _ProjectFormState extends State<ProjectForm> {
   final TextEditingController _descriptionTextController =
       TextEditingController();
   Color pickerColor = const Color(0xFF0652DD);
-  List<String> tasks = [];
+  List<Task> tasks = [];
 
   @override
   void initState() {
@@ -32,7 +33,7 @@ class _ProjectFormState extends State<ProjectForm> {
     print(getStringFromColor(pickerColor));
   }
 
-  void changeTasks(List<String> newTasks) {
+  void changeTasks(List<Task> newTasks) {
     setState(() {
       tasks = newTasks;
     });
@@ -90,12 +91,13 @@ class _ProjectFormState extends State<ProjectForm> {
             hintText: "Project description",
           ),
           ColorInput(pickerColor: pickerColor, onColorChange: changeColor),
-          MultiSelectInput(
-              items: const ['Task 1', 'Task 2', 'Task 3', 'Task 4'],
-              selectedItems: tasks,
-              onChange: changeTasks,
-              fieldTitle: "Tasks",
-              onEmpty: "Select tasks")
+          TaskInput(
+            multi: true,
+            fieldTitle: 'Tasks',
+            onEmpty: 'Select Tasks',
+            selectedItems: tasks,
+            onMultiChange: changeTasks,
+          )
         ]);
   }
 }
