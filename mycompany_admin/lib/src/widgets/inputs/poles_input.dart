@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multiselect/multiselect.dart';
-import 'package:mycompany_admin/src/blocs/projects/projects_bloc.dart';
-import 'package:mycompany_admin/src/models/task.dart';
+import 'package:mycompany_admin/src/blocs/company/company_bloc.dart';
+import 'package:mycompany_admin/src/models/pole.dart';
 import 'package:mycompany_admin/src/widgets/dropdown_menu_widget.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TaskInput extends StatefulWidget {
-  const TaskInput(
+class PoleInput extends StatefulWidget {
+  const PoleInput(
       {Key? key,
       required this.multi,
       this.selectedItems,
@@ -20,50 +20,42 @@ class TaskInput extends StatefulWidget {
       : super(key: key);
 
   final bool multi;
-  final List<Task>? selectedItems;
-  final Task? selectedItem;
+  final List<Pole>? selectedItems;
+  final Pole? selectedItem;
   final String fieldTitle;
   final String onEmpty;
-  final Function(List<Task>)? onMultiChange;
-  final Function(Task)? onChange;
+  final Function(List<Pole>)? onMultiChange;
+  final Function(Pole)? onChange;
 
   @override
-  _TaskInputState createState() => _TaskInputState();
+  _PoleInputState createState() => _PoleInputState();
 }
 
-class _TaskInputState extends State<TaskInput> {
-  final ProjectBloc _projectBloc = ProjectBloc();
-  late List<Task> _tasks;
+class _PoleInputState extends State<PoleInput> {
+  final CompanyBloc _companyBloc = CompanyBloc();
 
   @override
   void initState() {
     init();
     super.initState();
-    _tasks = [];
   }
 
   void init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var companyId = prefs.getString("companyId");
     if (companyId != null) {
-      _projectBloc.add(GetProjectsCompany(companyId));
+      _companyBloc.add(GetCompany(companyId));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-        bloc: _projectBloc,
+    return BlocBuilder<CompanyBloc, CompanyState>(
+        bloc: _companyBloc,
         builder: (context, state) {
-          if (state is ProjectsLoaded) {
-            WidgetsBinding.instance!.addPostFrameCallback((_) => setState(() {
-              _tasks.clear();
-              for (var element in state.projects) {
-                _tasks.addAll(element.tasks);
-              }
-            }));
-            return buildTaskInput(context, _tasks);
-          } else if (state is ProjectError) {
+          if (state is CompanyLoaded) {
+            return buildPoleInput(context, state.company.poles);
+          } else if (state is CompanyError) {
             return AlertDialog(
                 title: const Text('Error'),
                 content: Text(state.error),
@@ -81,7 +73,7 @@ class _TaskInputState extends State<TaskInput> {
         });
   }
 
-  Widget buildTaskInput(BuildContext context, List<Task> tasks) {
+  Widget buildPoleInput(BuildContext context, List<Pole> poles) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -109,27 +101,27 @@ class _TaskInputState extends State<TaskInput> {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: AppColors.black)),
               child: widget.multi
-                  ? buildMultiSelectInput(context, tasks)
-                  : buildSelectInput(context, tasks))
+                  ? buildMultiSelectInput(context, poles)
+                  : buildSelectInput(context, poles))
         ],
       ),
     );
   }
 
-  Widget buildMultiSelectInput(BuildContext context, List<Task> tasks) {
+  Widget buildMultiSelectInput(BuildContext context, List<Pole> poles) {
     return DropDownMultiSelect(
       onChanged: (strings) {
-        List<Task> newTasks = [];
+        List<Pole> newPoles = [];
 
         for (var string in strings) {
-          newTasks.add(tasks
-              .elementAt(tasks.indexWhere((e) => e.name == string)));
+          newPoles.add(poles
+              .elementAt(poles.indexWhere((e) => e.name == string)));
         }
-        widget.onMultiChange!(newTasks);
+        widget.onMultiChange!(newPoles);
       },
-      options: tasks.map((task) => task.name).toList(),
+      options: poles.map((pole) => pole.name).toList(),
       selectedValues:
-      widget.selectedItems!.map((task) => task.name).toList(),
+      widget.selectedItems!.map((pole) => pole.name).toList(),
       childBuilder: buildChildItem,
       whenEmpty: widget.onEmpty,
       decoration: const InputDecoration(
@@ -141,15 +133,15 @@ class _TaskInputState extends State<TaskInput> {
     );
   }
 
-  Widget buildSelectInput(BuildContext context, List<Task> tasks) {
+  Widget buildSelectInput(BuildContext context, List<Pole> poles) {
     return DropDownMenuWidget(
-        items: tasks.map((task) => task.name).toList(),
+        items: poles.map((pole) => pole.name).toList(),
         changeItem: (string) {
           widget.onChange!(
-              tasks.elementAt(tasks.indexWhere((e) => e.name == string)));
+              poles.elementAt(poles.indexWhere((e) => e.name == string)));
         },
         initialItem: widget.selectedItem?.name ??
-            tasks.map((task) => task.name).toList()[0]);
+            poles.map((pole) => pole.name).toList()[0]);
   }
 
   Widget buildChildItem(List<String> selectedItems) {

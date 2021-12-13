@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/models/user.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
 import 'package:mycompany_admin/src/widgets/inputs/calendar_input.dart';
 import 'package:mycompany_admin/src/widgets/inputs/task_state_input.dart';
+import 'package:mycompany_admin/src/widgets/inputs/users_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
 
 class TaskForm extends StatefulWidget {
@@ -18,7 +20,7 @@ class _TaskFormState extends State<TaskForm> {
       TextEditingController();
   final TextEditingController _estimatedTimeTextController =
       TextEditingController();
-  final TextEditingController _userTextController = TextEditingController(); // TODO replace with user and single select input
+  // TODO add assignee
   String taskPriority = "None";
   DateTime deadline = DateTime.now().add(const Duration(days: 1));
 
@@ -103,12 +105,6 @@ class _TaskFormState extends State<TaskForm> {
             initialValue: deadline,
             onDeadlineChanged: changeDeadline,
             fieldTitle: "Deadline",
-          ),
-          FormBasicInput(
-            readOnly: false,
-            fieldTitle: "Assignee",
-            textEditingController: _userTextController,
-            hintText: "Assignee",
           ),
         ]);
   }

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/models/pole.dart';
+import 'package:mycompany_admin/src/models/project.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
 import 'package:mycompany_admin/src/widgets/inputs/multiselect_input.dart';
+import 'package:mycompany_admin/src/widgets/inputs/poles_input.dart';
+import 'package:mycompany_admin/src/widgets/inputs/projects_input.dart';
 import 'package:mycompany_admin/src/widgets/inputs/role_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
 
@@ -26,8 +30,8 @@ class _UserFormState extends State<UserForm> {
   final TextEditingController _phoneNumberTextController =
       TextEditingController();
   String role = "User";
-  List<String> projects = [];
-  List<String> poles = [];
+  List<Project> projects = [];
+  List<Pole> poles = [];
 
   @override
   void initState() {
@@ -43,13 +47,13 @@ class _UserFormState extends State<UserForm> {
     });
   }
 
-  void changeProjects(List<String> newProjects) {
+  void changeProjects(List<Project> newProjects) {
     setState(() {
       projects = newProjects;
     });
   }
 
-  void changePoles(List<String> newPoles) {
+  void changePoles(List<Pole> newPoles) {
     setState(() {
       poles = newPoles;
     });
@@ -154,18 +158,8 @@ class _UserFormState extends State<UserForm> {
             hintText: "Phone number",
           ),
           RoleInput(changeItem: changeRole),
-          MultiSelectInput(
-              items: const ['Project 1', 'Project 2', 'Project 3', 'Project 4'],
-              selectedItems: projects,
-              onChange: changeProjects,
-              fieldTitle: "Projects",
-              onEmpty: "Select projects"),
-          MultiSelectInput(
-              items: const ['Dev', 'Design', 'Comm', 'Test'],
-              selectedItems: poles,
-              onChange: changePoles,
-              fieldTitle: "Poles",
-              onEmpty: "Select poles")
+          ProjectInput(multi: true, fieldTitle: 'Projects', onEmpty: 'Select projects', selectedItems: projects, onMultiChange: changeProjects,),
+          PoleInput(multi: true, fieldTitle: 'Poles', onEmpty: 'Select poles', selectedItems: poles, onMultiChange: changePoles,)
         ]);
   }
 }
