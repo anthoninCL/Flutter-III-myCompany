@@ -58,21 +58,30 @@ class ProjectService {
     if (projectsId.isEmpty) {
       return projects;
     }
-    var collection = FirebaseFirestore.instance.collection('projects');
-    var docSnapshot =
-        await collection.where(FieldPath.documentId, whereIn: projectsId).get();
-    List<QueryDocumentSnapshot> docs = docSnapshot.docs;
-    for (var doc in docs) {
-      if (doc.data() != null) {
-        Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
-        var tasksId = data["tasks"] as List;
-        if (tasksId.isEmpty) {
-          List<Task> emptyTasks = [];
-          data["tasks"] = emptyTasks;
-        } else {
-          data["tasks"] = await TaskService().readTasks(tasksId.cast<String>());
+    List<List<String>> subList = [];
+    for (var i = 0; i < projectsId.length; i += 10) {
+      subList.add(projectsId.sublist(
+          i, i + 10 > projectsId.length ? projectsId.length : i + 10));
+    }
+    for (var element in subList) {
+      var collection = FirebaseFirestore.instance.collection('projects');
+      var docSnapshot = await collection
+          .where(FieldPath.documentId, whereIn: element)
+          .get();
+      List<QueryDocumentSnapshot> docs = docSnapshot.docs;
+      for (var doc in docs) {
+        if (doc.data() != null) {
+          Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
+          var tasksId = data["tasks"] as List;
+          if (tasksId.isEmpty) {
+            List<Task> emptyTasks = [];
+            data["tasks"] = emptyTasks;
+          } else {
+            data["tasks"] =
+            await TaskService().readTasks(tasksId.cast<String>());
+          }
+          projects.add(Project.fromMap(data));
         }
-        projects.add(Project.fromMap(data));
       }
     }
     return projects;

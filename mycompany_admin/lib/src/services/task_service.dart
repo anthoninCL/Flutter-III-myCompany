@@ -39,17 +39,25 @@ class TaskService {
 
   Future<List<Task>> readTasks(List<String> tasksId) async {
     List<Task> tasks = [];
-    var collection = FirebaseFirestore.instance.collection('tasks');
     if (tasksId.isEmpty) {
       return tasks;
     }
-    var docSnapshot =
-        await collection.where(FieldPath.documentId, whereIn: tasksId).get();
-    List<QueryDocumentSnapshot> docs = docSnapshot.docs;
-    for (var doc in docs) {
-      if (doc.data() != null) {
-        Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
-        tasks.add(Task.fromMap(data));
+    List<List<String>> subList = [];
+    for (var i = 0; i < tasksId.length; i += 10) {
+      subList.add(tasksId.sublist(
+          i, i + 10 > tasksId.length ? tasksId.length : i + 10));
+    }
+    var collection = FirebaseFirestore.instance.collection('tasks');
+
+    for (var element in subList) {
+      var docSnapshot =
+      await collection.where(FieldPath.documentId, whereIn: element).get();
+      List<QueryDocumentSnapshot> docs = docSnapshot.docs;
+      for (var doc in docs) {
+        if (doc.data() != null) {
+          Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
+          tasks.add(Task.fromMap(data));
+        }
       }
     }
     return tasks;

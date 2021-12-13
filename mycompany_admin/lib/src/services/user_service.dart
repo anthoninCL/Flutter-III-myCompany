@@ -7,10 +7,11 @@ import 'package:mycompany_admin/src/exceptions/weak_password_exception.dart';
 import 'package:mycompany_admin/src/exceptions/wrong_password_exception.dart';
 import 'package:mycompany_admin/src/models/company.dart';
 import 'package:mycompany_admin/src/models/user.dart';
-import 'package:mycompany_admin/src/services/company_service.dart';
 import 'package:mycompany_admin/src/services/pole_service.dart';
 import 'package:mycompany_admin/src/services/project_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'company_service.dart';
 
 class UserService {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -50,10 +51,15 @@ class UserService {
   //Sign In
   Future<String> signInUser(String email, String password) async {
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
       UserCredential result = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       final User user = result.user!;
 
+      await prefs.setString("userToken", user.uid);
+      UserFront userFront = await UserService().readUser(user.uid);
+      await prefs.setString("companyId", userFront.companyId);
       return user.uid;
     } on FirebaseAuthException catch (err) {
       if (err.code == 'invalid-email') {
@@ -93,21 +99,29 @@ class UserService {
     if (usersId.isEmpty) {
       return users;
     }
-    var docSnapshot =
-        await collection.where(FieldPath.documentId, whereIn: usersId).get();
-    List<QueryDocumentSnapshot> docs = docSnapshot.docs;
-    for (var doc in docs) {
-      if (doc.data() != null) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    List<List<String>> subList = [];
+    for (var i = 0; i < usersId.length; i += 10) {
+      subList.add(usersId.sublist(
+          i, i + 10 > usersId.length ? usersId.length : i + 10));
+    }
+    for (var element in subList) {
+      var docSnapshot =
+      await collection.where(FieldPath.documentId, whereIn: element).get();
+      List<QueryDocumentSnapshot> docs = docSnapshot.docs;
+      for (var doc in docs) {
+        if (doc.data() != null) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        List<dynamic> polesIds = data["poles"];
-        List<dynamic> projectsIds = data["projects"];
+          List<dynamic> polesIds = data["poles"];
+          List<dynamic> projectsIds = data["projects"];
 
-        data["poles"] = await PoleService().readPoles(polesIds.cast<String>());
-        data["projects"] =
-            await ProjectService().readProjects(projectsIds.cast<String>());
+          data["poles"] =
+          await PoleService().readPoles(polesIds.cast<String>());
+          data["projects"] =
+          await ProjectService().readProjects(projectsIds.cast<String>());
 
-        users.add(UserFront.fromMap(data));
+          users.add(UserFront.fromMap(data));
+        }
       }
     }
     return users;

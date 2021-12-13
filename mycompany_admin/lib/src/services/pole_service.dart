@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mycompany_admin/src/models/company.dart';
 import 'package:mycompany_admin/src/models/pole.dart';
-import 'package:mycompany_admin/src/services/company_service.dart';
+
+import 'company_service.dart';
 
 class PoleService {
   CollectionReference poles = FirebaseFirestore.instance.collection('poles');
@@ -45,14 +46,21 @@ class PoleService {
     if (polesId.isEmpty) {
       return poles;
     }
-    var docSnapshot =
-        await collection.where(FieldPath.documentId, whereIn: polesId).get();
-    List<QueryDocumentSnapshot> docs = docSnapshot.docs;
-    for (var doc in docs) {
-      if (doc.data() != null) {
-        Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
+    List<List<String>> subList = [];
+    for (var i = 0; i < polesId.length; i += 10) {
+      subList.add(polesId.sublist(
+          i, i + 10 > polesId.length ? polesId.length : i + 10));
+    }
+    for (var element in subList) {
+      var docSnapshot =
+      await collection.where(FieldPath.documentId, whereIn: element).get();
+      List<QueryDocumentSnapshot> docs = docSnapshot.docs;
+      for (var doc in docs) {
+        if (doc.data() != null) {
+          Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
 
-        poles.add(Pole.fromMap(data));
+          poles.add(Pole.fromMap(data));
+        }
       }
     }
     return poles;

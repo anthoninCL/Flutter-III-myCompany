@@ -9,6 +9,7 @@ import 'package:mycompany_admin/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'blocs/auth/auth_bloc.dart';
+import 'blocs/company/company_bloc.dart';
 import 'blocs/register/register_bloc.dart';
 import 'blocs/users/user_bloc.dart';
 
@@ -52,6 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 BlocProvider<RegisterBloc>(
                   create: (BuildContext context) => RegisterBloc(),
+                ),
+                BlocProvider<UserBloc>(
+                  create: (BuildContext context) => UserBloc(),
+                ),
+                BlocProvider<CompanyBloc>(
+                  create: (BuildContext context) => CompanyBloc(),
                 )
               ],
               child: MaterialApp(

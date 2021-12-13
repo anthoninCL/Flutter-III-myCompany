@@ -41,7 +41,7 @@ class MeetingBloc extends Bloc<MeetingsEvent, MeetingsState> {
     on<GetMeetingsUser>((event, emit) async {
       try {
         emit(const MeetingLoading());
-        var meetings = await MeetingService().readMeetingsFromuser(event.userId);
+        var meetings = await MeetingService().readMeetingsFromUser(event.userId);
         emit(MeetingsLoaded(meetings));
       } on Exception catch (error) {
         emit(MeetingError(error.toString()));
