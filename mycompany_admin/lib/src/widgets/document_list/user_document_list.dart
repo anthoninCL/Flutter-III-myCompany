@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycompany_admin/src/blocs/company/company_bloc.dart';
-import 'package:mycompany_admin/src/models/user.dart';
 import 'package:mycompany_admin/src/widgets/classic_text_input.dart';
 import 'package:mycompany_admin/src/widgets/forms/user_form.dart';
 import 'package:mycompany_admin/src/widgets/generic_button.dart';
@@ -69,7 +68,7 @@ class _UserDocumentListState extends State<UserDocumentList> {
                   GenericButton(
                       title: 'New',
                       onPressed: () {
-                        widget.onChangeForm(const UserForm());
+                        widget.onChangeForm(UserForm(key: UniqueKey(),));
                       },
                       backColor: AppColors.primary,
                       fontColor: AppColors.white,
@@ -87,7 +86,7 @@ class _UserDocumentListState extends State<UserDocumentList> {
                           state.company.users[index].lastName;
                       return GestureDetector(
                         onTap: () {
-                          widget.onChangeForm(UserForm(user: state.company.users[index]));
+                          widget.onChangeForm(UserForm(user: state.company.users[index], key: UniqueKey()));
                         },
                         child: ListItem(
                             name: userName, id: state.company.users[index].id),

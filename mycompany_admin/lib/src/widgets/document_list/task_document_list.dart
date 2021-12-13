@@ -76,7 +76,7 @@ class _TaskDocumentListState extends State<TaskDocumentList> {
                   GenericButton(
                       title: 'New',
                       onPressed: () {
-                        widget.onChangeForm(const TaskForm());
+                        widget.onChangeForm(TaskForm(key: UniqueKey(),));
                       },
                       backColor: AppColors.primary,
                       fontColor: AppColors.white,
@@ -89,8 +89,13 @@ class _TaskDocumentListState extends State<TaskDocumentList> {
                 child: ListView.builder(
                     itemCount: _tasks.length,
                     itemBuilder: (context, index) {
-                      return ListItem(
-                          name: _tasks[index].name, id: _tasks[index].id);
+                      return GestureDetector(
+                        onTap: () {
+                          widget.onChangeForm(TaskForm(task: _tasks[index], key: UniqueKey(),));
+                        },
+                        child: ListItem(
+                            name: _tasks[index].name, id: _tasks[index].id),
+                      );
                     }),
               ),
             ]);

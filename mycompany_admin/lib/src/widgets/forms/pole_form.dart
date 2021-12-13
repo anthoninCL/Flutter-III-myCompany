@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/models/pole.dart';
 import 'package:mycompany_admin/src/shared/utils/color_convertion.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
@@ -6,15 +7,29 @@ import 'package:mycompany_admin/src/widgets/inputs/color_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
 
 class PoleForm extends StatefulWidget {
-  const PoleForm({Key? key}) : super(key: key);
+  const PoleForm({Key? key, this.pole}) : super(key: key);
+
+  final Pole? pole;
 
   @override
   _PoleFormState createState() => _PoleFormState();
 }
 
 class _PoleFormState extends State<PoleForm> {
-  final TextEditingController _nameTextController = TextEditingController();
-  Color pickerColor = const Color(0xFF0652DD);
+  late final TextEditingController _nameTextController;
+  late Color pickerColor;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.pole != null) {
+      _nameTextController = TextEditingController(text: widget.pole!.name);
+      pickerColor = getColorFromString(widget.pole!.color);
+    } else {
+      _nameTextController = TextEditingController(text: '');
+      pickerColor = const Color(0xFF0652DD);
+    }
+  }
 
   void changeColor(Color color) {
     setState(() => pickerColor = color);
@@ -50,7 +65,7 @@ class _PoleFormState extends State<PoleForm> {
   @override
   Widget build(BuildContext context) {
     return FormLayout(
-        creation: false, // replace with widget.pole ? true : false
+        creation: widget.pole != null ? false : true, // replace with widget.pole ? true : false
         onEdit: () {
           onEdit(context);
         },
