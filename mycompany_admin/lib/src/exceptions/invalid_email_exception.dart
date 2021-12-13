@@ -1,5 +1,6 @@
 class InvalidEmailException implements Exception {
-  String errorMessage() {
+  @override
+  String toString() {
     return "The email used is invalid";
   }
 }
