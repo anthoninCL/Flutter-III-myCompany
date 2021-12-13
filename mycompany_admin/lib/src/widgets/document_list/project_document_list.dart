@@ -67,7 +67,7 @@ class _ProjectDocumentListState extends State<ProjectDocumentList> {
                   GenericButton(
                       title: 'New',
                       onPressed: () {
-                        widget.onChangeForm(const ProjectForm());
+                        widget.onChangeForm(ProjectForm(key: UniqueKey(),));
                       },
                       backColor: AppColors.primary,
                       fontColor: AppColors.white,
@@ -80,9 +80,14 @@ class _ProjectDocumentListState extends State<ProjectDocumentList> {
                 child: ListView.builder(
                     itemCount: state.projects.length,
                     itemBuilder: (context, index) {
-                      return ListItem(
-                          name: state.projects[index].name,
-                          id: state.projects[index].id);
+                      return GestureDetector(
+                        onTap: () {
+                          widget.onChangeForm(ProjectForm(project: state.projects[index], key: UniqueKey(),));
+                        },
+                        child: ListItem(
+                            name: state.projects[index].name,
+                            id: state.projects[index].id),
+                      );
                     }),
               ),
             ]);
