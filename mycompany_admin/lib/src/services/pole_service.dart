@@ -22,7 +22,15 @@ class PoleService {
   }
 
   //Delete
-  Future<void> deletePole(String poleId) {
+  Future<void> deletePole(String poleId, String companyId) async {
+    Company company = await CompanyService().readCompany(companyId);
+    final poleIdx = company.poles.indexWhere((element) => element.id == poleId);
+
+    if (poleIdx != -1) {
+      company.poles.removeAt(poleIdx);
+      CompanyService().setCompany(company);
+    }
+
     return (poles.doc(poleId).delete().catchError((error) => print(error)));
   }
 
@@ -53,7 +61,7 @@ class PoleService {
     }
     for (var element in subList) {
       var docSnapshot =
-      await collection.where(FieldPath.documentId, whereIn: element).get();
+          await collection.where(FieldPath.documentId, whereIn: element).get();
       List<QueryDocumentSnapshot> docs = docSnapshot.docs;
       for (var doc in docs) {
         if (doc.data() != null) {
