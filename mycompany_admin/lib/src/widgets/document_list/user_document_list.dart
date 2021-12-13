@@ -12,10 +12,9 @@ import '../list_item.dart';
 
 class UserDocumentList extends StatefulWidget {
   const UserDocumentList(
-      {Key? key, required this.data, required this.onChangeForm})
+      {Key? key, required this.onChangeForm})
       : super(key: key);
 
-  final List<Widget> data; // TODO -> List<UserFront>
   final Function(Widget) onChangeForm;
 
   @override

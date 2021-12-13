@@ -10,11 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../list_item.dart';
 
 class PoleDocumentList extends StatefulWidget {
-  const PoleDocumentList(
-      {Key? key, required this.data, required this.onChangeForm})
+  const PoleDocumentList({Key? key, required this.onChangeForm})
       : super(key: key);
 
-  final List<Widget> data;
   final Function(Widget) onChangeForm;
 
   @override

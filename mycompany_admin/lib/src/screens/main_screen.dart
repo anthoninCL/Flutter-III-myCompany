@@ -33,7 +33,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   String _selectedScreen = '';
-  List<ListItem> _data = listUser;
   Widget form = Container();
   Widget documentList = Container();
 
@@ -49,27 +48,21 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedScreen = title;
 
-      // TODO : remove this when blocks implemented except for the form
       if (title == 'Users') {
-        _data = listUser;
         form = Container();
-        documentList = UserDocumentList(data: _data, onChangeForm: changeForm);
+        documentList = UserDocumentList(onChangeForm: changeForm);
       } else if (title == 'Poles') {
-        _data = listGroups;
         form = Container();
-        documentList = PoleDocumentList(data: _data, onChangeForm: changeForm);
+        documentList = PoleDocumentList(onChangeForm: changeForm);
       } else if (title == 'Projects') {
-        _data = listProjects;
         form = Container();
-        documentList = ProjectDocumentList(data: _data, onChangeForm: changeForm);
+        documentList = ProjectDocumentList(onChangeForm: changeForm);
       } else if (title == 'Tasks') {
-        _data = listTasks;
         form = Container();
-        documentList = TaskDocumentList(data: _data, onChangeForm: changeForm);
+        documentList = TaskDocumentList(onChangeForm: changeForm);
       } else if (title == 'Meetings') {
-        _data = listMeetings;
         form = Container();
-        documentList = MeetingDocumentList(data: _data, onChangeForm: changeForm);
+        documentList = MeetingDocumentList(onChangeForm: changeForm);
       }
     });
   }
