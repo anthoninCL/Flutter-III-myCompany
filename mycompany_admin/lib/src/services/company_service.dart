@@ -50,7 +50,7 @@ class CompanyService {
     }
 
     for (var pole in company.poles) {
-      PoleService().deletePole(pole.id);
+      PoleService().deletePole(pole.id, companyId);
     }
 
     List<Project> projects =
