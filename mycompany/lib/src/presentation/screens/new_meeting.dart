@@ -10,6 +10,7 @@ import 'package:mycompany/src/models/user.dart';
 import 'package:mycompany/src/presentation/widgets/classic_text_input.dart';
 import 'package:mycompany/src/presentation/widgets/custom_date_picker.dart';
 import 'package:mycompany/src/presentation/widgets/header_label.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class NewMeeting extends StatefulWidget {
@@ -32,12 +33,22 @@ class _NewMeetingState extends State<NewMeeting> {
 
   DateTime start = DateTime.now();
 
+  String? companyId;
+
   @override
   void initState() {
+    init();
     super.initState();
     _meetingNameController = TextEditingController();
     _meetingLocationController = TextEditingController();
-    _userBloc.add(GetUsersFromCompany("8ca236d2-f85f-46ef-ae8f-dae4b7e97236"));
+  }
+
+  void init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    companyId = prefs.getString("companyId");
+    if (companyId != null) {
+      _userBloc.add(GetUsersFromCompany(companyId!));
+    }
   }
 
   @override
@@ -81,7 +92,8 @@ class _NewMeetingState extends State<NewMeeting> {
         users,
         _meetingNameController.text,
         start.millisecondsSinceEpoch,
-        duration.toDouble());
+        duration.toDouble(),
+        companyId!);
     _meetingBloc.add(AddMeeting(meeting));
   }
 

@@ -6,8 +6,9 @@ class Meeting {
   String name;
   int dateStart;
   double duration;
+  String companyId;
 
-  Meeting(this.id, this.users, this.name, this.dateStart, this.duration);
+  Meeting(this.id, this.users, this.name, this.dateStart, this.duration, this.companyId);
 
   Map<String, dynamic> toMap() {
     return {
@@ -15,7 +16,8 @@ class Meeting {
       "users": users,
       "name": name,
       "dateStart": dateStart,
-      "duration": duration
+      "duration": duration,
+      "companyId": companyId,
     };
   }
 
@@ -24,7 +26,8 @@ class Meeting {
         users = map["users"],
         name = map["name"],
         dateStart = map["dateStart"],
-        duration = map["duration"];
+        duration = map["duration"],
+        companyId = map["companyId"];
 
   @override
   String toString() {

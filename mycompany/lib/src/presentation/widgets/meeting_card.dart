@@ -11,7 +11,7 @@ class MeetingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var date = DateTime.fromMillisecondsSinceEpoch(meeting.dateStart * 1000);
+    var date = DateTime.fromMillisecondsSinceEpoch(meeting.dateStart);
     var endDate = date.add(Duration(minutes: meeting.duration.toInt()));
 
     return Container(
@@ -47,7 +47,7 @@ class MeetingCard extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-              "${DateFormat('hh:mm').format(date)} - ${DateFormat('hh:mm').format(endDate)}")
+              "${DateFormat('HH:mm').format(date)} - ${DateFormat('HH:mm').format(endDate)}")
         ],
       ),
     );
