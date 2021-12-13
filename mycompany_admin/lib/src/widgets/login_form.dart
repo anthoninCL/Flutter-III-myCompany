@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mycompany_admin/src/blocs/auth/auth_bloc.dart';
 import 'package:mycompany_admin/src/screens/main_screen.dart';
 import 'package:mycompany_admin/src/screens/register_screen.dart';
 import 'package:mycompany_admin/src/widgets/classic_text_input.dart';
@@ -60,6 +63,20 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer<AuthBloc, LoginState>(
+    listener: (context, state) {
+      if (state is LoginError) {
+        showDialog(context: context, builder: (BuildContext context) {
+          return Text(state.error);
+        });
+      }
+    },
+      builder: (context, state) {
+    if (state is LoginLoaded) {
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
+        Navigator.pushNamed(context, MainScreen.id);
+      });
+    }
     return Form(
       child: Row(children: [
         const SizedBox(
@@ -74,7 +91,7 @@ class _LoginFormState extends State<LoginForm> {
                 child: AuthHeader(
                     title: "Welcome 👋",
                     subtitle:
-                        "We’re glad to see you here. You can continue to login and manage your company"),
+                    "We’re glad to see you here. You can continue to login and manage your company"),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -108,8 +125,8 @@ class _LoginFormState extends State<LoginForm> {
                     MainButton(
                         title: "Login",
                         onPressed: () =>
-                            // TODO: CHECK IF LOGIN SUCCESS -> Navigator.pushNamed(context, MainScreen.id)
-                            Navigator.pushNamed(context, MainScreen.id)),
+                        login(context),
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -118,7 +135,9 @@ class _LoginFormState extends State<LoginForm> {
                         content: "Don't have an account yet? ",
                         richContent: "Create one",
                         onTap: () =>
-                            Navigator.pushNamed(context, RegisterScreen.id),
+                          SchedulerBinding.instance!.addPostFrameCallback((_) {
+                            Navigator.pushNamed(context, RegisterScreen.id);
+                          }),
                       ),
                     ),
                   ],
@@ -132,5 +151,11 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ]),
     );
+      });
+  }
+
+  void login(BuildContext context) {
+    BlocProvider.of<AuthBloc>(context).add(LoginSubmitEvent(
+        _emailTextController.text, _passwordTextController.text));
   }
 }

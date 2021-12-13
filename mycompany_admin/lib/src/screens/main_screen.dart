@@ -19,8 +19,6 @@ import 'package:mycompany_admin/theme/app_colors.dart';
 // CONSTANTS IMPORT TO REMOVE WHEN IMPLEMENT BLOCKS
 import 'package:mycompany_admin/src/constants/groups_datas.dart';
 import 'package:mycompany_admin/src/constants/projects_data.dart';
-import 'package:mycompany_admin/src/constants/rights_datas.dart';
-import 'package:mycompany_admin/src/constants/roles_datas.dart';
 import 'package:mycompany_admin/src/constants/tasks_datas.dart';
 import 'package:mycompany_admin/src/constants/users_dats.dart';
 import 'package:mycompany_admin/src/constants/meetings_datas.dart';

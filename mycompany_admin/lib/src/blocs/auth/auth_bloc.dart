@@ -7,8 +7,8 @@ part "auth_state.dart";
 
 part "auth_events.dart";
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(const LoginInitial()) {
+class AuthBloc extends Bloc<LoginEvent, LoginState> {
+  AuthBloc() : super(const LoginInitial()) {
     on<LoginSubmitEvent>((event, emit) async {
       try {
         emit(const LoginLoading());

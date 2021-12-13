@@ -8,6 +8,7 @@ import 'package:mycompany_admin/theme/app_colors.dart';
 import 'package:mycompany_admin/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'blocs/auth/auth_bloc.dart';
 import 'blocs/users/user_bloc.dart';
 
 class MyApp extends StatelessWidget {
@@ -42,25 +43,29 @@ class _MyHomePageState extends State<MyHomePage> {
             print(snapshot.error.toString());
             return Text(snapshot.error.toString());
           }
-          // if (snapshot.connectionState == ConnectionState.done) {
-            return MaterialApp(
-              title: 'myCompany',
-              theme: AppTheme.defaultTheme,
-              initialRoute: LoginScreen.id,
-              routes: {
-                LoginScreen.id: (context) => const LoginScreen(),
-                RegisterScreen.id: (context) => const RegisterScreen(),
-                MainScreen.id: (context) => const MainScreen(),
-              },
-              debugShowCheckedModeBanner: false,
+          if (snapshot.connectionState == ConnectionState.done) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<AuthBloc>(
+                  create: (BuildContext context) => AuthBloc(),
+                )
+              ],
+              child: MaterialApp(
+                title: 'myCompany',
+                theme: AppTheme.defaultTheme,
+                initialRoute: LoginScreen.id,
+                routes: {
+                  LoginScreen.id: (context) => const LoginScreen(),
+                  RegisterScreen.id: (context) => const RegisterScreen(),
+                  MainScreen.id: (context) => const MainScreen(),
+                },
+                debugShowCheckedModeBanner: false,
+              ),
             );
-          /* }
-          return MaterialApp(
-              title: 'myCompany',
-              theme: AppTheme.defaultTheme,
-              home: const Text("Loading"));
-
-           */
+          }
+          return const Scaffold(
+              body: CircularProgressIndicator()
+          );
         });
   }
 }
