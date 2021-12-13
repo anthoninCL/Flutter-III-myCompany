@@ -3,7 +3,7 @@ description: Flutter III project
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -29,18 +29,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.0.0
+  equatable: ^2.0.3
   cloud_firestore: ^3.1.1
   uuid: ^3.0.5
   firebase_auth: ^3.3.0
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  intl: ^0.17.0
+  flutter_picker: ^2.0.2
+  flutter_datetime_picker: ^1.5.1
+  fluttertoast: ^8.0.8
+  shared_preferences: ^2.0.10
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  lint: ^1.3.0
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

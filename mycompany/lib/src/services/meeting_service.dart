@@ -54,21 +54,28 @@ class MeetingService {
     if (meetingsId.isEmpty) {
       return meetings;
     }
-    var docSnapshot =
-        await collection.where(FieldPath.documentId, whereIn: meetingsId).get();
-    List<QueryDocumentSnapshot> docs = docSnapshot.docs;
-    for (var doc in docs) {
-      if (doc.data() != null) {
-        Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
-        List<dynamic> usersId = data["users"];
-        data["users"] = await UserService().readUsers(usersId.cast<String>());
-        meetings.add(Meeting.fromMap(data));
+    List<List<String>> subList = [];
+    for (var i = 0; i < meetingsId.length; i += 10) {
+      subList.add(meetingsId.sublist(
+          i, i + 10 > meetingsId.length ? meetingsId.length : i + 10));
+    }
+    for (var element in subList) {
+      var docSnapshot =
+      await collection.where(FieldPath.documentId, whereIn: element).get();
+      List<QueryDocumentSnapshot> docs = docSnapshot.docs;
+      for (var doc in docs) {
+        if (doc.data() != null) {
+          Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
+          List<dynamic> usersId = data["users"];
+          data["users"] = await UserService().readUsers(usersId.cast<String>());
+          meetings.add(Meeting.fromMap(data));
+        }
       }
     }
     return meetings;
   }
 
-  Future<List<Meeting>> readMeetingsFromuser(String userId) async {
+  Future<List<Meeting>> readMeetingsFromUser(String userId) async {
     List<Meeting> meetings = [];
     var collection = FirebaseFirestore.instance.collection('meetings');
     var docSnapshot =

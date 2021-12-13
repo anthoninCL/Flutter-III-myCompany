@@ -1,5 +1,6 @@
 class UserNotFoundException implements Exception {
-  String errorMessage() {
+  @override
+  String toString() {
     return "The user doesn't exist";
   }
 }

@@ -1,5 +1,6 @@
 class WeakPasswordException implements Exception {
-  String errorMessage() {
+  @override
+  String toString() {
     return "The password provided is too weak.";
   }
 }

@@ -1,5 +1,6 @@
 class EmailAlreadyUsedException implements Exception {
-  String errorMessage() {
+  @override
+  String toString() {
     return "The account already exists for that email";
   }
 }

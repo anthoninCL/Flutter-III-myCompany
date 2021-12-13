@@ -1,12 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mycompany/src/pages/create_company.dart';
-import 'package:mycompany/src/pages/login.dart';
-import 'package:mycompany/src/pages/welcome.dart';
-import 'package:mycompany/src/navigation_screen.dart';
-import 'package:mycompany/theme/app_colors.dart';
-import 'package:mycompany/theme/app_theme.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mycompany/src/blocs/meeting/meeting_bloc.dart';
+import 'package:mycompany/src/config/routes/app_routes.dart';
+import 'package:mycompany/src/config/themes/app_colors.dart';
+import 'package:mycompany/src/config/themes/app_theme.dart';
+import 'package:mycompany/src/presentation/screens/login.dart';
+
+import 'blocs/login/login_bloc.dart';
+import 'blocs/project/project_bloc.dart';
+import 'blocs/task/task_bloc.dart';
+import 'blocs/user/user_bloc.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -17,11 +22,31 @@ class MyApp extends StatelessWidget {
         statusBarColor: AppColors.background,
         statusBarBrightness: Brightness.dark));
 
-    return MaterialApp(
-      title: 'myCompany',
-      theme: AppTheme.defaultTheme,
-      home: const MyHomePage(),
-      debugShowCheckedModeBanner: false,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<LoginBloc>(
+          create: (BuildContext context) => LoginBloc(),
+        ),
+        BlocProvider<UserBloc>(
+          create: (BuildContext context) => UserBloc(),
+        ),
+        BlocProvider<TaskBloc>(
+          create: (BuildContext context) => TaskBloc(),
+        ),
+        BlocProvider<MeetingBloc>(
+          create: (BuildContext context) => MeetingBloc(),
+        ),
+        BlocProvider<ProjectBloc>(
+          create: (BuildContext context) => ProjectBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'myCompany',
+        theme: AppTheme.defaultTheme,
+        home: const MyHomePage(),
+        onGenerateRoute: AppRoutes.onGenerateRoutes,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
@@ -35,19 +60,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            print(snapshot.error.toString());
-            return Text(snapshot.error.toString());
+            return Scaffold(
+                body: Center(child: Text(snapshot.error.toString())));
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            return const NavigationScreen();
+            return const LoginScreen();
           }
-          return const Text("Loading");
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
         });
   }
 }

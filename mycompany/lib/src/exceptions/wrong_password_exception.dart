@@ -1,5 +1,6 @@
 class WrongPasswordException implements Exception {
-  String errorMessage() {
+  @override
+  String toString() {
     return "The password is incorrect";
   }
 }
