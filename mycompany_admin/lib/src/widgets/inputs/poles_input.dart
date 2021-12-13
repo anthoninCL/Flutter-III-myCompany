@@ -149,15 +149,18 @@ class _PoleInputState extends State<PoleInput> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              selectedItems.isNotEmpty
-                  ? selectedItems.reduce((a, b) => a + ' , ' + b)
-                  : widget.onEmpty,
-              style: TextStyle(
-                  color: selectedItems.isNotEmpty
-                      ? AppColors.black
-                      : AppColors.grey,
-                  fontSize: 20),
+            Flexible(
+              child: Text(
+                selectedItems.isNotEmpty
+                    ? selectedItems.reduce((a, b) => a + ' , ' + b)
+                    : widget.onEmpty,
+                style: TextStyle(
+                    color: selectedItems.isNotEmpty
+                        ? AppColors.black
+                        : AppColors.grey,
+                    fontSize: 20),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             const Icon(Icons.arrow_drop_down, color: AppColors.black, size: 32)
           ],

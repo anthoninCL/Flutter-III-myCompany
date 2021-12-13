@@ -11,6 +11,7 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: 40,
@@ -20,16 +21,19 @@ class ListItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(50),
           ),
         ),
-        Padding(
-            padding: const EdgeInsets.all(20),
-          child: Text(
-            name,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: AppColors.primary,
-            ),
-          )
+        Flexible(
+          child: Padding(
+              padding: const EdgeInsets.all(20),
+            child: Text(
+              name,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: AppColors.primary,
+              ),
+            )
+          ),
         ),
       ]
     );
