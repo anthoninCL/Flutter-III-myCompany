@@ -67,7 +67,7 @@ class _MeetingDocumentListState extends State<MeetingDocumentList> {
                   GenericButton(
                       title: 'New',
                       onPressed: () {
-                        widget.onChangeForm(const MeetingForm());
+                        widget.onChangeForm(MeetingForm(key: UniqueKey(),));
                       },
                       backColor: AppColors.primary,
                       fontColor: AppColors.white,
@@ -80,9 +80,14 @@ class _MeetingDocumentListState extends State<MeetingDocumentList> {
                 child: ListView.builder(
                     itemCount: state.meetings.length,
                     itemBuilder: (context, index) {
-                      return ListItem(
-                          name: state.meetings[index].name,
-                          id: state.meetings[index].id);
+                      return GestureDetector(
+                        onTap: () {
+                          widget.onChangeForm(MeetingForm(meeting: state.meetings[index], key: UniqueKey(),));
+                        },
+                        child: ListItem(
+                            name: state.meetings[index].name,
+                            id: state.meetings[index].id),
+                      );
                     }),
               ),
             ]);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/models/meeting.dart';
 import 'package:mycompany_admin/src/models/user.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
@@ -8,17 +9,19 @@ import 'package:mycompany_admin/src/widgets/inputs/users_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
 
 class MeetingForm extends StatefulWidget {
-  const MeetingForm({Key? key}) : super(key: key);
+  const MeetingForm({Key? key, this.meeting}) : super(key: key);
+
+  final Meeting? meeting;
 
   @override
   _MeetingFormState createState() => _MeetingFormState();
 }
 
 class _MeetingFormState extends State<MeetingForm> {
-  final TextEditingController _nameTextController = TextEditingController();
-  String duration = "15min";
+  late final TextEditingController _nameTextController;
+  late String duration;
   DateTime start = DateTime.now().add(const Duration(hours: 1));
-  List<UserFront> users = [];
+  late List<UserFront> users;
 
   @override
   void initState() {
@@ -26,6 +29,17 @@ class _MeetingFormState extends State<MeetingForm> {
     duration = "15min";
     start = DateTime.now().add(const Duration(hours: 1));
     users = [];
+    if (widget.meeting != null) {
+      _nameTextController = TextEditingController(text: widget.meeting!.name);
+      duration = widget.meeting!.duration.toString();
+      start = DateTime.fromMicrosecondsSinceEpoch(widget.meeting!.dateStart * 1000);
+      users = widget.meeting!.users;
+    } else {
+      _nameTextController = TextEditingController(text: '');
+      duration = "15min";
+      start = DateTime.now().add(const Duration(hours: 1));
+      users = [];
+    }
   }
 
   void changeDuration(String value) {
