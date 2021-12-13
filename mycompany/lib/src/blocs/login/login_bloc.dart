@@ -19,5 +19,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginError(error.toString()));
       }
     });
+    on<Logout>((event, emit) async {
+      emit(const LoginInitial());
+    });
   }
 }
