@@ -3,11 +3,11 @@ class Task {
   String name;
   String description;
   double estimatedTime;
-  String state;
+  String priority;
   int? deadLine;
   String? user;
 
-  Task(this.id, this.name, this.description, this.estimatedTime, this.state,
+  Task(this.id, this.name, this.description, this.estimatedTime, this.priority,
       {this.deadLine, this.user});
 
   bool operator ==(Object o) => o is Task && o.id == id;
@@ -18,9 +18,9 @@ class Task {
       "name": name,
       "description": description,
       "estimatedTime": estimatedTime,
-      "state": state,
       "deadLine": deadLine,
       "user": user,
+      "priority": priority,
     };
   }
 
@@ -29,9 +29,9 @@ class Task {
         name = map["name"],
         description = map["description"],
         estimatedTime = map["estimatedTime"],
-        state = map["state"],
         deadLine = map["deadLine"],
-        user = map["user"];
+        user = map["user"],
+        priority = map["priority"];
 
   @override
   String toString() {

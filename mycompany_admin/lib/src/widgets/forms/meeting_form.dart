@@ -87,6 +87,7 @@ class _MeetingFormState extends State<MeetingForm> {
   }
 
   void onCreate(BuildContext context) async {
+    print(double.parse(duration.split(" ")[0]));
     if (_nameTextController.value.text.isNotEmpty) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var companyId = prefs.getString("companyId");

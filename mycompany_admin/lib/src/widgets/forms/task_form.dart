@@ -41,7 +41,7 @@ class _TaskFormState extends State<TaskForm> {
           TextEditingController(text: widget.task!.description);
       _estimatedTimeTextController =
           TextEditingController(text: widget.task!.estimatedTime.toString());
-      taskPriority = widget.task!.state;
+      taskPriority = widget.task!.priority;
       deadline =
       widget.task!.deadLine != null ? DateTime.fromMicrosecondsSinceEpoch(
           widget.task!.deadLine! * 1000) : DateTime.now().add(
