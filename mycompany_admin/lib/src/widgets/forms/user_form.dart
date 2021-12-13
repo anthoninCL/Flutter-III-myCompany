@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mycompany_admin/src/models/pole.dart';
 import 'package:mycompany_admin/src/models/project.dart';
+import 'package:mycompany_admin/src/models/user.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
 import 'package:mycompany_admin/src/widgets/inputs/multiselect_input.dart';
@@ -10,35 +11,55 @@ import 'package:mycompany_admin/src/widgets/inputs/role_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
 
 class UserForm extends StatefulWidget {
-  const UserForm({Key? key}) : super(key: key);
+  const UserForm({Key? key, this.user}) : super(key: key);
 
-  // final User? user;     -> if the user is given, it can be edited, else it's a new document
+  final UserFront? user;
 
   @override
   _UserFormState createState() => _UserFormState();
 }
 
 class _UserFormState extends State<UserForm> {
-  final TextEditingController _firstNameTextController =
-      TextEditingController();
-  final TextEditingController _lastNameTextController = TextEditingController();
-  final TextEditingController _emailTextController = TextEditingController();
-  final TextEditingController _addressTextController = TextEditingController();
-  final TextEditingController _zipCodeTextController = TextEditingController();
-  final TextEditingController _cityTextController = TextEditingController();
-  final TextEditingController _countryTextController = TextEditingController();
-  final TextEditingController _phoneNumberTextController =
-      TextEditingController();
-  String role = "User";
-  List<Project> projects = [];
-  List<Pole> poles = [];
+  late final TextEditingController _firstNameTextController;
+  late final TextEditingController _lastNameTextController;
+  late final TextEditingController _emailTextController;
+  late final TextEditingController _addressTextController;
+  late final TextEditingController _zipCodeTextController;
+  late final TextEditingController _cityTextController;
+  late final TextEditingController _countryTextController;
+  late final TextEditingController _phoneNumberTextController;
+  late String role;
+  late List<Project> projects;
+  late List<Pole> poles;
 
   @override
   void initState() {
     super.initState();
-    role = "User";
-    projects = [];
-    poles = [];
+    if (widget.user != null) {
+      _firstNameTextController = TextEditingController(text: widget.user!.firstName);
+      _lastNameTextController = TextEditingController(text: widget.user!.lastName);
+      _emailTextController = TextEditingController(text: widget.user!.email);
+      _addressTextController = TextEditingController(text: widget.user!.address);
+      _zipCodeTextController = TextEditingController(text: widget.user!.zipCode);
+      _cityTextController = TextEditingController(text: widget.user!.city);
+      _countryTextController = TextEditingController(text: widget.user!.country);
+      _phoneNumberTextController = TextEditingController(text: widget.user!.phoneNumber);
+      role = widget.user!.role;
+      projects = widget.user!.projects;
+      poles = widget.user!.poles;
+    } else {
+      _firstNameTextController = TextEditingController();
+      _lastNameTextController = TextEditingController();
+      _emailTextController = TextEditingController();
+      _addressTextController = TextEditingController();
+      _zipCodeTextController = TextEditingController();
+      _cityTextController = TextEditingController();
+      _countryTextController = TextEditingController();
+      _phoneNumberTextController = TextEditingController();
+      role = "User";
+      projects = [];
+      poles = [];
+    }
   }
 
   void changeRole(String value) {
@@ -101,7 +122,7 @@ class _UserFormState extends State<UserForm> {
   @override
   Widget build(BuildContext context) {
     return FormLayout(
-        creation: false, // replace with widget.user ? true : false
+        creation: widget.user != null ? false : true,
         onEdit: () {
           onEdit(context);
         },

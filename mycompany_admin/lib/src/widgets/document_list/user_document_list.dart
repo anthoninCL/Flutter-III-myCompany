@@ -85,8 +85,13 @@ class _UserDocumentListState extends State<UserDocumentList> {
                       String userName = state.company.users[index].firstName +
                           ' ' +
                           state.company.users[index].lastName;
-                      return ListItem(
-                          name: userName, id: state.company.users[index].id);
+                      return GestureDetector(
+                        onTap: () {
+                          widget.onChangeForm(UserForm(user: state.company.users[index]));
+                        },
+                        child: ListItem(
+                            name: userName, id: state.company.users[index].id),
+                      );
                     }),
               ),
             ]);
