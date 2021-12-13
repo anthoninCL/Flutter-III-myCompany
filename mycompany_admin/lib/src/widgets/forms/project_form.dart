@@ -81,7 +81,7 @@ class _ProjectFormState extends State<ProjectForm> {
   @override
   Widget build(BuildContext context) {
     return FormLayout(
-        creation: false, // replace with widget.project ? true : false
+        creation: widget.project != null ? false : true, // replace with widget.project ? true : false
         onEdit: () {
           onEdit(context);
         },

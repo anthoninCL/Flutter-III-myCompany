@@ -84,7 +84,7 @@ class _TaskFormState extends State<TaskForm> {
   @override
   Widget build(BuildContext context) {
     return FormLayout(
-        creation: false, // replace with widget.task ? true : false
+        creation: widget.task != null ? false : true, // replace with widget.task ? true : false
         onEdit: () {
           onEdit(context);
         },

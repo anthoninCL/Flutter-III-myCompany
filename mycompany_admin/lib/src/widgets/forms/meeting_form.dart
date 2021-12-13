@@ -26,9 +26,6 @@ class _MeetingFormState extends State<MeetingForm> {
   @override
   void initState() {
     super.initState();
-    duration = "15min";
-    start = DateTime.now().add(const Duration(hours: 1));
-    users = [];
     if (widget.meeting != null) {
       _nameTextController = TextEditingController(text: widget.meeting!.name);
       duration = widget.meeting!.duration.toString();
@@ -87,7 +84,7 @@ class _MeetingFormState extends State<MeetingForm> {
   @override
   Widget build(BuildContext context) {
     return FormLayout(
-        creation: false, // replace with widget.meeting ? true : false
+        creation: widget.meeting != null ? false : true, // replace with widget.meeting ? true : false
         onEdit: () {
           onEdit(context);
         },

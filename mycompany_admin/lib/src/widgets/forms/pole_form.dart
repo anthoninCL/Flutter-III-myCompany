@@ -65,7 +65,7 @@ class _PoleFormState extends State<PoleForm> {
   @override
   Widget build(BuildContext context) {
     return FormLayout(
-        creation: false, // replace with widget.pole ? true : false
+        creation: widget.pole != null ? false : true, // replace with widget.pole ? true : false
         onEdit: () {
           onEdit(context);
         },
