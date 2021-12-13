@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/models/user.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
 import 'package:mycompany_admin/src/widgets/inputs/datetime_input.dart';
 import 'package:mycompany_admin/src/widgets/inputs/meeting_duration_input.dart';
 import 'package:mycompany_admin/src/widgets/inputs/multiselect_input.dart';
+import 'package:mycompany_admin/src/widgets/inputs/users_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
 
@@ -18,14 +20,14 @@ class _MeetingFormState extends State<MeetingForm> {
   final TextEditingController _nameTextController = TextEditingController();
   String duration = "15min";
   DateTime start = DateTime.now().add(const Duration(hours: 1));
-  List<String> users = ['John', 'Bob'];
+  List<UserFront> users = [];
 
   @override
   void initState() {
     super.initState();
     duration = "15min";
     start = DateTime.now().add(const Duration(hours: 1));
-    users = ['John', 'Bob'];
+    users = [];
   }
 
   void changeDuration(String value) {
@@ -40,7 +42,7 @@ class _MeetingFormState extends State<MeetingForm> {
     });
   }
 
-  void changeUsers(List<String> newUsers) {
+  void changeUsers(List<UserFront> newUsers) {
     setState(() {
       users = newUsers;
     });
@@ -92,12 +94,13 @@ class _MeetingFormState extends State<MeetingForm> {
               onValueChanged: changeStart,
               initialValue: start,
               fieldTitle: "Schedule"),
-          MultiSelectInput(
-              items: const ['John', 'Bob', 'James', 'Mandy'],
-              selectedItems: users,
-              onChange: changeUsers,
-              fieldTitle: "Users",
-              onEmpty: "Select users")
+          UserInput(
+            multi: true,
+            fieldTitle: "Users",
+            onEmpty: "Select users",
+            selectedItems: users,
+            onMultiChange: changeUsers,
+          )
         ]);
   }
 }
