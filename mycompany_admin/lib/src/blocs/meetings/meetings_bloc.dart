@@ -48,6 +48,16 @@ class MeetingBloc extends Bloc<MeetingsEvent, MeetingsState> {
       }
     });
 
+    on<GetMeetingsCompany>((event, emit) async {
+      try {
+        emit(const MeetingLoading());
+        var meetings = await MeetingService().readMeetingsFromCompany(event.companyId);
+        emit(MeetingsLoaded(meetings));
+      } on Exception catch (error) {
+        emit(MeetingError(error.toString()));
+      }
+    });
+
     on<UpdateMeeting>((event, emit) async {
       try {
         emit(const MeetingUpdating());

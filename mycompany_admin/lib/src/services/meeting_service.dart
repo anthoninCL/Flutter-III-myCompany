@@ -91,4 +91,21 @@ class MeetingService {
     }
     return meetings;
   }
+
+  Future<List<Meeting>> readMeetingsFromCompany(String companyId) async {
+    List<Meeting> meetings = [];
+    var collection = FirebaseFirestore.instance.collection('meetings');
+    var docSnapshot =
+    await collection.where('companyId', isEqualTo: companyId).get();
+    List<QueryDocumentSnapshot> docs = docSnapshot.docs;
+    for (var doc in docs) {
+      if (doc.data() != null) {
+        Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
+        List<dynamic> usersId = data["users"];
+        data["users"] = await UserService().readUsers(usersId.cast<String>());
+        meetings.add(Meeting.fromMap(data));
+      }
+    }
+    return meetings;
+  }
 }

@@ -26,6 +26,12 @@ class GetMeetingsUser extends MeetingsEvent {
   GetMeetingsUser(this.userId);
 }
 
+class GetMeetingsCompany extends MeetingsEvent {
+  final String companyId;
+
+  GetMeetingsCompany(this.companyId);
+}
+
 class UpdateMeeting extends MeetingsEvent {
   final Meeting meeting;
 
