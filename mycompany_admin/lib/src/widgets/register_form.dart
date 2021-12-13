@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mycompany_admin/src/blocs/register/register_bloc.dart';
 import 'package:mycompany_admin/src/screens/login_screen.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:mycompany_admin/src/widgets/classic_text_input.dart';
@@ -80,170 +83,161 @@ class _RegisterFormState extends State<RegisterForm> {
     _companyEmailError = false;
   }
 
-  bool isEmailValid(TextEditingController controller, bool error) {
-    bool validation = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(controller.text);
-
-    setState(() {
-      error = !validation;
-    });
-
-    return !validation;
-  }
-
-  bool isPasswordValid() {
-    bool validation = _passwordTextController.text.trim().isNotEmpty;
-
-    setState(() {
-      _passwordError = !validation;
-    });
-
-    return !validation;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Row(children: [
-        const SizedBox(
-          width: 50,
-        ),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 20, bottom: 30, left: 20, right: 20),
-                child: AuthHeader(
-                  title: _stepIndex == 0
-                      ? "Create a new account"
-                      : "Create a company",
-                  subtitle: _stepIndex == 0
-                      ? "Create an account in order to manage your personal company"
-                      : "Enter the information of your company",
-                  spaceBetween: 30,
+    return BlocConsumer<RegisterBloc, RegisterState>(
+        listener: (context, state) {
+      if (state is RegisterError) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  title: Text('Error'),
+                  content: Text(state.error),
+                  actions: [
+                    ElevatedButton(
+                      child: Text('Got it'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    )
+                  ]);
+            });
+      }
+    }, builder: (context, state) {
+      if (state is RegisterLoaded) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          Navigator.pushNamed(context, LoginScreen.id);
+        });
+      }
+      return Form(
+        child: Row(children: [
+          const SizedBox(
+            width: 50,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 20, bottom: 30, left: 20, right: 20),
+                  child: AuthHeader(
+                    title: _stepIndex == 0
+                        ? "Create a new account"
+                        : "Create a company",
+                    subtitle: _stepIndex == 0
+                        ? "Create an account in order to manage your personal company"
+                        : "Enter the information of your company",
+                    spaceBetween: 30,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 50),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.65,
-                  width: MediaQuery.of(context).size.width * 0.35,
-                  child: Stepper(
-                    type: StepperType.horizontal,
-                    currentStep: _stepIndex,
-                    steps: stepList(),
-                    onStepContinue: () {
-                      if (_stepIndex < (stepList().length - 1)) {
-                        if (_stepIndex == 0) {
-                          final emailValid =
-                              isEmailValid(_emailTextController, _emailError);
-                          final passwordValid = isPasswordValid();
-
-                          if (emailValid && passwordValid) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AlertDialog(
-                                  title: Text('Email Correct'),
-                                );
-                              },
-                            );
+                Padding(
+                  padding: const EdgeInsets.only(right: 50),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.65,
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    child: Stepper(
+                      type: StepperType.horizontal,
+                      currentStep: _stepIndex,
+                      steps: stepList(),
+                      onStepContinue: () {
+                        if (_stepIndex < (stepList().length - 1)) {
+                          if (_stepIndex == 0) {
+                            setState(() {
+                              _stepIndex += 1;
+                            });
+                          } else {
                             setState(() {
                               _stepIndex += 1;
                             });
                           }
                         } else {
-                          setState(() {
-                            _stepIndex += 1;
-                          });
+                          register(context);
                         }
-                      } else {
-                        // TODO: CALL FIREBASE POUR CREER L'USER ET LA COMPANY
-                        final emailValid = isEmailValid(
-                            _companyEmailTextController, _companyEmailError);
-
-                        if (emailValid) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const AlertDialog(
-                                title: Text('Submitted'),
-                              );
-                            },
-                          );
+                      },
+                      onStepCancel: () {
+                        if (_stepIndex == 0) {
+                          return;
                         }
-                      }
-                    },
-                    onStepCancel: () {
-                      if (_stepIndex == 0) {
-                        return;
-                      }
-                      setState(() {
-                        _stepIndex -= 1;
-                      });
-                    },
-                    onStepTapped: (int index) {
-                      setState(() {
-                        _stepIndex = index;
-                      });
-                    },
-                    controlsBuilder: (context, {onStepContinue, onStepCancel}) {
-                      final isLastStep = _stepIndex == stepList().length - 1;
-                      return Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            if (_stepIndex > 0)
+                        setState(() {
+                          _stepIndex -= 1;
+                        });
+                      },
+                      onStepTapped: (int index) {
+                        setState(() {
+                          _stepIndex = index;
+                        });
+                      },
+                      controlsBuilder: (context,
+                          {onStepContinue, onStepCancel}) {
+                        final isLastStep = _stepIndex == stepList().length - 1;
+                        return Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              if (_stepIndex > 0)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30),
+                                  child: GenericButton(
+                                    title: "Back",
+                                    onPressed: onStepCancel,
+                                    backColor: AppColors.white,
+                                    fontColor: AppColors.primary,
+                                    shadowColor: AppColors.primary,
+                                    borderColor: AppColors.primary,
+                                  ),
+                                ),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 30),
                                 child: GenericButton(
-                                  title: "Back",
-                                  onPressed: onStepCancel,
-                                  backColor: AppColors.white,
-                                  fontColor: AppColors.primary,
+                                  title: isLastStep ? "Submit" : "Continue",
+                                  onPressed: onStepContinue,
+                                  backColor: AppColors.primary,
+                                  fontColor: AppColors.white,
                                   shadowColor: AppColors.primary,
                                   borderColor: AppColors.primary,
                                 ),
                               ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: GenericButton(
-                                title: isLastStep ? "Submit" : "Continue",
-                                onPressed: onStepContinue,
-                                backColor: AppColors.primary,
-                                fontColor: AppColors.white,
-                                shadowColor: AppColors.primary,
-                                borderColor: AppColors.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(0),
-                child: Center(
-                  child: AuthRichText(
-                    content: "Already have an account? ",
-                    richContent: "Sign in",
-                    onTap: () => Navigator.pushNamed(context, LoginScreen.id),
+                Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: Center(
+                    child: AuthRichText(
+                      content: "Already have an account? ",
+                      richContent: "Sign in",
+                      onTap: () => Navigator.pushNamed(context, LoginScreen.id),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ]),
-    );
+        ]),
+      );
+    });
+  }
+
+  void register(BuildContext context) {
+    BlocProvider.of<RegisterBloc>(context).add(RegisterSubmitEvent(
+        _firstnameTextController.text,
+        _lastnameTextController.text,
+        _emailTextController.text,
+        _passwordTextController.text,
+        _companyNameTextController.text,
+        _companyAddressTextController.text,
+        _companyZipcodeTextController.text,
+        _companyCityTextController.text,
+        _companyCountryTextController.text,
+        _companyEmailTextController.text,
+        _companyPhoneTextController.text));
   }
 
   List<Step> stepList() => [

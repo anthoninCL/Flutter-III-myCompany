@@ -9,6 +9,7 @@ import 'package:mycompany_admin/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'blocs/auth/auth_bloc.dart';
+import 'blocs/register/register_bloc.dart';
 import 'blocs/users/user_bloc.dart';
 
 class MyApp extends StatelessWidget {
@@ -48,6 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
               providers: [
                 BlocProvider<AuthBloc>(
                   create: (BuildContext context) => AuthBloc(),
+                ),
+                BlocProvider<RegisterBloc>(
+                  create: (BuildContext context) => RegisterBloc(),
                 )
               ],
               child: MaterialApp(

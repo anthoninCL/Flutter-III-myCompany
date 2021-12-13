@@ -10,6 +10,7 @@ import 'package:mycompany_admin/src/models/user.dart';
 import 'package:mycompany_admin/src/services/company_service.dart';
 import 'package:mycompany_admin/src/services/pole_service.dart';
 import 'package:mycompany_admin/src/services/project_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -18,16 +19,21 @@ class UserService {
   Future<String> registerUser(
       String email, String password, UserFront user, String companyId) async {
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
 
       if (userCredential.user != null) {
         user.id = userCredential.user!.uid;
         users.doc(userCredential.user!.uid).set(user.toMap());
-        Company company = await CompanyService().readCompany(companyId);
-        company.users.add(user);
-        CompanyService().setCompany(company);
-        return (userCredential.user!.uid);
+        if (companyId.isNotEmpty) {
+          Company company = await CompanyService().readCompany(companyId);
+          company.users.add(user);
+          CompanyService().setCompany(company);
+        }
+        await prefs.setString("userToken", user.id);
+        await prefs.setString("companyId", user.companyId);
+        return user.id;
       } else {
         throw Error();
       }
