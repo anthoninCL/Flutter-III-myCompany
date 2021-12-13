@@ -1,5 +1,26 @@
 # Flutter-III-myCompany
 
+## Content Table
+
+- [Set up](#set-up)
+- [Mock up](#mock-up)
+- [Route Map Navigation](#route-map-navigation)
+- [User Stories](#user-stories)
+- [Data Models](#data-models)
+- [Firestore Documentation](#firestore-documentation)
+
+## Set up
+
+This project is divided in two main parts. There is the mobile application and the admin console.
+
+### Mobile Application
+
+You can launch this project using any IDE on Android or iOS. The application concerned is `mycompany` so launch the application from this folder.
+
+### Admin Console
+
+You can launch this project with the command line `flutter run -d chrome`. The folder of this web application is `mycompany_admin`.
+
 ## Mock up
 
 To design our application, we decided to go with Figma into a full mock up of our mobile application and our admin console. We didn't take the time to prototype it because of the lack of time and the lack of use in our project.
@@ -180,7 +201,7 @@ As an admin I want to see all the information linked to a pole. <br />
 }
 ```
 
-## Firestore documentation
+## Firestore Documentation
 
 - Company methods (inside CompanyService) : 
   - setCompany(Company object) -> Create / Update
