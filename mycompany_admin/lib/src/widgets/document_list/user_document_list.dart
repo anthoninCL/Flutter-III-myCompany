@@ -69,7 +69,8 @@ class _UserDocumentListState extends State<UserDocumentList> {
                   GenericButton(
                       title: 'New',
                       onPressed: () {
-                        widget.onChangeForm(const UserForm());
+                        widget.onChangeForm(Container());
+                        widget.onChangeForm(UserForm(key: UniqueKey(),));
                       },
                       backColor: AppColors.primary,
                       fontColor: AppColors.white,
@@ -87,7 +88,8 @@ class _UserDocumentListState extends State<UserDocumentList> {
                           state.company.users[index].lastName;
                       return GestureDetector(
                         onTap: () {
-                          widget.onChangeForm(UserForm(user: state.company.users[index]));
+                          widget.onChangeForm(Container());
+                          widget.onChangeForm(UserForm(user: state.company.users[index], key: UniqueKey()));
                         },
                         child: ListItem(
                             name: userName, id: state.company.users[index].id),

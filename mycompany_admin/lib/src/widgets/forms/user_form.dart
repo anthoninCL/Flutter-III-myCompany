@@ -48,14 +48,14 @@ class _UserFormState extends State<UserForm> {
       projects = widget.user!.projects;
       poles = widget.user!.poles;
     } else {
-      _firstNameTextController = TextEditingController();
-      _lastNameTextController = TextEditingController();
-      _emailTextController = TextEditingController();
-      _addressTextController = TextEditingController();
-      _zipCodeTextController = TextEditingController();
-      _cityTextController = TextEditingController();
-      _countryTextController = TextEditingController();
-      _phoneNumberTextController = TextEditingController();
+      _firstNameTextController = TextEditingController(text: '');
+      _lastNameTextController = TextEditingController(text: '');
+      _emailTextController = TextEditingController(text: '');
+      _addressTextController = TextEditingController(text: '');
+      _zipCodeTextController = TextEditingController(text: '');
+      _cityTextController = TextEditingController(text: '');
+      _countryTextController = TextEditingController(text: '');
+      _phoneNumberTextController = TextEditingController(text: '');
       role = "User";
       projects = [];
       poles = [];
