@@ -3,12 +3,11 @@ class Task {
   String name;
   String description;
   double estimatedTime;
-  String state;
   String priority;
   int? deadLine;
   String? user;
 
-  Task(this.id, this.name, this.description, this.estimatedTime, this.state, this.priority,
+  Task(this.id, this.name, this.description, this.estimatedTime, this.priority,
       {this.deadLine, this.user});
 
   Map<String, dynamic> toMap() {
@@ -17,7 +16,6 @@ class Task {
       "name": name,
       "description": description,
       "estimatedTime": estimatedTime,
-      "state": state,
       "deadLine": deadLine,
       "user": user,
       "priority": priority,
@@ -28,8 +26,7 @@ class Task {
       : id = map["id"],
         name = map["name"],
         description = map["description"],
-        estimatedTime = map["estimatedTime"],
-        state = map["state"],
+        estimatedTime = map["estimatedTime"].toDouble(),
         deadLine = map["deadLine"],
         user = map["user"],
         priority = map["priority"];

@@ -26,7 +26,7 @@ class Meeting {
         users = map["users"],
         name = map["name"],
         dateStart = map["dateStart"],
-        duration = map["duration"],
+        duration = map["duration"].toDouble(),
         companyId = map["companyId"];
 
   @override
