@@ -164,7 +164,7 @@ class _TaskFormState extends State<TaskForm> {
           ),
           ProjectInput(
             multi: false,
-            fieldTitle: 'Projects',
+            fieldTitle: 'Project',
             onEmpty: 'Select projects',
             selectedItem: projectSelected,
             onChange: changeProject,
