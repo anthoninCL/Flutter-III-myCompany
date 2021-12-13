@@ -4,6 +4,8 @@ import 'package:mycompany/src/blocs/user/user_bloc.dart';
 import 'package:mycompany/src/config/themes/app_colors.dart';
 import 'package:mycompany/src/config/themes/card_decoration.dart';
 import 'package:mycompany/src/presentation/screens/edit_profile.dart';
+import 'package:mycompany/src/presentation/screens/login.dart';
+import 'package:mycompany/src/presentation/shared/utils/color_extension.dart';
 import 'package:mycompany/src/presentation/widgets/custom_title.dart';
 import 'package:mycompany/src/presentation/widgets/header_label.dart';
 import 'package:mycompany/src/presentation/widgets/tile.dart';
@@ -55,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomTitle(label: "Thomas Hidalgo"),
+            CustomTitle(label: "${state.user.firstName} ${state.user.lastName}"),
             const SizedBox(
               height: 15,
             ),
@@ -93,9 +95,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             spacing: 5,
             runSpacing: 5,
             children: state.user.poles.map((pole) {
-              return const Tile(
-                color: Colors.white,
-                label: "Development",
+              return Tile(
+                color: getColor(pole.color),
+                label: pole.name,
               );
             }).toList(),
           ),
@@ -112,9 +114,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Wrap(
             spacing: 5,
             runSpacing: 5,
-            children: const [
-              Tile(color: Colors.orange, label: "ProjectName"),
-            ],
+            children: state.user.projects.map((project) {
+              return Tile(
+                color: getColor(project.color),
+                label: project.name,
+              );
+            }).toList(),
           ),
         ],
       ),
@@ -239,7 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return GestureDetector(
       onTap: () {
         _onTapLogOut();
-        Navigator.pushNamed(context, "/login");
+        Navigator.push(context, MaterialPageRoute(builder: (_) => LoginScreen()));
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

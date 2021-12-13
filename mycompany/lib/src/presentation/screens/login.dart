@@ -38,10 +38,11 @@ class _LoginScreenState extends State<LoginScreen> {
             builder: (context, state) {
               if (state is LoginLoaded) {
                 SchedulerBinding.instance!.addPostFrameCallback((_) {
+                  BlocProvider.of<LoginBloc>(context).add(Logout());
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const NavigationScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const NavigationScreen()));
                 });
               }
               return _buildInitialPage(state);

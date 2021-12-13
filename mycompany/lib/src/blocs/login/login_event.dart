@@ -8,3 +8,5 @@ class LoginSubmitEvent extends LoginEvent {
 
   LoginSubmitEvent(this.email, this.password);
 }
+
+class Logout extends LoginEvent {}
