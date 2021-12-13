@@ -33,8 +33,7 @@ To design our application, we decided to go with Figma into a full mock up of ou
 
 ### Mobile App:
 
-<img width="524" alt="Capture d’écran 2021-12-12 à 22 49 27" src="https://user-images.githubusercontent.com/37048180/145731117-ce469ad3-fe52-4fe8-b3e8-ba4a6f89bc7b.png">
-
+<img width="455" alt="Capture d’écran 2021-12-13 à 12 24 26" src="https://user-images.githubusercontent.com/37048180/145804096-54436795-48be-4ba2-b25e-7c35667a2ee1.png">
 
 ### Web App:
 
