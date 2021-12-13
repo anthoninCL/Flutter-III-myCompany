@@ -64,6 +64,9 @@ class UserService {
 
       await prefs.setString("userToken", user.uid);
       UserFront userFront = await UserService().readUser(user.uid);
+      if (userFront.role != "admin") {
+        throw NotAdminException();
+      }
       await prefs.setString("companyId", userFront.companyId);
       return user.uid;
     } on FirebaseAuthException catch (err) {
