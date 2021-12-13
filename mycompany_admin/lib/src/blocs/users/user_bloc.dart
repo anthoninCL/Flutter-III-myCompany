@@ -42,9 +42,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<UpdateUser>((event, emit) async {
       try {
-        emit(const UserLoading());
-        var user = await UserService().readUser(event.user.id);
-        emit(UserLoaded(user));
+        await UserService().updateUser(event.user);
+      } on Exception catch (error) {
+        emit(UserError(error.toString()));
+      }
+    });
+
+    on<DeleteUser>((event, emit) async {
+      try {
+        await UserService().deleteUser(event.userId);
       } on Exception catch (error) {
         emit(UserError(error.toString()));
       }

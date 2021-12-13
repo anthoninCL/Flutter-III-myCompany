@@ -140,8 +140,7 @@ class _ProjectInputState extends State<ProjectInput> {
           widget.onChange!(
               projects.elementAt(projects.indexWhere((e) => e.name == string)));
         },
-        initialItem: widget.selectedItem?.name ??
-            projects.map((project) => project.name).toList()[0]);
+        initialItem: widget.selectedItem?.name);
   }
 
   Widget buildChildItem(List<String> selectedItems) {

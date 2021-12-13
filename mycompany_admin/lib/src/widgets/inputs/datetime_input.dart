@@ -62,7 +62,7 @@ class _DateTimeInputState extends State<DateTimeInput> {
             onTap: () => _selectDate(context),
             child: Container(
                 height: 50,
-                width: MediaQuery.of(context).size.width * 0.15,
+                width: MediaQuery.of(context).size.width * 0.25,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(

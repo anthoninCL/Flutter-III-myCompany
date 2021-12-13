@@ -34,6 +34,7 @@ class UpdatePole extends PolesEvent {
 
 class DeletePole extends PolesEvent {
   final String poleId;
+  final String companyId;
 
-  DeletePole(this.poleId);
+  DeletePole(this.poleId, this.companyId);
 }

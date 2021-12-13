@@ -77,7 +77,7 @@ class _UserDocumentListState extends State<UserDocumentList> {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.22,
-                height: MediaQuery.of(context).size.height * 0.85,
+                height: MediaQuery.of(context).size.height * 0.80,
                 child: ListView.builder(
                     itemCount: state.company.users.length,
                     itemBuilder: (context, index) {

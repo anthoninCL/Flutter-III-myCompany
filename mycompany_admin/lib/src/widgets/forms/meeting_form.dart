@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/blocs/meetings/meetings_bloc.dart';
 import 'package:mycompany_admin/src/models/meeting.dart';
 import 'package:mycompany_admin/src/models/user.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
@@ -7,6 +8,8 @@ import 'package:mycompany_admin/src/widgets/inputs/datetime_input.dart';
 import 'package:mycompany_admin/src/widgets/inputs/meeting_duration_input.dart';
 import 'package:mycompany_admin/src/widgets/inputs/users_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class MeetingForm extends StatefulWidget {
   const MeetingForm({Key? key, this.meeting}) : super(key: key);
@@ -23,17 +26,20 @@ class _MeetingFormState extends State<MeetingForm> {
   DateTime start = DateTime.now().add(const Duration(hours: 1));
   late List<UserFront> users;
 
+  final MeetingBloc _meetingBloc = MeetingBloc();
+
   @override
   void initState() {
     super.initState();
     if (widget.meeting != null) {
       _nameTextController = TextEditingController(text: widget.meeting!.name);
-      duration = widget.meeting!.duration.toString();
-      start = DateTime.fromMicrosecondsSinceEpoch(widget.meeting!.dateStart * 1000);
+      duration = "${widget.meeting!.duration.toString()} minutes";
+      start =
+          DateTime.fromMicrosecondsSinceEpoch(widget.meeting!.dateStart * 1000);
       users = widget.meeting!.users;
     } else {
       _nameTextController = TextEditingController(text: '');
-      duration = "15min";
+      duration = "30 minutes";
       start = DateTime.now().add(const Duration(hours: 1));
       users = [];
     }
@@ -57,9 +63,20 @@ class _MeetingFormState extends State<MeetingForm> {
     });
   }
 
-  void onEdit(BuildContext context) {
+  void onEdit(BuildContext context) async {
     if (_nameTextController.value.text.isNotEmpty) {
-      print("Edit");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var companyId = prefs.getString("companyId");
+      if (companyId != null) {
+        var meeting = Meeting(
+            widget.meeting!.id,
+            users,
+            _nameTextController.text,
+            start.millisecondsSinceEpoch,
+            double.parse(duration.split(" ")[0]),
+            companyId);
+        _meetingBloc.add(UpdateMeeting(meeting));
+      }
     } else {
       showDialog(
           context: context,
@@ -69,9 +86,20 @@ class _MeetingFormState extends State<MeetingForm> {
     }
   }
 
-  void onCreate(BuildContext context) {
+  void onCreate(BuildContext context) async {
     if (_nameTextController.value.text.isNotEmpty) {
-      print("Create");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var companyId = prefs.getString("companyId");
+      if (companyId != null) {
+        var meeting = Meeting(
+            Uuid().v4(),
+            users,
+            _nameTextController.text,
+            start.millisecondsSinceEpoch,
+            double.parse(duration.split(" ")[0]),
+            companyId);
+        _meetingBloc.add(AddMeeting(meeting));
+      }
     } else {
       showDialog(
           context: context,
@@ -79,26 +107,34 @@ class _MeetingFormState extends State<MeetingForm> {
             return const WarningAlertDialog();
           });
     }
+  }
+
+  void onDelete() {
+    _meetingBloc.add(DeleteMeeting(widget.meeting!.id));
   }
 
   @override
   Widget build(BuildContext context) {
     return FormLayout(
-        creation: widget.meeting != null ? false : true, // replace with widget.meeting ? true : false
+        creation: widget.meeting != null ? false : true,
+        // replace with widget.meeting ? true : false
         onEdit: () {
           onEdit(context);
         },
         onCreate: () {
           onCreate(context);
         },
+        onDelete: () {
+          onDelete();
+        },
         children: [
           FormBasicInput(
             readOnly: false,
-            fieldTitle: "Project name",
+            fieldTitle: "Meeting name",
             textEditingController: _nameTextController,
-            hintText: "Project name",
+            hintText: "Meeting name",
           ),
-          MeetingDurationInput(changeItem: changeDuration),
+          MeetingDurationInput(changeItem: changeDuration, initialItem: duration,),
           DateTimeInput(
               onValueChanged: changeStart,
               initialValue: start,

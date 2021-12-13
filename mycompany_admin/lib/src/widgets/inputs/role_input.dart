@@ -13,7 +13,7 @@ class RoleInput extends StatefulWidget {
 }
 
 class _RoleInputState extends State<RoleInput> {
-  final items = ['User', 'Manager', 'Admin'];
+  final items = ['user', 'manager', 'admin'];
 
   @override
   Widget build(BuildContext context) {

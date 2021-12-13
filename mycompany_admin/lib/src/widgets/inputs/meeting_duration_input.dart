@@ -14,7 +14,7 @@ class MeetingDurationInput extends StatefulWidget {
 }
 
 class _MeetingDurationInputState extends State<MeetingDurationInput> {
-  final items = ['15min', '30min', '45min', '60min'];
+  final items = ['5 minutes', '10 minutes', '15 minutes', '30 minutes', '45 minutes', '60 minutes'];
 
   @override
   Widget build(BuildContext context) {

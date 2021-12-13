@@ -52,7 +52,7 @@ class TaskBloc extends Bloc<TasksEvent, TasksState> {
     on<DeleteTask>((event, emit) async {
       try {
         emit(const TaskDeleting());
-        await TaskService().deleteTask(event.taskId);
+        await TaskService().deleteTask(event.taskId, event.companyId);
         emit(const TaskDeleted());
       } on Exception catch (error) {
         emit(TaskError(error.toString()));

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/blocs/users/user_bloc.dart';
 import 'package:mycompany_admin/src/models/pole.dart';
 import 'package:mycompany_admin/src/models/project.dart';
 import 'package:mycompany_admin/src/models/user.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
-import 'package:mycompany_admin/src/widgets/inputs/multiselect_input.dart';
 import 'package:mycompany_admin/src/widgets/inputs/poles_input.dart';
 import 'package:mycompany_admin/src/widgets/inputs/projects_input.dart';
 import 'package:mycompany_admin/src/widgets/inputs/role_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({Key? key, this.user}) : super(key: key);
@@ -23,6 +24,7 @@ class _UserFormState extends State<UserForm> {
   late final TextEditingController _firstNameTextController;
   late final TextEditingController _lastNameTextController;
   late final TextEditingController _emailTextController;
+  late final TextEditingController _passwordTextController;
   late final TextEditingController _addressTextController;
   late final TextEditingController _zipCodeTextController;
   late final TextEditingController _cityTextController;
@@ -32,18 +34,26 @@ class _UserFormState extends State<UserForm> {
   late List<Project> projects;
   late List<Pole> poles;
 
+  final UserBloc _userBloc = UserBloc();
+
   @override
   void initState() {
     super.initState();
     if (widget.user != null) {
-      _firstNameTextController = TextEditingController(text: widget.user!.firstName);
-      _lastNameTextController = TextEditingController(text: widget.user!.lastName);
+      _firstNameTextController =
+          TextEditingController(text: widget.user!.firstName);
+      _lastNameTextController =
+          TextEditingController(text: widget.user!.lastName);
       _emailTextController = TextEditingController(text: widget.user!.email);
-      _addressTextController = TextEditingController(text: widget.user!.address);
-      _zipCodeTextController = TextEditingController(text: widget.user!.zipCode);
+      _addressTextController =
+          TextEditingController(text: widget.user!.address);
+      _zipCodeTextController =
+          TextEditingController(text: widget.user!.zipCode);
       _cityTextController = TextEditingController(text: widget.user!.city);
-      _countryTextController = TextEditingController(text: widget.user!.country);
-      _phoneNumberTextController = TextEditingController(text: widget.user!.phoneNumber);
+      _countryTextController =
+          TextEditingController(text: widget.user!.country);
+      _phoneNumberTextController =
+          TextEditingController(text: widget.user!.phoneNumber);
       role = widget.user!.role;
       projects = widget.user!.projects;
       poles = widget.user!.poles;
@@ -51,12 +61,13 @@ class _UserFormState extends State<UserForm> {
       _firstNameTextController = TextEditingController(text: '');
       _lastNameTextController = TextEditingController(text: '');
       _emailTextController = TextEditingController(text: '');
+      _passwordTextController = TextEditingController(text: '');
       _addressTextController = TextEditingController(text: '');
       _zipCodeTextController = TextEditingController(text: '');
       _cityTextController = TextEditingController(text: '');
       _countryTextController = TextEditingController(text: '');
       _phoneNumberTextController = TextEditingController(text: '');
-      role = "User";
+      role = "user";
       projects = [];
       poles = [];
     }
@@ -80,7 +91,7 @@ class _UserFormState extends State<UserForm> {
     });
   }
 
-  void onEdit(BuildContext context) {
+  void onEdit(BuildContext context) async {
     if (_firstNameTextController.value.text.isNotEmpty &&
         _lastNameTextController.value.text.isNotEmpty &&
         _emailTextController.value.text.isNotEmpty &&
@@ -89,7 +100,26 @@ class _UserFormState extends State<UserForm> {
         _cityTextController.value.text.isNotEmpty &&
         _countryTextController.value.text.isNotEmpty &&
         _phoneNumberTextController.value.text.isNotEmpty) {
-      print("Edit");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var companyId = prefs.getString("companyId");
+      if (companyId != null) {
+        var user = UserFront(
+          _firstNameTextController.text,
+          _lastNameTextController.text,
+          _emailTextController.text,
+          _addressTextController.text,
+          _zipCodeTextController.text,
+          _cityTextController.text,
+          _countryTextController.text,
+          _phoneNumberTextController.text,
+          role,
+          projects,
+          poles,
+          companyId,
+          widget.user!.id,
+        );
+        _userBloc.add(UpdateUser(user));
+      }
     } else {
       showDialog(
           context: context,
@@ -99,16 +129,36 @@ class _UserFormState extends State<UserForm> {
     }
   }
 
-  void onCreate(BuildContext context) {
+  void onCreate(BuildContext context) async {
     if (_firstNameTextController.value.text.isNotEmpty &&
         _lastNameTextController.value.text.isNotEmpty &&
         _emailTextController.value.text.isNotEmpty &&
+        _passwordTextController.value.text.isNotEmpty &&
         _addressTextController.value.text.isNotEmpty &&
         _zipCodeTextController.value.text.isNotEmpty &&
         _cityTextController.value.text.isNotEmpty &&
         _countryTextController.value.text.isNotEmpty &&
         _phoneNumberTextController.value.text.isNotEmpty) {
-      print("Create");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var companyId = prefs.getString("companyId");
+      if (companyId != null) {
+        var user = UserFront(
+          _firstNameTextController.text,
+          _lastNameTextController.text,
+          _emailTextController.text,
+          _addressTextController.text,
+          _zipCodeTextController.text,
+          _cityTextController.text,
+          _countryTextController.text,
+          _phoneNumberTextController.text,
+          role,
+          projects,
+          poles,
+          companyId,
+        );
+        _userBloc.add(CreateUser(_emailTextController.text,
+            _passwordTextController.text, user, companyId));
+      }
     } else {
       showDialog(
           context: context,
@@ -118,6 +168,9 @@ class _UserFormState extends State<UserForm> {
     }
   }
 
+  void onDelete() {
+    _userBloc.add(DeleteUser(widget.user!.id));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +181,9 @@ class _UserFormState extends State<UserForm> {
         },
         onCreate: () {
           onCreate(context);
+        },
+        onDelete: () {
+          onDelete();
         },
         children: [
           FormBasicInput(
@@ -143,11 +199,18 @@ class _UserFormState extends State<UserForm> {
             hintText: "LastName",
           ),
           FormBasicInput(
-            readOnly: true,
+            readOnly: widget.user == null ? false : true,
             fieldTitle: "Email",
             textEditingController: _emailTextController,
             hintText: "Email",
           ),
+          if (widget.user == null)
+            FormBasicInput(
+              readOnly: widget.user == null ? false : true,
+              fieldTitle: "Password",
+              textEditingController: _passwordTextController,
+              hintText: "Password",
+            ),
           FormBasicInput(
             readOnly: false,
             fieldTitle: "Address",
@@ -178,9 +241,21 @@ class _UserFormState extends State<UserForm> {
             textEditingController: _phoneNumberTextController,
             hintText: "Phone number",
           ),
-          RoleInput(changeItem: changeRole),
-          ProjectInput(multi: true, fieldTitle: 'Projects', onEmpty: 'Select projects', selectedItems: projects, onMultiChange: changeProjects,),
-          PoleInput(multi: true, fieldTitle: 'Poles', onEmpty: 'Select poles', selectedItems: poles, onMultiChange: changePoles,)
+          RoleInput(changeItem: changeRole, initialItem: role,),
+          ProjectInput(
+            multi: true,
+            fieldTitle: 'Projects',
+            onEmpty: 'Select projects',
+            selectedItems: projects,
+            onMultiChange: changeProjects,
+          ),
+          PoleInput(
+            multi: true,
+            fieldTitle: 'Poles',
+            onEmpty: 'Select poles',
+            selectedItems: poles,
+            onMultiChange: changePoles,
+          )
         ]);
   }
 }

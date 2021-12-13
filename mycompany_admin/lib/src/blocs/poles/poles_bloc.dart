@@ -61,7 +61,7 @@ class PoleBloc extends Bloc<PolesEvent, PolesState> {
     on<DeletePole>((event, emit) async {
       try {
         emit(const PoleDeleting());
-        await PoleService().deletePole(event.poleId);
+        await PoleService().deletePole(event.poleId, event.companyId);
         emit(const PoleDeleted());
       } on Exception catch (error) {
         emit(PoleError(error.toString()));

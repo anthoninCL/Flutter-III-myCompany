@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mycompany_admin/src/blocs/poles/poles_bloc.dart';
 import 'package:mycompany_admin/src/models/pole.dart';
 import 'package:mycompany_admin/src/shared/utils/color_convertion.dart';
 import 'package:mycompany_admin/src/widgets/form_basic_input.dart';
 import 'package:mycompany_admin/src/widgets/form_layout.dart';
 import 'package:mycompany_admin/src/widgets/inputs/color_input.dart';
 import 'package:mycompany_admin/src/widgets/warning_alert_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class PoleForm extends StatefulWidget {
   const PoleForm({Key? key, this.pole}) : super(key: key);
@@ -18,6 +21,8 @@ class PoleForm extends StatefulWidget {
 class _PoleFormState extends State<PoleForm> {
   late final TextEditingController _nameTextController;
   late Color pickerColor;
+
+  final PoleBloc _poleBloc = PoleBloc();
 
   @override
   void initState() {
@@ -36,10 +41,16 @@ class _PoleFormState extends State<PoleForm> {
     print(getStringFromColor(pickerColor));
   }
 
-  void onEdit(BuildContext context) {
+  void onEdit(BuildContext context) async {
     if (_nameTextController.value.text.isNotEmpty &&
         getStringFromColor(pickerColor).isNotEmpty) {
-      print("Edit");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var companyId = prefs.getString("companyId");
+      if (companyId != null) {
+        var pole = Pole(widget.pole!.id, _nameTextController.text,
+            getStringFromColor(pickerColor), companyId);
+        _poleBloc.add(AddPole(pole));
+      }
     } else {
       showDialog(
           context: context,
@@ -49,16 +60,30 @@ class _PoleFormState extends State<PoleForm> {
     }
   }
 
-  void onCreate(BuildContext context) {
+  void onCreate(BuildContext context) async {
     if (_nameTextController.value.text.isNotEmpty &&
         getStringFromColor(pickerColor).isNotEmpty) {
-      print("Create");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var companyId = prefs.getString("companyId");
+      if (companyId != null) {
+        var pole = Pole(Uuid().v4(), _nameTextController.text,
+            getStringFromColor(pickerColor), companyId);
+        _poleBloc.add(AddPole(pole));
+      }
     } else {
       showDialog(
           context: context,
           builder: (BuildContext context) {
             return const WarningAlertDialog();
           });
+    }
+  }
+
+  Future<void> onDelete() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var companyId = prefs.getString("companyId");
+    if (companyId != null) {
+      _poleBloc.add(DeletePole(widget.pole!.id, companyId));
     }
   }
 
@@ -71,6 +96,9 @@ class _PoleFormState extends State<PoleForm> {
         },
         onCreate: () {
           onCreate(context);
+        },
+        onDelete: () {
+          onDelete();
         },
         children: [
           FormBasicInput(

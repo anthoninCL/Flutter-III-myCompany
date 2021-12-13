@@ -76,7 +76,7 @@ class _PoleDocumentListState extends State<PoleDocumentList> {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.22,
-                height: MediaQuery.of(context).size.height * 0.85,
+                height: MediaQuery.of(context).size.height * 0.80,
                 child: ListView.builder(
                     itemCount: state.company.poles.length,
                     itemBuilder: (context, index) {

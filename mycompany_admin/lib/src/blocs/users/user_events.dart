@@ -29,10 +29,9 @@ class UpdateUser extends UserEvent {
   UpdateUser(this.user);
 }
 
-/*
+
 class DeleteUser extends UserEvent {
   final String userId;
 
   DeleteUser(this.userId);
 }
- */
