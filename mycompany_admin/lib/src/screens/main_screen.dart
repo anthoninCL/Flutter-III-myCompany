@@ -4,15 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mycompany_admin/src/blocs/users/user_bloc.dart';
 
-import 'package:mycompany_admin/src/widgets/action_buttons_bar.dart';
 import 'package:mycompany_admin/src/widgets/app_title.dart';
 import 'package:mycompany_admin/src/widgets/collection_buttons_bar.dart';
 import 'package:mycompany_admin/src/widgets/document_list.dart';
-import 'package:mycompany_admin/src/widgets/forms/meeting_form.dart';
-import 'package:mycompany_admin/src/widgets/forms/pole_form.dart';
-import 'package:mycompany_admin/src/widgets/forms/project_form.dart';
-import 'package:mycompany_admin/src/widgets/forms/task_form.dart';
-import 'package:mycompany_admin/src/widgets/forms/user_form.dart';
+import 'package:mycompany_admin/src/widgets/document_list/meeting_document_list.dart';
+import 'package:mycompany_admin/src/widgets/document_list/pole_document_list.dart';
+import 'package:mycompany_admin/src/widgets/document_list/project_document_list.dart';
+import 'package:mycompany_admin/src/widgets/document_list/task_document_list.dart';
+import 'package:mycompany_admin/src/widgets/document_list/user_document_list.dart';
 import 'package:mycompany_admin/src/widgets/list_item.dart';
 import 'package:mycompany_admin/theme/app_colors.dart';
 
@@ -33,9 +32,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String _selectedScreen = 'Users';
+  String _selectedScreen = '';
   List<ListItem> _data = listUser;
-  Widget form = const UserForm();
+  Widget form = Container();
+  Widget documentList = Container();
 
   final _firstNameController = TextEditingController();
   late StreamSubscription blocSubscription;
@@ -49,22 +49,27 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedScreen = title;
 
-      // TODO : remove this when blocks implemented
+      // TODO : remove this when blocks implemented except for the form
       if (title == 'Users') {
         _data = listUser;
-        form = const UserForm();
+        form = Container();
+        documentList = UserDocumentList(data: _data, onChangeForm: changeForm);
       } else if (title == 'Poles') {
         _data = listGroups;
-        form = const PoleForm();
+        form = Container();
+        documentList = PoleDocumentList(data: _data, onChangeForm: changeForm);
       } else if (title == 'Projects') {
         _data = listProjects;
-        form = const ProjectForm();
+        form = Container();
+        documentList = ProjectDocumentList(data: _data, onChangeForm: changeForm);
       } else if (title == 'Tasks') {
         _data = listTasks;
-        form = const TaskForm();
+        form = Container();
+        documentList = TaskDocumentList(data: _data, onChangeForm: changeForm);
       } else if (title == 'Meetings') {
         _data = listMeetings;
-        form = const MeetingForm();
+        form = Container();
+        documentList = MeetingDocumentList(data: _data, onChangeForm: changeForm);
       }
     });
   }
@@ -102,10 +107,7 @@ class _MainScreenState extends State<MainScreen> {
               width: MediaQuery.of(context).size.width * 0.25,
               height: MediaQuery.of(context).size.height -
                   AppBar().preferredSize.height,
-              child: DocumentList(
-                data: _data,
-                onChangeForm: changeForm,
-              ),
+              child: documentList,
             ),
             Container(
                 width: MediaQuery.of(context).size.width * 0.75,
